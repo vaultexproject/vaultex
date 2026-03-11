@@ -90,7 +90,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .section-heading{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:var(--white);}
 /* CATEGORIES */
 .cat-section{padding:70px 80px;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
-.cat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:36px;}
+.cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:36px;}
 .cat-card{background:var(--card);border:1px solid var(--border);padding:24px 16px;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
 .cat-card:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,255,231,.07);border-color:rgba(0,255,231,.3);}
 .cat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,255,231,.05),transparent);opacity:0;transition:opacity .3s;}
@@ -115,7 +115,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .t-Systeme,.t-Système{background:rgba(255,160,0,.1);color:#ffa000;border:1px solid rgba(255,160,0,.2);}
 .t-Dev{background:rgba(100,200,255,.1);color:#64c8ff;border:1px solid rgba(100,200,255,.2);}
 .t-Creatif,.t-Créatif{background:rgba(180,100,255,.1);color:#b464ff;border:1px solid rgba(180,100,255,.2);}
-.t-OS{background:rgba(255,160,0,.1);color:#ffa000;border:1px solid rgba(255,160,0,.2);}
 .sub-tag{padding:2px 8px;font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:1px;border-radius:2px;background:rgba(255,0,170,.08);color:var(--neon2);border:1px solid rgba(255,0,170,.15);}
 .sub-tag.nsfw{background:rgba(255,32,64,.1);color:var(--red);border-color:rgba(255,32,64,.2);}
 .sub-tag.horreur{background:rgba(100,0,50,.2);color:#ff6090;border-color:rgba(255,60,100,.2);}
@@ -236,7 +235,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 ::-webkit-scrollbar-thumb:hover{background:var(--neon);}
 @media(max-width:1100px){
   .hero,.section,.search-section,.cat-section,.community-page{padding-left:30px;padding-right:30px;}
-  .cat-grid{grid-template-columns:repeat(4,1fr);}
+  .cat-grid{grid-template-columns:repeat(3,1fr);}
   footer,.fbot{padding-left:30px;padding-right:30px;}
   .comm-grid{grid-template-columns:1fr;}
 }
@@ -332,7 +331,6 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       <span class="stag" data-cat="Système" onclick="setFilter(this,'Système')">🖥️ Système</span>
       <span class="stag" data-cat="Dev" onclick="setFilter(this,'Dev')">👨‍💻 Dev</span>
       <span class="stag" data-cat="Créatif" onclick="setFilter(this,'Créatif')">🎨 Créatif</span>
-      <span class="stag" data-cat="OS" onclick="setFilter(this,'OS')">🐧 OS</span>
     </div>
     <div class="subcat-row" id="subcatRow">
       <span class="filter-label">Genre</span>
@@ -368,7 +366,6 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <div class="cat-card" onclick="catClick('Système')"><span class="cat-icon-big">🖥️</span><div class="cat-name">Système</div><div class="cat-cnt" id="cnt-Système">0</div></div>
     <div class="cat-card" onclick="catClick('Dev')"><span class="cat-icon-big">👨‍💻</span><div class="cat-name">Dev</div><div class="cat-cnt" id="cnt-Dev">0</div></div>
     <div class="cat-card" onclick="catClick('Créatif')"><span class="cat-icon-big">🎨</span><div class="cat-name">Créatif</div><div class="cat-cnt" id="cnt-Créatif">0</div></div>
-    <div class="cat-card" onclick="catClick('OS')"><span class="cat-icon-big">🐧</span><div class="cat-name">OS</div><div class="cat-cnt" id="cnt-OS">0</div></div>
   </div>
 </div>
 </div><!-- end page-home -->
@@ -499,7 +496,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
         <select class="fs" id="f_cat" onchange="onCatChange()">
           <option value="">— Choisir —</option>
           <option>Jeux</option><option>Vidéo</option><option>Audio</option>
-          <option>Système</option><option>Dev</option><option>Créatif</option><option>OS</option>
+          <option>Système</option><option>Dev</option><option>Créatif</option>
         </select>
       </div>
       <div class="fg"><label class="fl">Version</label><input class="fi" id="f_ver" type="text" placeholder="Ex: v3.5.0"></div>
@@ -578,66 +575,26 @@ async function hashPwd(s){const b=await crypto.subtle.digest('SHA-256',new TextE
 
 // ═══════════════ DONNÉES PAR DÉFAUT ═══════════════
 const DEFAULT_SW=[
-  // VIDÉO
-  {id:'s001',name:'VLC Media Player',cat:'Vidéo',subcat:'',version:'v3.0.20',desc:'Le lecteur multimédia universel. Lit pratiquement tous les formats vidéo et audio sans codec supplémentaire.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.videolan.org/vlc/',img:'',added:1700000001},
-  {id:'s002',name:'OBS Studio',cat:'Vidéo',subcat:'',version:'v30.2',desc:'Logiciel de streaming et enregistrement vidéo professionnels. Scènes, sources, filtres — indispensable pour tout créateur de contenu.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://obsproject.com/',img:'',added:1700000002},
-  {id:'s003',name:'DaVinci Resolve',cat:'Vidéo',subcat:'',version:'v19',desc:'Suite de montage vidéo professionnelle utilisée à Hollywood. Étalonnage, effets, montage — version gratuite extrêmement puissante.',platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://www.blackmagicdesign.com/products/davinciresolve',img:'',added:1700000003},
-  {id:'s004',name:'Kdenlive',cat:'Vidéo',subcat:'',version:'v24.08',desc:'Éditeur vidéo open source complet. Timeline multi-piste, effets, transitions — parfait pour le montage quotidien.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://kdenlive.org/',img:'',added:1700000004},
-  {id:'s005',name:'Handbrake',cat:'Vidéo',subcat:'',version:'v1.8',desc:"Convertisseur vidéo universel. Encode, compresse et convertit n\'importe quel format vers MP4, MKV, WebM...",platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://handbrake.fr/',img:'',added:1700000005},
-  {id:'s006',name:'Shotcut',cat:'Vidéo',subcat:'',version:'v24.09',desc:'Éditeur vidéo simple et puissant. Interface claire, supporte des centaines de formats, idéal pour débuter.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://shotcut.org/',img:'',added:1700000006},
-  // AUDIO
-  {id:'s010',name:'Audacity',cat:'Audio',subcat:'',version:'v3.6',desc:'Éditeur audio open source de référence. Enregistrement multi-piste, effets, nettoyage audio — indispensable.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.audacityteam.org/',img:'',added:1700000010},
-  {id:'s011',name:'LMMS',cat:'Audio',subcat:'',version:'v1.2.2',desc:'Studio de musique complet gratuit. Séquenceur, synthétiseurs, samples — crée tes beats et musiques facilement.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://lmms.io/',img:'',added:1700000011},
-  {id:'s012',name:'Ardour',cat:'Audio',subcat:'',version:'v8.6',desc:'DAW professionnel open source. Enregistrement, mixage, mastering — utilisé par des ingénieurs du son pros.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://ardour.org/',img:'',added:1700000012},
-  {id:'s013',name:'VoiceMeeter',cat:'Audio',subcat:'',version:'v3.0',desc:'Mixeur audio virtuel pour Windows. Gère toutes tes entrées/sorties audio, parfait pour le streaming et le gaming.',platform:'WIN',license:'Freeware',link:'https://vb-audio.com/Voicemeeter/',img:'',added:1700000013},
-  {id:'s014',name:'Reaper',cat:'Audio',subcat:'',version:'v7.x',desc:'DAW professionnel léger et ultra-performant. Période d\'évaluation illimitée, moins de 20 Mo, supporte tout.',platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://www.reaper.fm/',img:'',added:1700000014},
-  // CRÉATIF
-  {id:'s020',name:'GIMP',cat:'Créatif',subcat:'',version:'v2.10',desc:"Alternative gratuite à Photoshop. Retouche photo, création graphique, manipulation avancée d\'images.",platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.gimp.org/',img:'',added:1700000020},
-  {id:'s021',name:'Blender',cat:'Créatif',subcat:'',version:'v4.2',desc:'Suite de création 3D complète. Modélisation, animation, rendu, VFX — utilisé par des studios professionnels du monde entier.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.blender.org/',img:'',added:1700000021},
-  {id:'s022',name:'Inkscape',cat:'Créatif',subcat:'',version:'v1.3',desc:'Éditeur de graphiques vectoriels open source. Alternative à Illustrator, parfait pour logos, affiches, illustrations.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://inkscape.org/',img:'',added:1700000022},
-  {id:'s023',name:'Krita',cat:'Créatif',subcat:'',version:'v5.2',desc:'Logiciel de peinture numérique professionnel. Conçu pour les artistes — brosses, calques, animation 2D intégrée.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://krita.org/',img:'',added:1700000023},
-  {id:'s024',name:'Canva',cat:'Créatif',subcat:'',version:'Web',desc:'Outil de design en ligne ultra-intuitif. Templates pro pour réseaux sociaux, présentations, affiches — version gratuite très généreuse.',platform:'WEB',license:'Freeware',link:'https://www.canva.com/',img:'',added:1700000024},
-  // DEV
-  {id:'s030',name:'Visual Studio Code',cat:'Dev',subcat:'',version:'v1.94',desc:"L'éditeur de code le plus populaire au monde. Extensions, IntelliSense, Git intégré — supporte tous les langages.",platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://code.visualstudio.com/',img:'',added:1700000030},
-  {id:'s031',name:'Godot Engine',cat:'Dev',subcat:'',version:'v4.3',desc:'Moteur de jeu 2D/3D open source. Simple à prendre en main, GDScript intuitif, exporte sur toutes les plateformes.',platform:'WIN · MAC · LINUX',license:'Open Source - MIT',link:'https://godotengine.org/',img:'',added:1700000031},
-  {id:'s032',name:'Git',cat:'Dev',subcat:'',version:'v2.46',desc:"Système de contrôle de version incontournable. Gère l\'historique de ton code, branches, collaborations d\'équipe.",platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://git-scm.com/',img:'',added:1700000032},
-  {id:'s033',name:'XAMPP',cat:'Dev',subcat:'',version:'v8.2',desc:'Environnement de développement web local. Apache, MySQL, PHP installés en un clic — parfait pour tester des sites.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://www.apachefriends.org/',img:'',added:1700000033},
-  {id:'s034',name:'Postman',cat:'Dev',subcat:'',version:'v11',desc:'Outil de test et développement d\'APIs. Interface claire pour tester tes requêtes HTTP, REST, GraphQL.',platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://www.postman.com/',img:'',added:1700000034},
-  {id:'s035',name:'Python',cat:'Dev',subcat:'',version:'v3.12',desc:'Le langage de programmation le plus polyvalent. IA, web, scripts, automatisation — incontournable pour tout développeur.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://www.python.org/',img:'',added:1700000035},
-  // SYSTÈME
-  {id:'s040',name:'7-Zip',cat:'Système',subcat:'',version:'v24.08',desc:'Archiveur open source ultra-performant. Supporte ZIP, RAR, 7z, TAR et bien plus. Taux de compression imbattable.',platform:'WIN · LINUX',license:'Open Source - LGPL',link:'https://www.7-zip.org/',img:'',added:1700000040},
-  {id:'s041',name:'Everything',cat:'Système',subcat:'',version:'v1.4',desc:"Moteur de recherche de fichiers ultra-rapide pour Windows. Trouve n\'importe quel fichier en moins d\'une seconde.",platform:'WIN',license:'Freeware',link:'https://www.voidtools.com/',img:'',added:1700000041},
-  {id:'s042',name:'CrystalDiskInfo',cat:'Système',subcat:'',version:'v9.3',desc:'Surveille la santé de tes disques durs et SSD. Affiche la température, les erreurs et prédit les pannes.',platform:'WIN',license:'Open Source',link:'https://crystalmark.info/en/software/crystaldiskinfo/',img:'',added:1700000042},
-  {id:'s043',name:'HWMonitor',cat:'Système',subcat:'',version:'v1.54',desc:'Moniteur de températures et voltages en temps réel. CPU, GPU, disques — surveille tout ton hardware.',platform:'WIN',license:'Freeware',link:'https://www.cpuid.com/softwares/hwmonitor.html',img:'',added:1700000043},
-  {id:'s044',name:'Rufus',cat:'Système',subcat:'',version:'v4.5',desc:'Crée des clés USB bootables en quelques secondes. Indispensable pour installer Windows, Linux ou tout OS.',platform:'WIN',license:'Open Source - GPL',link:'https://rufus.ie/',img:'',added:1700000044},
-  {id:'s045',name:'Ventoy',cat:'Système',subcat:'',version:'v1.0.99',desc:'Crée une clé USB multi-boot. Mets plusieurs ISOs dessus et choisis lequel démarrer — ultra pratique.',platform:'WIN · LINUX',license:'Open Source - GPL',link:'https://www.ventoy.net/',img:'',added:1700000045},
-  {id:'s046',name:'WinDirStat',cat:'Système',subcat:'',version:'v2.1',desc:'Visualise l\'utilisation de ton disque dur. Affiche quels dossiers et fichiers prennent le plus de place.',platform:'WIN',license:'Open Source - GPL',link:'https://windirstat.net/',img:'',added:1700000046},
-  {id:'s047',name:'Autoruns',cat:'Système',subcat:'',version:'v14.11',desc:'Gère tout ce qui démarre avec Windows. Désactive les programmes au démarrage pour booster les performances.',platform:'WIN',license:'Freeware',link:'https://learn.microsoft.com/sysinternals/downloads/autoruns',img:'',added:1700000047},
-  // OS
-  {id:'s050',name:'Ubuntu',cat:'OS',subcat:'',version:'v24.04 LTS',desc:'La distribution Linux la plus populaire. Interface intuitive, énorme communauté, parfaite pour débuter sous Linux.',platform:'LINUX',license:'Open Source',link:'https://ubuntu.com/download',img:'',added:1700000050},
-  {id:'s051',name:'Linux Mint',cat:'OS',subcat:'',version:'v22',desc:'Distribution Linux idéale pour les débutants venant de Windows. Légère, stable, familière — installation facile.',platform:'LINUX',license:'Open Source',link:'https://linuxmint.com/',img:'',added:1700000051},
-  {id:'s052',name:'Debian',cat:'OS',subcat:'',version:'v12',desc:'La distribution Linux de référence. Stable, sécurisée, base de nombreuses autres distros. Parfaite pour serveurs.',platform:'LINUX',license:'Open Source',link:'https://www.debian.org/',img:'',added:1700000052},
-  {id:'s053',name:'Arch Linux',cat:'OS',subcat:'',version:'Rolling',desc:'Distribution Linux minimaliste et personnalisable. Pour utilisateurs avancés — tu construis ton système de zéro.',platform:'LINUX',license:'Open Source',link:'https://archlinux.org/',img:'',added:1700000053},
-  {id:'s054',name:'Fedora',cat:'OS',subcat:'',version:'v40',desc:'Distribution Linux moderne sponsorisée par Red Hat. Toujours à jour, sécurisée, excellente pour les développeurs.',platform:'LINUX',license:'Open Source',link:'https://fedoraproject.org/',img:'',added:1700000054},
-  {id:'s055',name:'Pop!_OS',cat:'OS',subcat:'',version:'v22.04',desc:'Distribution Linux optimisée pour les créatifs et gamers. Par System76, excellente prise en charge des GPU NVIDIA.',platform:'LINUX',license:'Open Source',link:'https://pop.system76.com/',img:'',added:1700000055},
-  {id:'s056',name:'Kali Linux',cat:'OS',subcat:'',version:'v2024.3',desc:'Distribution Linux spécialisée en cybersécurité. Outils de pentesting, forensics et sécurité réseau préinstallés.',platform:'LINUX',license:'Open Source',link:'https://www.kali.org/',img:'',added:1700000056},
-  {id:'s057',name:'Tails OS',cat:'OS',subcat:'',version:'v6.8',desc:'OS axé sur la confidentialité et l\'anonymat. Tourne depuis une clé USB, ne laisse aucune trace sur la machine.',platform:'LINUX',license:'Open Source',link:'https://tails.boum.org/',img:'',added:1700000057},
-  // JEUX
-  {id:'s060',name:'0 A.D.',cat:'Jeux',subcat:'Stratégie',version:'v0.0.27',desc:'Jeu de stratégie temps réel open source. Civilisations antiques, batailles épiques — qualité AAA gratuite.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://play0ad.com/',img:'',added:1700000060},
-  {id:'s061',name:'SuperTuxKart',cat:'Jeux',subcat:'Action',version:'v1.4',desc:'Jeu de kart open source avec plus de 80 pistes et personnages. Multijoueur en ligne inclus.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://supertuxkart.net/',img:'',added:1700000061},
-  {id:'s062',name:'Freedoom',cat:'Jeux',subcat:'FPS',version:'v0.13',desc:'Version libre et open source de Doom. Compatible avec tous les mods et wads Doom originaux.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://freedoom.github.io/',img:'',added:1700000062},
-  {id:'s063',name:'Wesnoth',cat:'Jeux',subcat:'Stratégie',version:'v1.18',desc:'Jeu de stratégie au tour par tour fantasy. Des dizaines de campagnes, multijoueur, éditeur de maps intégré.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.wesnoth.org/',img:'',added:1700000063},
-  {id:'s064',name:'OpenRA',cat:'Jeux',subcat:'Stratégie',version:'release-20231010',desc:'Moteur open source pour Command & Conquer. Red Alert, Tiberian Dawn et Dune 2000 gratuits et en ligne.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.openra.net/',img:'',added:1700000064},
-  {id:'s065',name:'Minetest',cat:'Jeux',subcat:'Aventure',version:'v5.9',desc:'Alternative open source à Minecraft. Monde infiniment personnalisable avec des milliers de mods communautaires.',platform:'WIN · MAC · LINUX',license:'Open Source - LGPL',link:'https://www.minetest.net/',img:'',added:1700000065},
-  {id:'s066',name:'Xonotic',cat:'Jeux',subcat:'FPS',version:'v0.8.6',desc:'FPS multijoueur open source ultra-rapide. Inspiré de Quake, mouvements fluides, arènes dynamiques.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://xonotic.org/',img:'',added:1700000066},
-  {id:'s067',name:'Veloren',cat:'Jeux',subcat:'RPG',version:'v0.17',desc:'RPG open world voxel en ligne. Exploration, craft, combat — développé entièrement par la communauté.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://veloren.net/',img:'',added:1700000067},
-  {id:'s068',name:'Teeworlds',cat:'Jeux',subcat:'Action',version:'v0.7.5',desc:'Jeu de tir 2D multijoueur rapide et fun. Graphismes cartoon, gameplay nerveux, 100% gratuit et en ligne.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://www.teeworlds.com/',img:'',added:1700000068},
+  {id:'s001',name:'VLC Media Player',cat:'Vidéo',subcat:'',version:'v3.0.20',desc:'Le lecteur multimédia universel. Lit pratiquement tous les formats vidéo et audio sans codec supplémentaire.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.videolan.org/vlc/',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/VLC_Icon.svg/240px-VLC_Icon.svg.png',added:1700000001},
+  {id:'s002',name:'OBS Studio',cat:'Vidéo',subcat:'',version:'v30.2',desc:'Logiciel de streaming et enregistrement vidéo. Indispensable pour streamers et créateurs de contenu.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://obsproject.com/',img:'',added:1700000002},
+  {id:'s003',name:'Audacity',cat:'Audio',subcat:'',version:'v3.6',desc:'Éditeur audio open source. Enregistrement, mixage, effets — tout ce dont tu as besoin pour travailler le son.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.audacityteam.org/',img:'',added:1700000003},
+  {id:'s004',name:'GIMP',cat:'Créatif',subcat:'',version:'v2.10',desc:"L'alternative gratuite à Photoshop. Retouche photo, création graphique, manipulation d'images avancée.",platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.gimp.org/',img:'',added:1700000004},
+  {id:'s005',name:'Blender',cat:'Créatif',subcat:'',version:'v4.2',desc:'Suite de création 3D complète. Modélisation, animation, rendu, VFX — utilisé par des studios professionnels.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.blender.org/',img:'',added:1700000005},
+  {id:'s006',name:'Visual Studio Code',cat:'Dev',subcat:'',version:'v1.91',desc:"L'éditeur de code le plus populaire. Extensions illimitées, intégration Git, support de tous les langages.",platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://code.visualstudio.com/',img:'',added:1700000006},
+  {id:'s007',name:'Godot Engine',cat:'Dev',subcat:'',version:'v4.3',desc:'Moteur de jeu 2D/3D open source. Simple à apprendre, puissant à utiliser. Exporte sur toutes les plateformes.',platform:'WIN · MAC · LINUX',license:'Open Source - MIT',link:'https://godotengine.org/',img:'',added:1700000007},
+  {id:'s008',name:'0 A.D.',cat:'Jeux',subcat:'Stratégie',version:'v0.0.27',desc:'Jeu de stratégie temps réel open source. Civilisations antiques, batailles épiques — qualité AAA gratuite.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://play0ad.com/',img:'',added:1700000008},
+  {id:'s009',name:'SuperTuxKart',cat:'Jeux',subcat:'Action',version:'v1.4',desc:'Jeu de kart open source avec plus de 80 pistes et personnages. Multijoueur en ligne inclus.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://supertuxkart.net/',img:'',added:1700000009},
+  {id:'s010',name:'Freedoom',cat:'Jeux',subcat:'FPS',version:'v0.13',desc:'Version libre et open source de Doom. Compatible avec tous les mods et wads Doom originaux.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://freedoom.github.io/',img:'',added:1700000010},
+  {id:'s011',name:'Battle for Wesnoth',cat:'Jeux',subcat:'Stratégie',version:'v1.18',desc:'Jeu de stratégie au tour par tour fantasy. Des dizaines de campagnes, multijoueur, éditeur de maps.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.wesnoth.org/',img:'',added:1700000011},
+  {id:'s012',name:'OpenRA',cat:'Jeux',subcat:'Stratégie',version:'release-20231010',desc:'Moteur open source pour Command & Conquer. Red Alert, Tiberian Dawn et Dune 2000 gratuits.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.openra.net/',img:'',added:1700000012},
+  {id:'s013',name:'Minetest',cat:'Jeux',subcat:'Aventure',version:'v5.9',desc:'Alternative open source à Minecraft. Monde infiniment personnalisable avec des milliers de mods communautaires.',platform:'WIN · MAC · LINUX',license:'Open Source - LGPL',link:'https://www.minetest.net/',img:'',added:1700000013},
+  {id:'s014',name:'Teeworlds',cat:'Jeux',subcat:'Action',version:'v0.7.5',desc:'Jeu de tir 2D multijoueur rapide et fun. Graphismes cartoon, gameplay nerveux, 100% gratuit.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://www.teeworlds.com/',img:'',added:1700000014},
 ];
 const DEFAULT_COMM=[];
 
 // ═══════════════ STATE ═══════════════
 let db=[],community=[],filterCat='all',filterSub='all',filterQ='',isAdmin=false,delMode=false,editId=null,b64img=null;
-const ICONS={Jeux:'🎮',Vidéo:'🎬',Audio:'🎵',Système:'🖥️',Dev:'👨‍💻',Créatif:'🎨',OS:'🐧'};
+const ICONS={Jeux:'🎮',Vidéo:'🎬',Audio:'🎵',Système:'🖥️',Dev:'👨‍💻',Créatif:'🎨'};
 const POST_LABELS={bug:'🐛 Bug',jeu:'🎮 Jeu gratuit',logiciel:'💾 Logiciel',suggestion:'💡 Suggestion'};
 
 // ═══════════════ NAV ═══════════════
@@ -657,29 +614,20 @@ async function apiGet(){
   const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':MASTER_KEY}});
   if(!r.ok)throw new Error('GET '+r.status);
   const j=await r.json();
-  return{softwares:j.record?.softwares||null, community:j.record?.community||[], version:j.record?.version||0};
+  return{softwares:j.record?.softwares||null,community:j.record?.community||[]};
 }
 async function apiPut(sw,cm){
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},body:JSON.stringify({softwares:sw, community:cm, version:DATA_VERSION})});
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},body:JSON.stringify({softwares:sw,community:cm})});
   if(!r.ok)throw new Error('PUT '+r.status);
 }
 
 // ═══════════════ INIT ═══════════════
-const DATA_VERSION = 3; // ← augmente ce chiffre à chaque fois que tu veux forcer une mise à jour
-
 async function init(){
   try{
     const data=await apiGet();
+    db=data.softwares||DEFAULT_SW;
     community=data.community||DEFAULT_COMM;
-
-    // Si la version stockée est différente → on écrase avec les nouvelles données
-    const storedVersion = data.version || 0;
-    if(!data.softwares || storedVersion < DATA_VERSION){
-      db = DEFAULT_SW;
-      try{await apiPut(db, community);}catch(e){}
-    } else {
-      db = data.softwares;
-    }
+    if(!data.softwares){try{await apiPut(db,community);}catch(e){}}
   }catch(e){
     notify('⚠️ Hors ligne — données locales');
     db=DEFAULT_SW;community=DEFAULT_COMM;
@@ -700,7 +648,7 @@ function render(){
   document.getElementById('sectionLabel').textContent=filterCat==='all'?'Tous les Logiciels':(filterSub!=='all'?filterSub+' — ':'')+filterCat;
   document.getElementById('searchInfo').innerHTML=list.length?`<span>${list.length}</span> résultat${list.length>1?'s':''}`:filterQ?'<span style="color:var(--red)">Aucun résultat</span>':'';
 
-  ['Jeux','Vidéo','Audio','Système','Dev','Créatif','OS'].forEach(cat=>{
+  ['Jeux','Vidéo','Audio','Système','Dev','Créatif'].forEach(cat=>{
     const el=document.getElementById('cnt-'+cat);
     if(el){const n=db.filter(s=>s.cat===cat).length;el.textContent=n+' logiciel'+(n>1?'s':'');}
   });
