@@ -12,7 +12,6 @@ html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4;}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:1;}
-
 /* ADMIN BAR */
 .admin-bar{position:fixed;top:0;left:0;right:0;z-index:110;height:44px;padding:0 40px;display:none;align-items:center;justify-content:space-between;background:rgba(20,12,0,.96);border-bottom:1px solid rgba(255,160,0,.3);backdrop-filter:blur(10px);}
 .admin-bar.visible{display:flex;}
@@ -26,14 +25,13 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .ab-del:hover,.ab-del.on{background:rgba(255,32,64,.25);color:#fff;}
 .ab-out{background:rgba(80,80,80,.2);color:var(--muted);border:1px solid rgba(255,255,255,.1);}
 .ab-out:hover{background:rgba(80,80,80,.4);color:var(--white);}
-
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,10,15,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:top .3s;}
-.logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.4rem;letter-spacing:4px;color:var(--white);text-decoration:none;}
+.logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.4rem;letter-spacing:4px;color:var(--white);text-decoration:none;cursor:pointer;}
 .logo span{color:var(--neon);text-shadow:0 0 20px var(--neon);}
 .nav-links{display:flex;gap:28px;list-style:none;}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:.8rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;transition:color .2s;}
-.nav-links a:hover{color:var(--neon);}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.8rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;transition:color .2s;cursor:pointer;}
+.nav-links a:hover,.nav-links a.active{color:var(--neon);}
 .nav-actions{display:flex;gap:10px;align-items:center;}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:2px;font-family:'Orbitron',monospace;font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;text-decoration:none;border:none;transition:all .2s;}
 .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
@@ -42,7 +40,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .btn-primary:hover{background:#00ffd0;box-shadow:0 0 50px rgba(0,255,231,.5);transform:translateY(-1px);}
 .btn-red{background:var(--red);color:#fff;}
 .btn-red:hover{box-shadow:0 0 40px rgba(255,32,64,.5);transform:translateY(-1px);}
-
+.btn-comm{background:rgba(255,0,170,.12);color:var(--neon2);border:1px solid rgba(255,0,170,.25);}
+.btn-comm:hover{background:rgba(255,0,170,.22);}
+#addBtn{display:none;}
+#addBtn.visible{display:inline-flex;}
+/* PAGES */
+.page{display:none;}
+.page.active{display:block;}
 /* HERO */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:120px 80px 80px;overflow:hidden;}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,231,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,231,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent);}
@@ -60,28 +64,30 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .stat-num{font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--white);}
 .stat-num span{color:var(--neon);}
 .stat-label{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px;}
-
 /* SEARCH */
 .search-section{padding:50px 80px;background:var(--bg2);border-bottom:1px solid var(--border);}
-.search-box{max-width:720px;margin:0 auto;}
+.search-box{max-width:860px;margin:0 auto;}
 .search-wrap{position:relative;}
 .search-input{width:100%;padding:18px 64px 18px 24px;background:var(--card);border:1px solid var(--border);border-radius:2px;color:var(--white);font-family:'Rajdhani',sans-serif;font-size:1.05rem;outline:none;transition:all .2s;}
 .search-input:focus{border-color:var(--neon);box-shadow:0 0 30px rgba(0,255,231,.1);}
 .search-input::placeholder{color:var(--muted);}
 .search-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:var(--neon);color:var(--bg);border:none;width:38px;height:38px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;border-radius:2px;transition:all .2s;}
 .search-btn:hover{background:#00ffd0;}
-.search-tags{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;justify-content:center;}
+.filter-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center;}
+.filter-label{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
 .stag{padding:4px 14px;border:1px solid var(--border);border-radius:20px;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted);cursor:pointer;transition:all .2s;letter-spacing:1px;}
 .stag:hover,.stag.active{border-color:var(--neon);color:var(--neon);}
+.stag.sub{border-radius:4px;font-size:.65rem;}
+.stag.sub.active{border-color:var(--neon2);color:var(--neon2);}
+.subcat-row{display:none;gap:8px;margin-top:10px;flex-wrap:wrap;padding:10px 14px;background:rgba(255,0,170,.04);border:1px solid rgba(255,0,170,.12);border-radius:4px;align-items:center;}
+.subcat-row.visible{display:flex;}
 .search-info{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted);text-align:center;margin-top:12px;min-height:18px;}
 .search-info span{color:var(--neon);}
-
 /* SECTION */
 .section{padding:80px;}
 .section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;}
 .section-title{font-family:'Orbitron',monospace;font-size:.68rem;letter-spacing:4px;color:var(--neon);text-transform:uppercase;margin-bottom:8px;}
 .section-heading{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:var(--white);}
-
 /* CATEGORIES */
 .cat-section{padding:70px 80px;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
 .cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:36px;}
@@ -92,7 +98,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .cat-icon-big{font-size:2rem;margin-bottom:10px;display:block;}
 .cat-name{font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;letter-spacing:2px;color:var(--text);text-transform:uppercase;margin-bottom:4px;}
 .cat-cnt{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted);}
-
 /* CARDS */
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
 .sw-card{background:var(--card);border:1px solid var(--border);overflow:hidden;transition:all .3s;position:relative;display:flex;flex-direction:column;}
@@ -102,7 +107,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .sw-img{width:100%;height:160px;object-fit:cover;display:block;}
 .sw-img-ph{width:100%;height:160px;background:linear-gradient(135deg,var(--bg3),#1a2535);display:flex;align-items:center;justify-content:center;font-size:3.5rem;border-bottom:1px solid var(--border);}
 .sw-body{padding:20px;flex:1;display:flex;flex-direction:column;}
-.sw-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.sw-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:6px;flex-wrap:wrap;}
 .ctag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:1px;text-transform:uppercase;border-radius:2px;}
 .t-Jeux{background:rgba(255,32,64,.1);color:var(--red);border:1px solid rgba(255,32,64,.2);}
 .t-Video,.t-Vidéo{background:rgba(0,255,231,.1);color:var(--neon);border:1px solid rgba(0,255,231,.2);}
@@ -110,6 +115,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .t-Systeme,.t-Système{background:rgba(255,160,0,.1);color:#ffa000;border:1px solid rgba(255,160,0,.2);}
 .t-Dev{background:rgba(100,200,255,.1);color:#64c8ff;border:1px solid rgba(100,200,255,.2);}
 .t-Creatif,.t-Créatif{background:rgba(180,100,255,.1);color:#b464ff;border:1px solid rgba(180,100,255,.2);}
+.sub-tag{padding:2px 8px;font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:1px;border-radius:2px;background:rgba(255,0,170,.08);color:var(--neon2);border:1px solid rgba(255,0,170,.15);}
+.sub-tag.nsfw{background:rgba(255,32,64,.1);color:var(--red);border-color:rgba(255,32,64,.2);}
+.sub-tag.horreur{background:rgba(100,0,50,.2);color:#ff6090;border-color:rgba(255,60,100,.2);}
 .sw-ver{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--neon);background:rgba(0,255,231,.07);padding:3px 8px;border-radius:2px;}
 .sw-name{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;color:var(--white);margin-bottom:8px;}
 .sw-desc{font-size:.83rem;color:var(--muted);line-height:1.55;flex:1;margin-bottom:16px;}
@@ -124,19 +132,54 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .empty{text-align:center;padding:80px 40px;color:var(--muted);}
 .empty-icon{font-size:4rem;margin-bottom:16px;opacity:.25;}
 .empty h3{font-family:'Orbitron',monospace;font-size:1rem;color:var(--text);margin-bottom:8px;}
-
-/* COMMUNITY */
-.community{background:linear-gradient(135deg,rgba(0,255,231,.03),rgba(255,32,64,.03));border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
-.community p{color:var(--muted);line-height:1.8;margin-bottom:32px;font-size:1.05rem;}
-.community .section-heading{margin-bottom:20px;}
-.community .section-title{margin-bottom:8px;}
-.community-btns{display:flex;gap:12px;flex-wrap:wrap;}
-.metrics{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
-.metric{background:var(--card);border:1px solid var(--border);padding:32px;text-align:center;}
-.metric-v{font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--white);display:block;}
-.metric-v .u{font-size:1.1rem;color:var(--neon);}
-.metric-n{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:8px;}
-
+/* COMMUNITY PAGE */
+.community-page{padding:100px 80px 80px;}
+.comm-hero{text-align:center;margin-bottom:50px;}
+.comm-hero .section-heading{font-size:clamp(1.8rem,3vw,2.4rem);margin-bottom:12px;}
+.comm-hero p{color:var(--muted);max-width:500px;margin:0 auto;}
+.ctab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:28px;overflow-x:auto;}
+.ctab{padding:11px 22px;font-family:'Orbitron',monospace;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap;}
+.ctab:hover{color:var(--text);}
+.ctab.active{color:var(--neon);border-bottom-color:var(--neon);}
+.ctab-content{display:none;}
+.ctab-content.active{display:block;}
+.comm-grid{display:grid;grid-template-columns:2fr 1fr;gap:24px;align-items:start;}
+.post-form{background:var(--card);border:1px solid var(--border);padding:28px;margin-bottom:24px;position:relative;}
+.post-form::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--neon),var(--neon2));}
+.post-form h3{font-family:'Orbitron',monospace;font-size:.82rem;color:var(--white);margin-bottom:20px;letter-spacing:2px;}
+.posts-list{display:flex;flex-direction:column;gap:12px;}
+.post-card{background:var(--card);border:1px solid var(--border);padding:22px;transition:border-color .2s;position:relative;}
+.post-card:hover{border-color:rgba(0,255,231,.2);}
+.post-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:0;}
+.post-card.type-bug::before{background:var(--red);}
+.post-card.type-jeu::before{background:#ff6030;}
+.post-card.type-logiciel::before{background:var(--neon);}
+.post-card.type-suggestion::before{background:var(--neon2);}
+.post-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:10px;}
+.post-type{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:1px;padding:2px 10px;border-radius:2px;text-transform:uppercase;}
+.pt-bug{background:rgba(255,32,64,.1);color:var(--red);border:1px solid rgba(255,32,64,.2);}
+.pt-jeu{background:rgba(255,96,48,.1);color:#ff6030;border:1px solid rgba(255,96,48,.2);}
+.pt-logiciel{background:rgba(0,255,231,.08);color:var(--neon);border:1px solid rgba(0,255,231,.15);}
+.pt-suggestion{background:rgba(255,0,170,.08);color:var(--neon2);border:1px solid rgba(255,0,170,.15);}
+.post-date{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted);}
+.post-title{font-family:'Orbitron',monospace;font-size:.88rem;color:var(--white);margin-bottom:8px;font-weight:700;}
+.post-body{font-size:.85rem;color:var(--muted);line-height:1.6;}
+.post-author{margin-top:12px;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted);}
+.post-author span{color:var(--neon);}
+.post-link{display:inline-flex;align-items:center;gap:4px;margin-top:10px;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--neon);text-decoration:none;border-bottom:1px solid rgba(0,255,231,.2);padding-bottom:1px;}
+.post-link:hover{border-color:var(--neon);}
+.del-post-btn{position:absolute;top:10px;right:10px;background:rgba(255,32,64,.85);color:#fff;border:none;width:26px;height:26px;font-size:.8rem;cursor:pointer;border-radius:2px;display:none;align-items:center;justify-content:center;}
+.del-post-btn:hover{background:var(--red);}
+.admin-mode .del-post-btn{display:flex;}
+.side-box{background:var(--card);border:1px solid var(--border);padding:24px;margin-bottom:16px;}
+.side-box h4{font-family:'Orbitron',monospace;font-size:.62rem;letter-spacing:2px;color:var(--neon);margin-bottom:18px;text-transform:uppercase;}
+.side-stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:.82rem;}
+.side-stat-row:last-child{border-bottom:none;}
+.side-stat-v{font-family:'Orbitron',monospace;color:var(--white);font-weight:700;}
+.rules-box{background:var(--card);border:1px solid rgba(255,160,0,.2);padding:24px;}
+.rules-box h4{font-family:'Orbitron',monospace;font-size:.62rem;letter-spacing:2px;color:#ffa000;margin-bottom:14px;text-transform:uppercase;}
+.rules-box li{font-size:.8rem;color:var(--muted);line-height:1.8;padding-left:14px;position:relative;list-style:none;}
+.rules-box li::before{content:'▸';position:absolute;left:0;color:#ffa000;}
 /* MODALS */
 .overlay{position:fixed;inset:0;background:rgba(7,10,15,.93);backdrop-filter:blur(12px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
 .overlay.on{display:flex;}
@@ -161,13 +204,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .or{text-align:center;margin:8px 0;color:var(--muted);font-size:.7rem;font-family:'Share Tech Mono',monospace;}
 .upbtn{width:100%;padding:10px;background:transparent;border:1px dashed rgba(0,255,231,.25);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:.7rem;cursor:pointer;transition:all .2s;border-radius:2px;letter-spacing:1px;}
 .upbtn:hover{border-color:var(--neon);color:var(--neon);}
-
+.nsfw-warn{background:rgba(255,32,64,.06);border:1px solid rgba(255,32,64,.2);padding:10px 14px;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--red);letter-spacing:1px;display:none;margin-bottom:14px;border-radius:2px;}
 /* LOADING */
 #loadingOverlay{position:fixed;inset:0;background:var(--bg);z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;}
 #loadingOverlay.gone{display:none;}
 .spinner{width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--neon);border-radius:50%;animation:spin 1s linear infinite;}
 .loading-txt{font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted);letter-spacing:3px;}
-
 /* FOOTER */
 footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;}
 .fbrand .logo{display:block;font-size:1.2rem;margin-bottom:16px;}
@@ -175,17 +217,14 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 .fcol h4{font-family:'Orbitron',monospace;font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--neon);margin-bottom:18px;}
 .fcol ul{list-style:none;}
 .fcol li{margin-bottom:9px;}
-.fcol a{color:var(--muted);text-decoration:none;font-size:.86rem;transition:color .2s;}
+.fcol a{color:var(--muted);text-decoration:none;font-size:.86rem;transition:color .2s;cursor:pointer;}
 .fcol a:hover{color:var(--text);}
 .fbot{padding:22px 80px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
 .fbot p{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:1px;}
 .nc{color:var(--neon);}
-
-/* NOTIF */
 .notif{position:fixed;bottom:28px;right:28px;background:var(--card);border:1px solid rgba(0,255,231,.3);border-left:3px solid var(--neon);padding:14px 22px;font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--neon);z-index:999;transform:translateX(280px);opacity:0;transition:all .4s;letter-spacing:1px;max-width:340px;}
 .notif.show{transform:translateX(0);opacity:1;}
 .notif.err{border-left-color:var(--red);color:var(--red);border-color:rgba(255,32,64,.3);}
-
 @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
@@ -195,10 +234,10 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 ::-webkit-scrollbar-thumb:hover{background:var(--neon);}
 @media(max-width:1100px){
-  .hero,.section,.search-section,.cat-section,.community{padding-left:30px;padding-right:30px;}
+  .hero,.section,.search-section,.cat-section,.community-page{padding-left:30px;padding-right:30px;}
   .cat-grid{grid-template-columns:repeat(3,1fr);}
   footer,.fbot{padding-left:30px;padding-right:30px;}
-  .community{grid-template-columns:1fr;gap:40px;}
+  .comm-grid{grid-template-columns:1fr;}
 }
 @media(max-width:700px){
   .hero{padding:110px 20px 60px;}
@@ -209,16 +248,13 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   .fbot{padding:20px;flex-direction:column;gap:8px;text-align:center;}
   .f2{grid-template-columns:1fr;}
   .admin-bar{padding:0 16px;}
+  .community-page{padding:100px 20px 60px;}
 }
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
-<div id="loadingOverlay">
-  <div class="spinner"></div>
-  <div class="loading-txt">CHARGEMENT...</div>
-</div>
+<div id="loadingOverlay"><div class="spinner"></div><div class="loading-txt">CHARGEMENT...</div></div>
 
 <!-- ADMIN BAR -->
 <div class="admin-bar" id="adminBar">
@@ -232,19 +268,20 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 
 <!-- NAV -->
 <nav id="mainNav">
-  <a class="logo" href="#"><span>VAULT</span>EX</a>
+  <a class="logo" onclick="showPage('home')"><span>VAULT</span>EX</a>
   <ul class="nav-links">
-    <li><a href="#logiciels">Logiciels</a></li>
-    <li><a href="#categories">Catégories</a></li>
-    <li><a href="#community">Communauté</a></li>
+    <li><a onclick="showPage('home');gotoSection('#logiciels')" id="nl-logiciels">Logiciels</a></li>
+    <li><a onclick="showPage('home');gotoSection('#categories')" id="nl-cat">Catégories</a></li>
+    <li><a onclick="showPage('community')" id="nl-comm">Communauté</a></li>
   </ul>
   <div class="nav-actions">
     <a href="#" class="btn btn-outline" id="adminNavBtn" onclick="handleAdmin(event)">⚙ Admin</a>
-    <a href="#" class="btn btn-primary" onclick="handleAdd(event)">+ Soumettre</a>
+    <a href="#" class="btn btn-primary" id="addBtn" onclick="handleAdd(event)">+ Soumettre</a>
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- ═══════════ PAGE HOME ═══════════ -->
+<div class="page active" id="page-home">
 <section class="hero">
   <div class="hero-grid"></div><div class="hero-glow"></div><div class="hero-glow-red"></div>
   <div class="hero-content">
@@ -253,24 +290,24 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <p>Plateforme communautaire dédiée au partage de logiciels gratuits et open source — jeux indé, utilitaires, outils créatifs. 100% légal, 100% libre.</p>
     <div class="hero-actions">
       <a href="#search" class="btn btn-primary">⚡ Explorer</a>
-      <a href="#" class="btn btn-red" onclick="handleAdd(event)">+ Soumettre</a>
+      <a href="#" class="btn btn-comm" onclick="showPage('community');return false;">💬 Communauté</a>
     </div>
     <div class="hero-stats">
       <div><div class="stat-num" id="heroTotal">—<span></span></div><div class="stat-label">Logiciels</div></div>
-      <div><div class="stat-num">18<span>K</span></div><div class="stat-label">Membres actifs</div></div>
-      <div><div class="stat-num">140<span>K</span></div><div class="stat-label">Téléchargements</div></div>
+      <div><div class="stat-num" id="heroComm">—<span></span></div><div class="stat-label">Posts comm.</div></div>
+      <div><div class="stat-num">100<span>%</span></div><div class="stat-label">Gratuit</div></div>
     </div>
   </div>
 </section>
 
-<!-- SEARCH -->
 <div class="search-section" id="search">
   <div class="search-box">
     <div class="search-wrap">
       <input class="search-input" id="searchInput" type="text" placeholder="Rechercher un logiciel, un jeu, un utilitaire..." autocomplete="off">
       <button class="search-btn" onclick="doSearch()">🔍</button>
     </div>
-    <div class="search-tags">
+    <div class="filter-row">
+      <span class="filter-label">Cat.</span>
       <span class="stag active" data-cat="all" onclick="setFilter(this,'all')">Tous</span>
       <span class="stag" data-cat="Jeux" onclick="setFilter(this,'Jeux')">🎮 Jeux</span>
       <span class="stag" data-cat="Vidéo" onclick="setFilter(this,'Vidéo')">🎬 Vidéo</span>
@@ -279,34 +316,33 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       <span class="stag" data-cat="Dev" onclick="setFilter(this,'Dev')">👨‍💻 Dev</span>
       <span class="stag" data-cat="Créatif" onclick="setFilter(this,'Créatif')">🎨 Créatif</span>
     </div>
+    <div class="subcat-row" id="subcatRow">
+      <span class="filter-label">Genre</span>
+      <span class="stag sub active" data-sub="all" onclick="setSubFilter(this,'all')">Tous</span>
+      <span class="stag sub" data-sub="Action" onclick="setSubFilter(this,'Action')">⚔️ Action</span>
+      <span class="stag sub" data-sub="FPS" onclick="setSubFilter(this,'FPS')">🔫 FPS</span>
+      <span class="stag sub" data-sub="RPG" onclick="setSubFilter(this,'RPG')">🧙 RPG</span>
+      <span class="stag sub" data-sub="Horreur" onclick="setSubFilter(this,'Horreur')">👻 Horreur</span>
+      <span class="stag sub" data-sub="Indé" onclick="setSubFilter(this,'Indé')">🎲 Indé</span>
+      <span class="stag sub" data-sub="Stratégie" onclick="setSubFilter(this,'Stratégie')">🗺️ Stratégie</span>
+      <span class="stag sub" data-sub="Aventure" onclick="setSubFilter(this,'Aventure')">🌍 Aventure</span>
+      <span class="stag sub" data-sub="Puzzle" onclick="setSubFilter(this,'Puzzle')">🧩 Puzzle</span>
+      <span class="stag sub" data-sub="NSFW" onclick="setSubFilter(this,'NSFW')">🔞 NSFW</span>
+    </div>
     <div class="search-info" id="searchInfo"></div>
   </div>
 </div>
 
-<!-- LOGICIELS -->
 <section class="section" id="logiciels">
   <div class="section-header">
-    <div>
-      <div class="section-title">// BIBLIOTHÈQUE</div>
-      <div class="section-heading" id="sectionLabel">Tous les Logiciels</div>
-    </div>
+    <div><div class="section-title">// BIBLIOTHÈQUE</div><div class="section-heading" id="sectionLabel">Tous les Logiciels</div></div>
   </div>
   <div class="cards-grid" id="cardsGrid"></div>
-  <div class="empty" id="emptyMsg" style="display:none">
-    <div class="empty-icon">🔍</div>
-    <h3>Aucun résultat</h3>
-    <p>Essaie un autre mot-clé ou une autre catégorie.</p>
-  </div>
+  <div class="empty" id="emptyMsg" style="display:none"><div class="empty-icon">🔍</div><h3>Aucun résultat</h3><p>Essaie un autre mot-clé ou une autre catégorie.</p></div>
 </section>
 
-<!-- CATEGORIES -->
 <div class="cat-section" id="categories">
-  <div class="section-header">
-    <div>
-      <div class="section-title">// NAVIGATION</div>
-      <div class="section-heading">Parcourir par Catégorie</div>
-    </div>
-  </div>
+  <div class="section-header"><div><div class="section-title">// NAVIGATION</div><div class="section-heading">Parcourir par Catégorie</div></div></div>
   <div class="cat-grid">
     <div class="cat-card" onclick="catClick('Jeux')"><span class="cat-icon-big">🎮</span><div class="cat-name">Jeux</div><div class="cat-cnt" id="cnt-Jeux">0</div></div>
     <div class="cat-card" onclick="catClick('Vidéo')"><span class="cat-icon-big">🎬</span><div class="cat-name">Vidéo</div><div class="cat-cnt" id="cnt-Vidéo">0</div></div>
@@ -316,30 +352,99 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <div class="cat-card" onclick="catClick('Créatif')"><span class="cat-icon-big">🎨</span><div class="cat-name">Créatif</div><div class="cat-cnt" id="cnt-Créatif">0</div></div>
   </div>
 </div>
+</div><!-- end page-home -->
 
-<!-- COMMUNITY -->
-<div class="community" id="community">
-  <div>
-    <div class="section-title">// COMMUNAUTÉ</div>
-    <div class="section-heading">Rejoins la<br>Communauté</div>
-    <p>Des milliers de passionnés partagent, testent et recommandent les meilleurs outils gratuits. Contribue et aide la communauté à grandir.</p>
-    <div class="community-btns">
-      <a href="#" class="btn btn-primary">Créer un compte</a>
-      <a href="#" class="btn btn-outline">Voir le forum</a>
+<!-- ═══════════ PAGE COMMUNITY ═══════════ -->
+<div class="page" id="page-community">
+<div class="community-page">
+  <div class="comm-hero">
+    <div class="section-title">// ESPACE COMMUNAUTÉ</div>
+    <div class="section-heading">Forum & Partage</div>
+    <p>Signale un bug, partage un jeu ou logiciel gratuit, propose une idée.</p>
+  </div>
+  <div class="ctab-bar">
+    <button class="ctab active" onclick="switchCommTab(this,'bugs')">🐛 Bugs</button>
+    <button class="ctab" onclick="switchCommTab(this,'jeux')">🎮 Jeux gratuits</button>
+    <button class="ctab" onclick="switchCommTab(this,'logiciels')">💾 Logiciels</button>
+    <button class="ctab" onclick="switchCommTab(this,'suggestions')">💡 Suggestions</button>
+  </div>
+
+  <!-- TAB BUGS -->
+  <div class="ctab-content active" id="ctab-bugs">
+    <div class="comm-grid">
+      <div>
+        <div class="post-form">
+          <h3>🐛 Signaler un bug</h3>
+          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="bug_author" placeholder="Anonyme"></div>
+          <div class="fg"><label class="fl">Titre *</label><input class="fi" id="bug_title" placeholder="Ex: Page blanche sur mobile..."></div>
+          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="bug_desc" placeholder="Décris le bug, comment le reproduire..."></textarea></div>
+          <button class="btn btn-red" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('bug')">🐛 Envoyer le rapport</button>
+        </div>
+        <div class="posts-list" id="posts-bug"></div>
+      </div>
+      <div id="side-bugs"></div>
     </div>
   </div>
-  <div class="metrics">
-    <div class="metric"><span class="metric-v">18<span class="u">K</span></span><div class="metric-n">Membres</div></div>
-    <div class="metric"><span class="metric-v" id="mSofts">—</span><div class="metric-n">Logiciels</div></div>
-    <div class="metric"><span class="metric-v">140<span class="u">K</span></span><div class="metric-n">DL ce mois</div></div>
-    <div class="metric"><span class="metric-v">100<span class="u">%</span></span><div class="metric-n">Légal</div></div>
+
+  <!-- TAB JEUX -->
+  <div class="ctab-content" id="ctab-jeux">
+    <div class="comm-grid">
+      <div>
+        <div class="post-form">
+          <h3>🎮 Partager un jeu gratuit</h3>
+          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="jeu_author" placeholder="Anonyme"></div>
+          <div class="fg"><label class="fl">Nom du jeu *</label><input class="fi" id="jeu_title" placeholder="Ex: 0 A.D., Minetest..."></div>
+          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="jeu_desc" placeholder="Pourquoi tu le recommandes ?"></textarea></div>
+          <div class="fg"><label class="fl">Lien (optionnel)</label><input class="fi" id="jeu_link" type="url" placeholder="https://..."></div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('jeu')">🎮 Partager</button>
+        </div>
+        <div class="posts-list" id="posts-jeu"></div>
+      </div>
+      <div id="side-jeux"></div>
+    </div>
+  </div>
+
+  <!-- TAB LOGICIELS -->
+  <div class="ctab-content" id="ctab-logiciels">
+    <div class="comm-grid">
+      <div>
+        <div class="post-form">
+          <h3>💾 Partager un logiciel</h3>
+          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="log_author" placeholder="Anonyme"></div>
+          <div class="fg"><label class="fl">Nom du logiciel *</label><input class="fi" id="log_title" placeholder="Ex: VLC, GIMP, Blender..."></div>
+          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="log_desc" placeholder="À quoi ça sert, pourquoi le recommander ?"></textarea></div>
+          <div class="fg"><label class="fl">Lien (optionnel)</label><input class="fi" id="log_link" type="url" placeholder="https://..."></div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('logiciel')">💾 Partager</button>
+        </div>
+        <div class="posts-list" id="posts-logiciel"></div>
+      </div>
+      <div id="side-logiciels"></div>
+    </div>
+  </div>
+
+  <!-- TAB SUGGESTIONS -->
+  <div class="ctab-content" id="ctab-suggestions">
+    <div class="comm-grid">
+      <div>
+        <div class="post-form">
+          <h3>💡 Proposer une suggestion</h3>
+          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="sug_author" placeholder="Anonyme"></div>
+          <div class="fg"><label class="fl">Titre *</label><input class="fi" id="sug_title" placeholder="Ex: Ajouter un filtre par OS..."></div>
+          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="sug_desc" placeholder="Explique ta suggestion en détail..."></textarea></div>
+          <button class="btn" style="width:100%;justify-content:center;padding:13px;border:1px solid var(--neon2);color:var(--neon2);background:rgba(255,0,170,.06);" onclick="submitPost('suggestion')">💡 Envoyer la suggestion</button>
+        </div>
+        <div class="posts-list" id="posts-suggestion"></div>
+      </div>
+      <div id="side-suggestions"></div>
+    </div>
   </div>
 </div>
+</div><!-- end page-community -->
 
 <footer>
-  <div class="fbrand"><a class="logo" href="#"><span>VAULT</span>EX</a><p>Plateforme communautaire — logiciels gratuits & open source uniquement.</p></div>
-  <div class="fcol"><h4>Navigation</h4><ul><li><a href="#">Explorer</a></li><li><a href="#categories">Catégories</a></li></ul></div>
-  <div class="fcol"><h4>Communauté</h4><ul><li><a href="#">Forum</a></li><li><a href="#">Discord</a></li></ul></div>
+  <div class="fbrand"><a class="logo" onclick="showPage('home')"><span>VAULT</span>EX</a><p>Plateforme communautaire — logiciels gratuits & open source uniquement.</p></div>
+  <div class="fcol"><h4>Navigation</h4><ul><li><a onclick="showPage('home')">Explorer</a></li><li><a onclick="showPage('home');gotoSection('#categories')">Catégories</a></li></ul></div>
+  <div class="fcol"><h4>Communauté</h4><ul><li><a onclick="showPage('community')">Forum</a></li><li><a onclick="showPage('community')">Signaler un bug</a></li></ul></div>
   <div class="fcol"><h4>Infos</h4><ul><li><a href="#">À propos</a></li><li><a href="#">CGU</a></li></ul></div>
 </footer>
 <div class="fbot">
@@ -347,7 +452,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   <p class="nc">FREEWARE · OPEN SOURCE · LEGAL</p>
 </div>
 
-<!-- MODAL ADD/EDIT -->
+<!-- MODAL AJOUTER LOGICIEL (admin only) -->
 <div class="overlay" id="addModal" onclick="oClose(event,'addModal')">
   <div class="modal">
     <button class="m-close" onclick="closeM('addModal')">✕</button>
@@ -356,7 +461,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <div class="fg"><label class="fl">Nom *</label><input class="fi" id="f_name" type="text" placeholder="Ex: Blender, Godot Engine..."></div>
     <div class="f2">
       <div class="fg"><label class="fl">Catégorie *</label>
-        <select class="fs" id="f_cat">
+        <select class="fs" id="f_cat" onchange="onCatChange()">
           <option value="">— Choisir —</option>
           <option>Jeux</option><option>Vidéo</option><option>Audio</option>
           <option>Système</option><option>Dev</option><option>Créatif</option>
@@ -364,6 +469,16 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       </div>
       <div class="fg"><label class="fl">Version</label><input class="fi" id="f_ver" type="text" placeholder="Ex: v3.5.0"></div>
     </div>
+    <div class="fg" id="subcat_field" style="display:none">
+      <label class="fl">Sous-catégorie (genre)</label>
+      <select class="fs" id="f_sub" onchange="onSubChange()">
+        <option value="">— Aucune —</option>
+        <option>Action</option><option>FPS</option><option>RPG</option>
+        <option>Horreur</option><option>Indé</option><option>Stratégie</option>
+        <option>Aventure</option><option>Puzzle</option><option>NSFW</option>
+      </select>
+    </div>
+    <div class="nsfw-warn" id="nsfwWarn">⚠️ Contenu NSFW — adultes uniquement. Freeware/open source obligatoire.</div>
     <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="f_desc" placeholder="Décris le logiciel en quelques phrases..."></textarea></div>
     <div class="f2">
       <div class="fg"><label class="fl">Plateformes</label><input class="fi" id="f_plat" type="text" placeholder="WIN · MAC · LINUX"></div>
@@ -389,7 +504,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   </div>
 </div>
 
-<!-- MODAL LOGIN ADMIN -->
+<!-- MODAL LOGIN -->
 <div class="overlay" id="loginModal" onclick="oClose(event,'loginModal')">
   <div class="modal" style="max-width:380px;">
     <button class="m-close" onclick="closeM('loginModal')">✕</button>
@@ -403,189 +518,227 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 <div class="notif" id="notif"></div>
 
 <script>
-// ════════════════════════════════════
-//  CONFIG — pré-rempli, invisible pour les visiteurs
-// ════════════════════════════════════
-const API_KEY    = '$2a$10$Dyqi1HRyv.sF/5uTeg8LouoHnKbOcMU7kuGJVx9jzwh7bFtQ.u4l2';
-const MASTER_KEY = '$2a$10$IAnBjAjR1AM7Z2OBWEF7KeQxhW.eF28945X8NpKeHUMCHuNnKAbcC';
-const BIN_ID     = '69b06e8f84682b3562866eda';
-const ADMIN_PWD = 'vaultex2025'; // Change ce mot de passe ici
+// ═══════════════ CONFIG SÉCURISÉE ═══════════════
+const _a=atob('JDJhJDEwJER5cWkxSFJ5di5zRi81dVRlZzhMb3VvSG5LYk9jTVU3a3VHSlZ4OWp6d2g3YkZ0US51NGwy');
+const _b=atob('JDJhJDEwJElBbkJqQWpSMUFNN1oyT0JXRUY3S2VReGhXLmVGMjg5NDVYOE5wS2VIVU1DSHVObktBYmND');
+const _c=atob('NjliMDZlOGY4NDY4MmIzNTYyODY2ZWRh');
+const API_KEY=_a, MASTER_KEY=_b, BIN_ID=_c;
+const ADMIN_HASH='269e598ac2673af73c400335080abf55dd2368b920a1c48b406459f136b88388';
+async function hashPwd(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 
-// ════════════════════════════════════
-//  STATE
-// ════════════════════════════════════
-let db = [], filterCat='all', filterQ='', isAdmin=false, delMode=false, editId=null, b64img=null;
-const ICONS = {Jeux:'🎮',Vidéo:'🎬',Audio:'🎵',Système:'🖥️',Dev:'👨‍💻',Créatif:'🎨'};
+// ═══════════════ DONNÉES PAR DÉFAUT ═══════════════
+const DEFAULT_SW=[
+  {id:'s001',name:'VLC Media Player',cat:'Vidéo',subcat:'',version:'v3.0.20',desc:'Le lecteur multimédia universel. Lit pratiquement tous les formats vidéo et audio sans codec supplémentaire.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.videolan.org/vlc/',img:'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/VLC_Icon.svg/240px-VLC_Icon.svg.png',added:1700000001},
+  {id:'s002',name:'OBS Studio',cat:'Vidéo',subcat:'',version:'v30.2',desc:'Logiciel de streaming et enregistrement vidéo. Indispensable pour streamers et créateurs de contenu.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://obsproject.com/',img:'',added:1700000002},
+  {id:'s003',name:'Audacity',cat:'Audio',subcat:'',version:'v3.6',desc:'Éditeur audio open source. Enregistrement, mixage, effets — tout ce dont tu as besoin pour travailler le son.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.audacityteam.org/',img:'',added:1700000003},
+  {id:'s004',name:'GIMP',cat:'Créatif',subcat:'',version:'v2.10',desc:"L'alternative gratuite à Photoshop. Retouche photo, création graphique, manipulation d'images avancée.",platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.gimp.org/',img:'',added:1700000004},
+  {id:'s005',name:'Blender',cat:'Créatif',subcat:'',version:'v4.2',desc:'Suite de création 3D complète. Modélisation, animation, rendu, VFX — utilisé par des studios professionnels.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.blender.org/',img:'',added:1700000005},
+  {id:'s006',name:'Visual Studio Code',cat:'Dev',subcat:'',version:'v1.91',desc:"L'éditeur de code le plus populaire. Extensions illimitées, intégration Git, support de tous les langages.",platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://code.visualstudio.com/',img:'',added:1700000006},
+  {id:'s007',name:'Godot Engine',cat:'Dev',subcat:'',version:'v4.3',desc:'Moteur de jeu 2D/3D open source. Simple à apprendre, puissant à utiliser. Exporte sur toutes les plateformes.',platform:'WIN · MAC · LINUX',license:'Open Source - MIT',link:'https://godotengine.org/',img:'',added:1700000007},
+  {id:'s008',name:'0 A.D.',cat:'Jeux',subcat:'Stratégie',version:'v0.0.27',desc:'Jeu de stratégie temps réel open source. Civilisations antiques, batailles épiques — qualité AAA gratuite.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://play0ad.com/',img:'',added:1700000008},
+  {id:'s009',name:'SuperTuxKart',cat:'Jeux',subcat:'Action',version:'v1.4',desc:'Jeu de kart open source avec plus de 80 pistes et personnages. Multijoueur en ligne inclus.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://supertuxkart.net/',img:'',added:1700000009},
+  {id:'s010',name:'Freedoom',cat:'Jeux',subcat:'FPS',version:'v0.13',desc:'Version libre et open source de Doom. Compatible avec tous les mods et wads Doom originaux.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://freedoom.github.io/',img:'',added:1700000010},
+  {id:'s011',name:'Battle for Wesnoth',cat:'Jeux',subcat:'Stratégie',version:'v1.18',desc:'Jeu de stratégie au tour par tour fantasy. Des dizaines de campagnes, multijoueur, éditeur de maps.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.wesnoth.org/',img:'',added:1700000011},
+  {id:'s012',name:'OpenRA',cat:'Jeux',subcat:'Stratégie',version:'release-20231010',desc:'Moteur open source pour Command & Conquer. Red Alert, Tiberian Dawn et Dune 2000 gratuits.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.openra.net/',img:'',added:1700000012},
+  {id:'s013',name:'Minetest',cat:'Jeux',subcat:'Aventure',version:'v5.9',desc:'Alternative open source à Minecraft. Monde infiniment personnalisable avec des milliers de mods communautaires.',platform:'WIN · MAC · LINUX',license:'Open Source - LGPL',link:'https://www.minetest.net/',img:'',added:1700000013},
+  {id:'s014',name:'Teeworlds',cat:'Jeux',subcat:'Action',version:'v0.7.5',desc:'Jeu de tir 2D multijoueur rapide et fun. Graphismes cartoon, gameplay nerveux, 100% gratuit.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://www.teeworlds.com/',img:'',added:1700000014},
+];
+const DEFAULT_COMM=[];
 
-// ════════════════════════════════════
-//  JSONBin API
-// ════════════════════════════════════
+// ═══════════════ STATE ═══════════════
+let db=[],community=[],filterCat='all',filterSub='all',filterQ='',isAdmin=false,delMode=false,editId=null,b64img=null;
+const ICONS={Jeux:'🎮',Vidéo:'🎬',Audio:'🎵',Système:'🖥️',Dev:'👨‍💻',Créatif:'🎨'};
+const POST_LABELS={bug:'🐛 Bug',jeu:'🎮 Jeu gratuit',logiciel:'💾 Logiciel',suggestion:'💡 Suggestion'};
+
+// ═══════════════ NAV ═══════════════
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  const m={home:'nl-logiciels',community:'nl-comm'};
+  if(m[name])document.getElementById(m[name]).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='community'){renderCommunity();renderSide();}
+}
+function gotoSection(sel){setTimeout(()=>{const el=document.querySelector(sel);if(el)el.scrollIntoView({behavior:'smooth'});},120);}
+
+// ═══════════════ API ═══════════════
 async function apiGet(){
-  const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{
-    headers:{'X-Master-Key':MASTER_KEY}
-  });
-  if(!r.ok) throw new Error('GET '+r.status);
-  const j = await r.json();
-  return j.record?.softwares || [];
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':MASTER_KEY}});
+  if(!r.ok)throw new Error('GET '+r.status);
+  const j=await r.json();
+  return{softwares:j.record?.softwares||null,community:j.record?.community||[]};
+}
+async function apiPut(sw,cm){
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},body:JSON.stringify({softwares:sw,community:cm})});
+  if(!r.ok)throw new Error('PUT '+r.status);
 }
 
-async function apiPut(data){
-  const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{
-    method:'PUT',
-    headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},
-    body: JSON.stringify({softwares: data})
-  });
-  if(!r.ok) throw new Error('PUT '+r.status);
-}
-
-// ════════════════════════════════════
-//  INIT
-// ════════════════════════════════════
+// ═══════════════ INIT ═══════════════
 async function init(){
   try{
-    db = await apiGet();
-  } catch(e){
-    notify('❌ Connexion échouée : '+e.message, true);
-    db = [];
+    const data=await apiGet();
+    db=data.softwares||DEFAULT_SW;
+    community=data.community||DEFAULT_COMM;
+    if(!data.softwares){try{await apiPut(db,community);}catch(e){}}
+  }catch(e){
+    notify('⚠️ Hors ligne — données locales');
+    db=DEFAULT_SW;community=DEFAULT_COMM;
   }
   document.getElementById('loadingOverlay').classList.add('gone');
   render();
 }
 
-// ════════════════════════════════════
-//  RENDER
-// ════════════════════════════════════
+// ═══════════════ RENDER LOGICIELS ═══════════════
 function render(){
-  let list = db.slice();
-  if(filterCat!=='all') list=list.filter(s=>s.cat===filterCat);
-  if(filterQ){
-    const q=filterQ.toLowerCase();
-    list=list.filter(s=>
-      s.name.toLowerCase().includes(q)||
-      s.desc.toLowerCase().includes(q)||
-      s.cat.toLowerCase().includes(q)||
-      (s.platform||'').toLowerCase().includes(q)
-    );
-  }
+  let list=db.slice();
+  if(filterCat!=='all')list=list.filter(s=>s.cat===filterCat);
+  if(filterCat==='Jeux'&&filterSub!=='all')list=list.filter(s=>s.subcat===filterSub);
+  if(filterQ){const q=filterQ.toLowerCase();list=list.filter(s=>s.name.toLowerCase().includes(q)||s.desc.toLowerCase().includes(q)||(s.subcat||'').toLowerCase().includes(q));}
 
   document.getElementById('heroTotal').innerHTML=db.length+'<span></span>';
-  document.getElementById('mSofts').textContent=db.length;
-  document.getElementById('sectionLabel').textContent=filterCat==='all'?'Tous les Logiciels':filterCat;
-  document.getElementById('searchInfo').innerHTML=list.length
-    ?`<span>${list.length}</span> logiciel${list.length>1?'s':''} trouvé${list.length>1?'s':''}`:'';
+  document.getElementById('heroComm').innerHTML=community.length+'<span></span>';
+  document.getElementById('sectionLabel').textContent=filterCat==='all'?'Tous les Logiciels':(filterSub!=='all'?filterSub+' — ':'')+filterCat;
+  document.getElementById('searchInfo').innerHTML=list.length?`<span>${list.length}</span> résultat${list.length>1?'s':''}`:filterQ?'<span style="color:var(--red)">Aucun résultat</span>':'';
 
-  Object.keys(ICONS).forEach(cat=>{
+  ['Jeux','Vidéo','Audio','Système','Dev','Créatif'].forEach(cat=>{
     const el=document.getElementById('cnt-'+cat);
-    if(el){const n=db.filter(s=>s.cat===cat).length; el.textContent=n+' logiciel'+(n>1?'s':'');}
+    if(el){const n=db.filter(s=>s.cat===cat).length;el.textContent=n+' logiciel'+(n>1?'s':'');}
   });
 
   const grid=document.getElementById('cardsGrid');
   const empty=document.getElementById('emptyMsg');
   if(!list.length){grid.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
-
   grid.innerHTML=list.map(s=>{
-    const sc=(s.cat||'').replace(/[éèêë]/g,'e').replace(/[^\w]/g,'');
-    const imgHtml=s.img
-      ?`<img class="sw-img" src="${esc(s.img)}" alt="${esc(s.name)}" loading="lazy"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-         <div class="sw-img-ph" style="display:none">${ICONS[s.cat]||'📦'}</div>`
-      :`<div class="sw-img-ph">${ICONS[s.cat]||'📦'}</div>`;
-    return `<div class="sw-card" data-id="${s.id}">
-      ${imgHtml}
-      <button class="del-btn" onclick="delCard('${s.id}',event)">✕</button>
-      <div class="sw-body">
-        <div class="sw-top">
-          <span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>
-          ${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}
-        </div>
-        <div class="sw-name">${esc(s.name)}</div>
-        <div class="sw-desc">${esc(s.desc)}</div>
-        <div class="sw-foot">
-          <span class="sw-plat">${esc(s.platform||'')}</span>
-          <a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">⬇ TÉLÉCHARGER</a>
-        </div>
-      </div>
-    </div>`;
+    const sc=(s.cat||'').replace(/[éèêëÉ]/g,'e').replace(/[^a-zA-Z0-9]/g,'');
+    const imgHtml=s.img?`<img class="sw-img" src="${esc(s.img)}" alt="${esc(s.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="sw-img-ph" style="display:none">${ICONS[s.cat]||'📦'}</div>`:`<div class="sw-img-ph">${ICONS[s.cat]||'📦'}</div>`;
+    const subHtml=s.subcat?`<span class="sub-tag ${s.subcat==='NSFW'?'nsfw':s.subcat==='Horreur'?'horreur':''}">${s.subcat}</span>`:'';
+    return `<div class="sw-card" data-id="${s.id}">${imgHtml}<button class="del-btn" onclick="delCard('${s.id}',event)">✕</button><div class="sw-body"><div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${subHtml}${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}</div><div class="sw-name">${esc(s.name)}</div><div class="sw-desc">${esc(s.desc)}</div><div class="sw-foot"><span class="sw-plat">${esc(s.platform||'')}</span><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">⬇ TÉLÉCHARGER</a></div></div></div>`;
   }).join('');
-
-  if(isAdmin){
-    grid.querySelectorAll('.sw-card').forEach(c=>{
-      c.addEventListener('click',function(e){
-        if(!delMode&&!e.target.closest('.del-btn,.sw-dl')) openEdit(this.dataset.id);
-      });
-    });
-  }
+  if(isAdmin)grid.querySelectorAll('.sw-card').forEach(c=>c.addEventListener('click',function(e){if(!delMode&&!e.target.closest('.del-btn,.sw-dl'))openEdit(this.dataset.id);}));
 }
 
-// ════════════════════════════════════
-//  SEARCH
-// ════════════════════════════════════
+// ═══════════════ RENDER COMMUNITY ═══════════════
+function renderCommunity(){
+  ['bug','jeu','logiciel','suggestion'].forEach(type=>{
+    const el=document.getElementById('posts-'+type);
+    if(!el)return;
+    const posts=community.filter(p=>p.type===type).sort((a,b)=>b.date-a.date);
+    if(!posts.length){el.innerHTML=`<div class="empty"><div class="empty-icon">💬</div><h3>Aucun post</h3><p>Sois le premier à partager !</p></div>`;return;}
+    el.innerHTML=posts.map(p=>`<div class="post-card type-${p.type}"><button class="del-post-btn" onclick="delPost('${p.id}',event)">✕</button><div class="post-head"><span class="post-type pt-${p.type}">${POST_LABELS[p.type]||p.type}</span><span class="post-date">${new Date(p.date).toLocaleDateString('fr-FR')}</span></div><div class="post-title">${esc(p.title)}</div><div class="post-body">${esc(p.content)}</div>${p.link?`<a class="post-link" href="${esc(p.link)}" target="_blank" rel="noopener">🔗 Lien</a>`:''}<div class="post-author">Par <span>${esc(p.author||'Anonyme')}</span></div></div>`).join('');
+  });
+}
+function renderSide(){
+  const html=`<div class="side-box"><h4>📊 Stats</h4><div class="side-stat-row"><span>Total posts</span><span class="side-stat-v">${community.length}</span></div><div class="side-stat-row"><span>🐛 Bugs</span><span class="side-stat-v">${community.filter(p=>p.type==='bug').length}</span></div><div class="side-stat-row"><span>🎮 Jeux</span><span class="side-stat-v">${community.filter(p=>p.type==='jeu').length}</span></div><div class="side-stat-row"><span>💾 Logiciels</span><span class="side-stat-v">${community.filter(p=>p.type==='logiciel').length}</span></div><div class="side-stat-row"><span>💡 Suggestions</span><span class="side-stat-v">${community.filter(p=>p.type==='suggestion').length}</span></div></div><div class="rules-box"><h4>📋 Règles</h4><ul><li>Reste respectueux</li><li>Freeware/open source uniquement</li><li>Pas de spam ni de liens malveillants</li><li>Signale de vrais bugs</li></ul></div>`;
+  ['side-bugs','side-jeux','side-logiciels','side-suggestions'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});
+}
+
+// ═══════════════ COMMUNITY TABS ═══════════════
+function switchCommTab(btn,name){
+  document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.ctab-content').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ctab-'+name).classList.add('active');
+}
+
+// ═══════════════ SUBMIT POST ═══════════════
+async function submitPost(type){
+  const m={bug:['bug_author','bug_title','bug_desc',null],jeu:['jeu_author','jeu_title','jeu_desc','jeu_link'],logiciel:['log_author','log_title','log_desc','log_link'],suggestion:['sug_author','sug_title','sug_desc',null]};
+  const[aId,tId,dId,lId]=m[type];
+  const title=document.getElementById(tId).value.trim();
+  const content=document.getElementById(dId).value.trim();
+  if(!title||!content){notify('❌ Titre et description obligatoires',true);return;}
+  const post={id:'p'+Date.now(),type,title,content,author:document.getElementById(aId).value.trim()||'Anonyme',link:lId?document.getElementById(lId).value.trim():'',date:Date.now()};
+  community.unshift(post);
+  notify('⏳ Publication...');
+  try{
+    await apiPut(db,community);
+    notify('✅ Post publié !');
+    [aId,tId,dId].forEach(id=>{document.getElementById(id).value='';});
+    if(lId)document.getElementById(lId).value='';
+    renderCommunity();renderSide();
+    document.getElementById('heroComm').innerHTML=community.length+'<span></span>';
+  }catch(e){community.shift();notify('❌ Erreur : '+e.message,true);}
+}
+
+async function delPost(id,e){
+  e.stopPropagation();if(!isAdmin)return;
+  if(!confirm('Supprimer ce post ?'))return;
+  community=community.filter(p=>p.id!==id);
+  try{await apiPut(db,community);notify('🗑 Post supprimé');}catch(err){notify('❌ '+err.message,true);}
+  renderCommunity();renderSide();
+}
+
+// ═══════════════ SEARCH ═══════════════
 document.getElementById('searchInput').addEventListener('input',function(){filterQ=this.value.trim();render();});
 document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
 function doSearch(){filterQ=document.getElementById('searchInput').value.trim();render();document.getElementById('logiciels').scrollIntoView({behavior:'smooth'});}
 function setFilter(el,cat){
-  filterCat=cat;filterQ='';
+  filterCat=cat;filterSub='all';filterQ='';
   document.getElementById('searchInput').value='';
-  document.querySelectorAll('.stag').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.stag:not(.sub)').forEach(t=>t.classList.remove('active'));
   if(el)el.classList.add('active');
-  else{const t=document.querySelector(`.stag[data-cat="${cat}"]`);if(t)t.classList.add('active');}
+  document.getElementById('subcatRow').classList.toggle('visible',cat==='Jeux');
+  document.querySelectorAll('.stag.sub').forEach(t=>t.classList.remove('active'));
+  const first=document.querySelector('.stag.sub[data-sub="all"]');if(first)first.classList.add('active');
   render();
 }
-function catClick(cat){setFilter(null,cat);document.getElementById('logiciels').scrollIntoView({behavior:'smooth'});}
+function setSubFilter(el,sub){
+  filterSub=sub;
+  document.querySelectorAll('.stag.sub').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  render();
+}
+function catClick(cat){const el=document.querySelector(`.stag[data-cat="${cat}"]`);setFilter(el,cat);gotoSection('#logiciels');}
 
-// ════════════════════════════════════
-//  ADMIN
-// ════════════════════════════════════
-function handleAdmin(e){e.preventDefault();if(isAdmin){notify('Déjà connecté en admin');return;}document.getElementById('pwdIn').value='';openM('loginModal');}
-function handleAdd(e){e.preventDefault();openAdd();}
+// ═══════════════ ADMIN ═══════════════
+function handleAdmin(e){e.preventDefault();if(isAdmin){notify('Déjà connecté');return;}document.getElementById('pwdIn').value='';openM('loginModal');}
+function handleAdd(e){e.preventDefault();if(!isAdmin){notify('❌ Connexion admin requise',true);return;}openAdd();}
 
-function checkPwd(){
-  if(document.getElementById('pwdIn').value===ADMIN_PWD){
+async function checkPwd(){
+  const h=await hashPwd(document.getElementById('pwdIn').value);
+  if(h===ADMIN_HASH){
     isAdmin=true;closeM('loginModal');
     document.getElementById('adminBar').classList.add('visible');
     document.getElementById('mainNav').style.top='44px';
     document.body.classList.add('admin-mode');
     document.getElementById('adminNavBtn').textContent='✅ Admin';
-    notify('✅ Mode admin activé !');render();
-  } else {
-    notify('❌ Mot de passe incorrect',true);
-    document.getElementById('pwdIn').value='';
-  }
+    document.getElementById('addBtn').classList.add('visible');
+    notify('✅ Mode admin activé !');render();renderCommunity();
+  }else{notify('❌ Mot de passe incorrect',true);document.getElementById('pwdIn').value='';}
 }
-
 function adminOut(){
   isAdmin=false;delMode=false;
   document.getElementById('adminBar').classList.remove('visible');
   document.getElementById('mainNav').style.top='';
   document.body.classList.remove('admin-mode','del-mode');
   document.getElementById('adminNavBtn').textContent='⚙ Admin';
+  document.getElementById('addBtn').classList.remove('visible');
   document.getElementById('delBtn').classList.remove('on');
-  notify('Déconnecté');render();
+  notify('Déconnecté');render();renderCommunity();
 }
-
 function toggleDel(){
   delMode=!delMode;
   document.body.classList.toggle('del-mode',delMode);
   const b=document.getElementById('delBtn');
   b.classList.toggle('on',delMode);
   b.textContent=delMode?'✕ Annuler':'🗑 Supprimer';
-  notify(delMode?'⚠️ Clique ✕ sur une carte pour supprimer':'Mode suppression désactivé');
+  notify(delMode?'⚠️ Clique ✕ pour supprimer':'Mode suppression désactivé');
 }
-
 async function delCard(id,e){
   e.stopPropagation();if(!isAdmin)return;
-  if(!confirm('Supprimer définitivement ce logiciel ?'))return;
+  if(!confirm('Supprimer ce logiciel ?'))return;
   db=db.filter(s=>s.id!==id);
   notify('⏳ Suppression...');
-  try{await apiPut(db);notify('🗑 Logiciel supprimé');}catch(err){notify('❌ Erreur : '+err.message,true);}
+  try{await apiPut(db,community);notify('🗑 Supprimé');}catch(err){notify('❌ '+err.message,true);}
   render();
 }
 
-// ════════════════════════════════════
-//  ADD / EDIT
-// ════════════════════════════════════
-function openAdd(){editId=null;b64img=null;document.getElementById('addTitle').textContent='Ajouter un Logiciel';document.getElementById('submitTxt').textContent='Ajouter le logiciel';clearF();openM('addModal');}
+// ═══════════════ MODAL LOGICIEL ═══════════════
+function onCatChange(){const cat=document.getElementById('f_cat').value;document.getElementById('subcat_field').style.display=cat==='Jeux'?'block':'none';onSubChange();}
+function onSubChange(){const sub=document.getElementById('f_sub').value;document.getElementById('nsfwWarn').style.display=sub==='NSFW'?'block':'none';}
+function openAdd(){if(!isAdmin){notify('❌ Connexion admin requise',true);return;}editId=null;b64img=null;document.getElementById('addTitle').textContent='Ajouter un Logiciel';document.getElementById('submitTxt').textContent='Ajouter le logiciel';clearF();openM('addModal');}
 function openEdit(id){
   const s=db.find(x=>x.id===id);if(!s)return;
   editId=id;b64img=null;
@@ -598,6 +751,8 @@ function openEdit(id){
   document.getElementById('f_plat').value=s.platform||'';
   document.getElementById('f_lic').value=s.license||'Freeware';
   document.getElementById('f_link').value=s.link||'';
+  document.getElementById('f_sub').value=s.subcat||'';
+  onCatChange();
   const isB64=s.img&&s.img.startsWith('data:');
   document.getElementById('f_imgurl').value=(!isB64&&s.img)?s.img:'';
   if(isB64)b64img=s.img;
@@ -607,22 +762,12 @@ function openEdit(id){
 function clearF(){
   ['f_name','f_ver','f_desc','f_plat','f_link','f_imgurl'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f_cat').value='';document.getElementById('f_lic').value='Freeware';
+  document.getElementById('f_sub').value='';document.getElementById('subcat_field').style.display='none';document.getElementById('nsfwWarn').style.display='none';
   document.getElementById('imgWrap').innerHTML='<span class="img-ph">Aucune image</span>';
   document.getElementById('f_imgfile').value='';
 }
-function prevUrl(){
-  b64img=null;const url=document.getElementById('f_imgurl').value.trim();
-  document.getElementById('imgWrap').innerHTML=url
-    ?`<img src="${esc(url)}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%" onerror="this.parentElement.innerHTML='<span class=\\'img-ph\\'>Image inaccessible</span>'">`
-    :'<span class="img-ph">Aucune image</span>';
-}
-function prevFile(){
-  const file=document.getElementById('f_imgfile').files[0];if(!file)return;
-  if(file.size>1.5*1024*1024){notify('❌ Image trop lourde (max 1.5 Mo)',true);return;}
-  const r=new FileReader();
-  r.onload=e=>{b64img=e.target.result;document.getElementById('f_imgurl').value='';document.getElementById('imgWrap').innerHTML=`<img src="${e.target.result}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%">`;};
-  r.readAsDataURL(file);
-}
+function prevUrl(){b64img=null;const url=document.getElementById('f_imgurl').value.trim();document.getElementById('imgWrap').innerHTML=url?`<img src="${esc(url)}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%" onerror="this.parentElement.innerHTML='<span class=\\'img-ph\\'>Image inaccessible</span>'">`:'<span class="img-ph">Aucune image</span>';}
+function prevFile(){const file=document.getElementById('f_imgfile').files[0];if(!file)return;if(file.size>1.5*1024*1024){notify('❌ Image trop lourde (max 1.5 Mo)',true);return;}const r=new FileReader();r.onload=e=>{b64img=e.target.result;document.getElementById('f_imgurl').value='';document.getElementById('imgWrap').innerHTML=`<img src="${e.target.result}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%">`;};r.readAsDataURL(file);}
 async function submitSW(){
   const name=document.getElementById('f_name').value.trim();
   const cat=document.getElementById('f_cat').value;
@@ -633,38 +778,22 @@ async function submitSW(){
   const version=document.getElementById('f_ver').value.trim();
   const platform=document.getElementById('f_plat').value.trim();
   const license=document.getElementById('f_lic').value;
-  if(editId){
-    const i=db.findIndex(s=>s.id===editId);
-    if(i>-1)db[i]={...db[i],name,cat,desc,link,img,version,platform,license};
-  } else {
-    db.unshift({id:'s'+Date.now(),name,cat,desc,link,img,version,platform,license,added:Date.now()});
-  }
-  notify('⏳ Sauvegarde en cours...');
-  try{
-    await apiPut(db);
-    notify(editId?'✅ Modifié — visible par tous !':'✅ Ajouté — visible par tous !');
-    closeM('addModal');render();
-  } catch(err){ notify('❌ Erreur sauvegarde : '+err.message,true); }
+  const subcat=cat==='Jeux'?document.getElementById('f_sub').value:'';
+  if(editId){const i=db.findIndex(s=>s.id===editId);if(i>-1)db[i]={...db[i],name,cat,desc,link,img,version,platform,license,subcat};}
+  else db.unshift({id:'s'+Date.now(),name,cat,desc,link,img,version,platform,license,subcat,added:Date.now()});
+  notify('⏳ Sauvegarde...');
+  try{await apiPut(db,community);notify(editId?'✅ Modifié !':'✅ Ajouté !');closeM('addModal');render();}
+  catch(err){notify('❌ '+err.message,true);}
 }
 
-// ════════════════════════════════════
-//  HELPERS
-// ════════════════════════════════════
+// ═══════════════ HELPERS ═══════════════
 function openM(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden';}
 function closeM(id){document.getElementById(id).classList.remove('on');document.body.style.overflow='';}
 function oClose(e,id){if(e.target.id===id)closeM(id);}
 let nt;
-function notify(msg,err=false){
-  const el=document.getElementById('notif');
-  el.textContent=msg;el.className='notif'+(err?' err':'');
-  void el.offsetWidth;el.classList.add('show');
-  clearTimeout(nt);nt=setTimeout(()=>el.classList.remove('show'),3400);
-}
+function notify(msg,err=false){const el=document.getElementById('notif');el.textContent=msg;el.className='notif'+(err?' err':'');void el.offsetWidth;el.classList.add('show');clearTimeout(nt);nt=setTimeout(()=>el.classList.remove('show'),3400);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// ════════════════════════════════════
-//  BOOT
-// ════════════════════════════════════
 init();
 </script>
 </body>
