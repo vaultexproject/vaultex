@@ -239,8 +239,24 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   footer,.fbot{padding-left:30px;padding-right:30px;}
   .comm-grid{grid-template-columns:1fr;}
 }
-@media(max-width:700px){
-  .hero{padding:110px 20px 60px;}
+.mod-card{background:var(--card);border:1px solid var(--border);padding:22px;position:relative;transition:border-color .2s;}
+.mod-card:hover{border-color:rgba(255,160,0,.3);}
+.mod-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
+.mod-card.type-bug::before{background:var(--red);}
+.mod-card.type-jeu::before{background:#ff6030;}
+.mod-card.type-logiciel::before{background:var(--neon);}
+.mod-card.type-suggestion::before{background:var(--neon2);}
+.mod-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:10px;flex-wrap:wrap;}
+.mod-actions{display:flex;gap:8px;}
+.mod-btn{padding:5px 14px;font-family:'Orbitron',monospace;font-size:.58rem;letter-spacing:1px;font-weight:700;cursor:pointer;border-radius:2px;border:none;text-transform:uppercase;transition:all .2s;}
+.mod-btn-edit{background:rgba(0,255,231,.12);color:var(--neon);border:1px solid rgba(0,255,231,.25);}
+.mod-btn-edit:hover{background:rgba(0,255,231,.22);}
+.mod-btn-del{background:rgba(255,32,64,.12);color:var(--red);border:1px solid rgba(255,32,64,.2);}
+.mod-btn-del:hover{background:rgba(255,32,64,.25);}
+.mod-meta{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted);margin-top:10px;display:flex;gap:16px;flex-wrap:wrap;}
+.mod-meta span{color:var(--neon);}
+@media(max-width:700px){.mod-card-head{flex-direction:column;}}
+
   .section{padding:50px 20px;}
   .cat-grid{grid-template-columns:repeat(2,1fr);}
   .nav-links{display:none;}
@@ -367,6 +383,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <button class="ctab" onclick="switchCommTab(this,'jeux')">🎮 Jeux gratuits</button>
     <button class="ctab" onclick="switchCommTab(this,'logiciels')">💾 Logiciels</button>
     <button class="ctab" onclick="switchCommTab(this,'suggestions')">💡 Suggestions</button>
+    <button class="ctab" id="adminCommTab" onclick="switchCommTab(this,'admin')" style="display:none;color:#ffa000;">⚙ Modération</button>
   </div>
 
   <!-- TAB BUGS -->
@@ -437,7 +454,22 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       </div>
       <div id="side-suggestions"></div>
     </div>
+  </div>  <!-- TAB ADMIN MODERATION -->
+  <div class="ctab-content" id="ctab-admin">
+    <div class="mod-header">
+      <div class="section-title">// PANNEAU DE MODÉRATION</div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted);">Filtrer :</span>
+        <span class="stag active" data-mf="all" onclick="setModFilter(this,'all')">Tous</span>
+        <span class="stag" data-mf="bug" onclick="setModFilter(this,'bug')">🐛 Bugs</span>
+        <span class="stag" data-mf="jeu" onclick="setModFilter(this,'jeu')">🎮 Jeux</span>
+        <span class="stag" data-mf="logiciel" onclick="setModFilter(this,'logiciel')">💾 Logiciels</span>
+        <span class="stag" data-mf="suggestion" onclick="setModFilter(this,'suggestion')">💡 Suggestions</span>
+      </div>
+    </div>
+    <div id="mod-list" style="margin-top:24px;display:flex;flex-direction:column;gap:12px;"></div>
   </div>
+
 </div>
 </div><!-- end page-community -->
 
@@ -512,6 +544,21 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <p class="sub">Entrez le mot de passe administrateur.</p>
     <div class="fg"><label class="fl">Mot de passe</label><input class="fi" id="pwdIn" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPwd()"></div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="checkPwd()">🔑 Connexion</button>
+  </div>
+</div>
+
+<!-- MODAL EDIT POST -->
+<div class="overlay" id="editPostModal" onclick="oClose(event,'editPostModal')">
+  <div class="modal" style="max-width:520px;">
+    <button class="m-close" onclick="closeM('editPostModal')">✕</button>
+    <h2>✏️ Modifier le post</h2>
+    <p class="sub" id="editPostSub"></p>
+    <input type="hidden" id="ep_id">
+    <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="ep_author" placeholder="Anonyme"></div>
+    <div class="fg"><label class="fl">Titre *</label><input class="fi" id="ep_title" placeholder="Titre..."></div>
+    <div class="fg"><label class="fl">Contenu *</label><textarea class="ft" id="ep_content" style="min-height:120px;" placeholder="Contenu..."></textarea></div>
+    <div class="fg"><label class="fl">Lien (optionnel)</label><input class="fi" id="ep_link" type="url" placeholder="https://..."></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;margin-top:4px;" onclick="saveEditPost()">💾 Enregistrer les modifications</button>
   </div>
 </div>
 
@@ -640,6 +687,7 @@ function switchCommTab(btn,name){
   document.querySelectorAll('.ctab-content').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('ctab-'+name).classList.add('active');
+  if(name==='admin')renderModeration();
 }
 
 // ═══════════════ SUBMIT POST ═══════════════
@@ -705,6 +753,7 @@ async function checkPwd(){
     document.body.classList.add('admin-mode');
     document.getElementById('adminNavBtn').textContent='✅ Admin';
     document.getElementById('addBtn').classList.add('visible');
+    document.getElementById('adminCommTab').style.display='block';
     notify('✅ Mode admin activé !');render();renderCommunity();
   }else{notify('❌ Mot de passe incorrect',true);document.getElementById('pwdIn').value='';}
 }
@@ -715,6 +764,7 @@ function adminOut(){
   document.body.classList.remove('admin-mode','del-mode');
   document.getElementById('adminNavBtn').textContent='⚙ Admin';
   document.getElementById('addBtn').classList.remove('visible');
+  document.getElementById('adminCommTab').style.display='none';
   document.getElementById('delBtn').classList.remove('on');
   notify('Déconnecté');render();renderCommunity();
 }
@@ -794,6 +844,78 @@ let nt;
 function notify(msg,err=false){const el=document.getElementById('notif');el.textContent=msg;el.className='notif'+(err?' err':'');void el.offsetWidth;el.classList.add('show');clearTimeout(nt);nt=setTimeout(()=>el.classList.remove('show'),3400);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
+// ═══════════════ MODÉRATION ═══════════════
+let modFilter='all';
+function setModFilter(el,type){
+  modFilter=type;
+  document.querySelectorAll('[data-mf]').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderModeration();
+}
+function renderModeration(){
+  if(!isAdmin)return;
+  const el=document.getElementById('mod-list');
+  if(!el)return;
+  let posts=community.slice().sort((a,b)=>b.date-a.date);
+  if(modFilter!=='all')posts=posts.filter(p=>p.type===modFilter);
+  if(!posts.length){el.innerHTML=`<div class="mod-empty"><div style="font-size:3rem;opacity:.2;margin-bottom:12px;">📭</div><p>Aucun post à modérer</p></div>`;return;}
+  el.innerHTML=posts.map(p=>`
+    <div class="mod-card type-${p.type}">
+      <div class="mod-card-head">
+        <div>
+          <span class="post-type pt-${p.type}">${POST_LABELS[p.type]||p.type}</span>
+          <div class="post-title" style="margin-top:8px;">${esc(p.title)}</div>
+        </div>
+        <div class="mod-actions">
+          <button class="mod-btn mod-btn-edit" onclick="openEditPost('${p.id}')">✏️ Modifier</button>
+          <button class="mod-btn mod-btn-del" onclick="delPostMod('${p.id}')">🗑 Supprimer</button>
+        </div>
+      </div>
+      <div class="post-body">${esc(p.content)}</div>
+      ${p.link?`<a class="post-link" href="${esc(p.link)}" target="_blank" rel="noopener">🔗 ${esc(p.link.substring(0,50))}</a>`:''}
+      <div class="mod-meta">
+        <span>Par <b style="color:var(--neon)">${esc(p.author||'Anonyme')}</b></span>
+        <span>${new Date(p.date).toLocaleString('fr-FR')}</span>
+        <span style="color:var(--muted)">ID: ${p.id}</span>
+      </div>
+    </div>
+  `).join('');
+}
+function openEditPost(id){
+  const p=community.find(x=>x.id===id);if(!p)return;
+  document.getElementById('ep_id').value=p.id;
+  document.getElementById('ep_author').value=p.author||'';
+  document.getElementById('ep_title').value=p.title;
+  document.getElementById('ep_content').value=p.content;
+  document.getElementById('ep_link').value=p.link||'';
+  document.getElementById('editPostSub').textContent=POST_LABELS[p.type]+' — Modification en cours';
+  openM('editPostModal');
+}
+async function saveEditPost(){
+  const id=document.getElementById('ep_id').value;
+  const title=document.getElementById('ep_title').value.trim();
+  const content=document.getElementById('ep_content').value.trim();
+  if(!title||!content){notify('❌ Titre et contenu obligatoires',true);return;}
+  const i=community.findIndex(p=>p.id===id);
+  if(i<0)return;
+  community[i]={...community[i],title,content,author:document.getElementById('ep_author').value.trim()||'Anonyme',link:document.getElementById('ep_link').value.trim(),edited:Date.now()};
+  notify('⏳ Sauvegarde...');
+  try{
+    await apiPut(db,community);
+    notify('✅ Post modifié !');
+    closeM('editPostModal');
+    renderCommunity();renderSide();renderModeration();
+  }catch(e){notify('❌ '+e.message,true);}
+}
+async function delPostMod(id){
+  if(!confirm('Supprimer ce post définitivement ?'))return;
+  community=community.filter(p=>p.id!==id);
+  try{await apiPut(db,community);notify('🗑 Post supprimé');}catch(err){notify('❌ '+err.message,true);}
+  renderCommunity();renderSide();renderModeration();
+  document.getElementById('heroComm').innerHTML=community.length+'<span></span>';
+}
+
+// ═══════════════ INIT ═══════════════
 init();
 </script>
 </body>
