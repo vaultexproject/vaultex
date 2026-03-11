@@ -657,20 +657,29 @@ async function apiGet(){
   const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':MASTER_KEY}});
   if(!r.ok)throw new Error('GET '+r.status);
   const j=await r.json();
-  return{softwares:j.record?.softwares||null,community:j.record?.community||[]};
+  return{softwares:j.record?.softwares||null, community:j.record?.community||[], version:j.record?.version||0};
 }
 async function apiPut(sw,cm){
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},body:JSON.stringify({softwares:sw,community:cm})});
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},body:JSON.stringify({softwares:sw, community:cm, version:DATA_VERSION})});
   if(!r.ok)throw new Error('PUT '+r.status);
 }
 
 // ═══════════════ INIT ═══════════════
+const DATA_VERSION = 3; // ← augmente ce chiffre à chaque fois que tu veux forcer une mise à jour
+
 async function init(){
   try{
     const data=await apiGet();
-    db=data.softwares||DEFAULT_SW;
     community=data.community||DEFAULT_COMM;
-    if(!data.softwares){try{await apiPut(db,community);}catch(e){}}
+
+    // Si la version stockée est différente → on écrase avec les nouvelles données
+    const storedVersion = data.version || 0;
+    if(!data.softwares || storedVersion < DATA_VERSION){
+      db = DEFAULT_SW;
+      try{await apiPut(db, community);}catch(e){}
+    } else {
+      db = data.softwares;
+    }
   }catch(e){
     notify('⚠️ Hors ligne — données locales');
     db=DEFAULT_SW;community=DEFAULT_COMM;
