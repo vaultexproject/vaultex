@@ -166,6 +166,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .post-title{font-family:'Orbitron',monospace;font-size:.88rem;color:var(--white);margin-bottom:8px;font-weight:700;}
 .post-body{font-size:.85rem;color:var(--muted);line-height:1.6;}
 .post-author{margin-top:12px;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted);}
+.post-footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:8px;}
+.like-bar{display:flex;gap:6px;align-items:center;}
+.like-btn,.dislike-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border:none;border-radius:20px;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:.72rem;font-weight:700;transition:all .2s;letter-spacing:1px;}
+.like-btn{background:rgba(0,255,231,.08);color:var(--neon);border:1px solid rgba(0,255,231,.2);}
+.like-btn:hover,.like-btn.voted{background:rgba(0,255,231,.2);box-shadow:0 0 14px rgba(0,255,231,.2);}
+.dislike-btn{background:rgba(255,32,64,.06);color:var(--red);border:1px solid rgba(255,32,64,.15);}
+.dislike-btn:hover,.dislike-btn.voted{background:rgba(255,32,64,.18);box-shadow:0 0 14px rgba(255,32,64,.15);}
+.post-rank{font-family:'Orbitron',monospace;font-size:.65rem;color:var(--muted);padding:3px 10px;border:1px solid var(--border);border-radius:2px;}
+.post-rank.top{color:#ffa000;border-color:rgba(255,160,0,.3);background:rgba(255,160,0,.06);}
+.post-added{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted);}
 .post-author span{color:var(--neon);}
 .post-link{display:inline-flex;align-items:center;gap:4px;margin-top:10px;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--neon);text-decoration:none;border-bottom:1px solid rgba(0,255,231,.2);padding-bottom:1px;}
 .post-link:hover{border-color:var(--neon);}
@@ -729,13 +739,69 @@ function render(){
 }
 
 // ═══════════════ RENDER COMMUNITY ═══════════════
+function getVoted(pid){try{return JSON.parse(localStorage.getItem('vx_votes')||'{}');}catch(e){return {};}}
+function saveVoted(v){try{localStorage.setItem('vx_votes',JSON.stringify(v));}catch(e){}}
+async function vote(pid, type){
+  const votes=getVoted();
+  const prev=votes[pid];
+  const i=community.findIndex(p=>p.id===pid);
+  if(i<0)return;
+  const p=community[i];
+  const likes=p.likes||0;
+  const dislikes=p.dislikes||0;
+  if(prev===type){
+    // annuler le vote
+    votes[pid]=null;
+    community[i]={...p,likes:type==='like'?Math.max(0,likes-1):likes,dislikes:type==='dislike'?Math.max(0,dislikes-1):dislikes};
+  } else {
+    if(prev==='like') community[i]={...p,likes:Math.max(0,likes-1)};
+    if(prev==='dislike') community[i]={...p,dislikes:Math.max(0,dislikes-1)};
+    votes[pid]=type;
+    community[i]={...community[i],likes:type==='like'?(community[i].likes||0)+1:community[i].likes||0,dislikes:type==='dislike'?(community[i].dislikes||0)+1:community[i].dislikes||0};
+  }
+  saveVoted(votes);
+  try{await apiPut(db,community);}catch(e){}
+  renderCommunity();
+}
 function renderCommunity(){
+  const votes=getVoted();
   ['bug','jeu','logiciel','suggestion'].forEach(type=>{
     const el=document.getElementById('posts-'+type);
     if(!el)return;
-    const posts=community.filter(p=>p.type===type).sort((a,b)=>b.date-a.date);
+    // Tri : score (likes - dislikes) décroissant, puis date
+    const posts=community.filter(p=>p.type===type).sort((a,b)=>{
+      const sa=(a.likes||0)-(a.dislikes||0);
+      const sb=(b.likes||0)-(b.dislikes||0);
+      if(sb!==sa)return sb-sa;
+      return b.date-a.date;
+    });
     if(!posts.length){el.innerHTML=`<div class="empty"><div class="empty-icon">💬</div><h3>Aucun post</h3><p>Sois le premier à partager !</p></div>`;return;}
-    el.innerHTML=posts.map(p=>`<div class="post-card type-${p.type}"><button class="del-post-btn" onclick="delPost('${p.id}',event)">✕</button><div class="post-head"><span class="post-type pt-${p.type}">${POST_LABELS[p.type]||p.type}</span><span class="post-date">${new Date(p.date).toLocaleDateString('fr-FR')}</span></div><div class="post-title">${esc(p.title)}</div><div class="post-body">${esc(p.content)}</div>${p.link?`<a class="post-link" href="${esc(p.link)}" target="_blank" rel="noopener">🔗 Lien</a>`:''}<div class="post-author">Par <span>${esc(p.author||'Anonyme')}</span></div></div>`).join('');
+    el.innerHTML=posts.map((p,idx)=>{
+      const score=(p.likes||0)-(p.dislikes||0);
+      const isTop=idx===0&&(p.likes||0)>0;
+      const vv=votes[p.id];
+      const dateStr=new Date(p.date).toLocaleDateString('fr-FR');
+      return `<div class="post-card type-${p.type}">
+        <button class="del-post-btn" onclick="delPost('${p.id}',event)">✕</button>
+        <div class="post-head">
+          <span class="post-type pt-${p.type}">${POST_LABELS[p.type]||p.type}</span>
+          <div style="display:flex;gap:8px;align-items:center;">
+            ${isTop?'<span class="post-rank top">🏆 TOP</span>':''}
+            <span class="post-rank">Score : ${score>=0?'+':''}${score}</span>
+          </div>
+        </div>
+        <div class="post-title">${esc(p.title)}</div>
+        <div class="post-body">${esc(p.content)}</div>
+        ${p.link?`<a class="post-link" href="${esc(p.link)}" target="_blank" rel="noopener">🔗 Lien</a>`:''}
+        <div class="post-footer">
+          <div class="post-author" style="margin-top:0">Par <span>${esc(p.author||'Anonyme')}</span> · <span class="post-added">${dateStr}</span></div>
+          <div class="like-bar">
+            <button class="like-btn ${vv==='like'?'voted':''}" onclick="vote('${p.id}','like')">👍 ${p.likes||0}</button>
+            <button class="dislike-btn ${vv==='dislike'?'voted':''}" onclick="vote('${p.id}','dislike')">👎 ${p.dislikes||0}</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
   });
 }
 function renderSide(){
