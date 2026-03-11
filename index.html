@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAULTEX — Freeware & Open Source Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff2040;--neon:#00ffe7;--neon2:#ff00aa;--bg:#070a0f;--bg2:#0d1117;--bg3:#111820;--card:#0f1923;--border:rgba(0,255,231,.15);--text:#c8d8e8;--muted:#4a6070;--white:#e8f4ff;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4;}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:1;}
+
+/* ADMIN BAR */
+.admin-bar{position:fixed;top:0;left:0;right:0;z-index:110;height:44px;padding:0 40px;display:none;align-items:center;justify-content:space-between;background:rgba(20,12,0,.96);border-bottom:1px solid rgba(255,160,0,.3);backdrop-filter:blur(10px);}
+.admin-bar.visible{display:flex;}
+.admin-badge{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:#ffa000;letter-spacing:2px;display:flex;align-items:center;gap:8px;}
+.admin-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:#ffa000;animation:pulse 2s infinite;}
+.abar-right{display:flex;gap:8px;}
+.ab{padding:5px 14px;font-family:'Orbitron',monospace;font-size:.58rem;letter-spacing:1px;font-weight:700;cursor:pointer;border-radius:2px;border:none;text-transform:uppercase;transition:all .2s;}
+.ab-add{background:rgba(0,255,231,.15);color:var(--neon);border:1px solid rgba(0,255,231,.3);}
+.ab-add:hover{background:rgba(0,255,231,.25);}
+.ab-del{background:rgba(255,32,64,.1);color:var(--red);border:1px solid rgba(255,32,64,.2);}
+.ab-del:hover,.ab-del.on{background:rgba(255,32,64,.25);color:#fff;}
+.ab-out{background:rgba(80,80,80,.2);color:var(--muted);border:1px solid rgba(255,255,255,.1);}
+.ab-out:hover{background:rgba(80,80,80,.4);color:var(--white);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,10,15,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:top .3s;}
+.logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.4rem;letter-spacing:4px;color:var(--white);text-decoration:none;}
+.logo span{color:var(--neon);text-shadow:0 0 20px var(--neon);}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.8rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--neon);}
+.nav-actions{display:flex;gap:10px;align-items:center;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:2px;font-family:'Orbitron',monospace;font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;text-decoration:none;border:none;transition:all .2s;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+.btn-outline:hover{border-color:var(--neon);color:var(--neon);}
+.btn-primary{background:var(--neon);color:var(--bg);box-shadow:0 0 30px rgba(0,255,231,.3);}
+.btn-primary:hover{background:#00ffd0;box-shadow:0 0 50px rgba(0,255,231,.5);transform:translateY(-1px);}
+.btn-red{background:var(--red);color:#fff;}
+.btn-red:hover{box-shadow:0 0 40px rgba(255,32,64,.5);transform:translateY(-1px);}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:120px 80px 80px;overflow:hidden;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,231,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,231,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black,transparent);}
+.hero-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,255,231,.06) 0%,transparent 70%);top:50%;left:30%;transform:translate(-50%,-50%);pointer-events:none;}
+.hero-glow-red{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,32,64,.08) 0%,transparent 70%);top:20%;right:10%;pointer-events:none;}
+.hero-content{position:relative;z-index:2;max-width:720px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(0,255,231,.3);font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--neon);margin-bottom:32px;letter-spacing:2px;animation:fadeInDown .6s ease both;}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 10px var(--neon);animation:pulse 2s infinite;}
+.hero h1{font-family:'Orbitron',monospace;font-size:clamp(2.4rem,5vw,4.5rem);font-weight:900;line-height:1.05;color:var(--white);margin-bottom:24px;animation:fadeInUp .7s ease .1s both;}
+.accent{color:var(--neon);text-shadow:0 0 40px rgba(0,255,231,.4);}
+.accent-red{color:var(--red);text-shadow:0 0 40px rgba(255,32,64,.4);}
+.hero p{font-size:1.1rem;color:var(--muted);max-width:500px;margin-bottom:40px;animation:fadeInUp .7s ease .2s both;}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;animation:fadeInUp .7s ease .3s both;}
+.hero-stats{display:flex;gap:48px;margin-top:64px;padding-top:40px;border-top:1px solid var(--border);animation:fadeInUp .7s ease .4s both;}
+.stat-num{font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--white);}
+.stat-num span{color:var(--neon);}
+.stat-label{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+
+/* SEARCH */
+.search-section{padding:50px 80px;background:var(--bg2);border-bottom:1px solid var(--border);}
+.search-box{max-width:720px;margin:0 auto;}
+.search-wrap{position:relative;}
+.search-input{width:100%;padding:18px 64px 18px 24px;background:var(--card);border:1px solid var(--border);border-radius:2px;color:var(--white);font-family:'Rajdhani',sans-serif;font-size:1.05rem;outline:none;transition:all .2s;}
+.search-input:focus{border-color:var(--neon);box-shadow:0 0 30px rgba(0,255,231,.1);}
+.search-input::placeholder{color:var(--muted);}
+.search-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:var(--neon);color:var(--bg);border:none;width:38px;height:38px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;border-radius:2px;transition:all .2s;}
+.search-btn:hover{background:#00ffd0;}
+.search-tags{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;justify-content:center;}
+.stag{padding:4px 14px;border:1px solid var(--border);border-radius:20px;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted);cursor:pointer;transition:all .2s;letter-spacing:1px;}
+.stag:hover,.stag.active{border-color:var(--neon);color:var(--neon);}
+.search-info{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted);text-align:center;margin-top:12px;min-height:18px;}
+.search-info span{color:var(--neon);}
+
+/* SECTION */
+.section{padding:80px;}
+.section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;}
+.section-title{font-family:'Orbitron',monospace;font-size:.68rem;letter-spacing:4px;color:var(--neon);text-transform:uppercase;margin-bottom:8px;}
+.section-heading{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:var(--white);}
+
+/* CATEGORIES */
+.cat-section{padding:70px 80px;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:36px;}
+.cat-card{background:var(--card);border:1px solid var(--border);padding:24px 16px;text-align:center;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
+.cat-card:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,255,231,.07);border-color:rgba(0,255,231,.3);}
+.cat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,255,231,.05),transparent);opacity:0;transition:opacity .3s;}
+.cat-card:hover::before{opacity:1;}
+.cat-icon-big{font-size:2rem;margin-bottom:10px;display:block;}
+.cat-name{font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;letter-spacing:2px;color:var(--text);text-transform:uppercase;margin-bottom:4px;}
+.cat-cnt{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted);}
+
+/* CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.sw-card{background:var(--card);border:1px solid var(--border);overflow:hidden;transition:all .3s;position:relative;display:flex;flex-direction:column;}
+.sw-card:hover{border-color:rgba(0,255,231,.35);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.sw-card::after{content:'';position:absolute;left:0;top:0;width:2px;height:0;background:var(--neon);transition:height .3s;}
+.sw-card:hover::after{height:100%;}
+.sw-img{width:100%;height:160px;object-fit:cover;display:block;}
+.sw-img-ph{width:100%;height:160px;background:linear-gradient(135deg,var(--bg3),#1a2535);display:flex;align-items:center;justify-content:center;font-size:3.5rem;border-bottom:1px solid var(--border);}
+.sw-body{padding:20px;flex:1;display:flex;flex-direction:column;}
+.sw-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.ctag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:1px;text-transform:uppercase;border-radius:2px;}
+.t-Jeux{background:rgba(255,32,64,.1);color:var(--red);border:1px solid rgba(255,32,64,.2);}
+.t-Video,.t-Vidéo{background:rgba(0,255,231,.1);color:var(--neon);border:1px solid rgba(0,255,231,.2);}
+.t-Audio{background:rgba(255,0,170,.1);color:var(--neon2);border:1px solid rgba(255,0,170,.2);}
+.t-Systeme,.t-Système{background:rgba(255,160,0,.1);color:#ffa000;border:1px solid rgba(255,160,0,.2);}
+.t-Dev{background:rgba(100,200,255,.1);color:#64c8ff;border:1px solid rgba(100,200,255,.2);}
+.t-Creatif,.t-Créatif{background:rgba(180,100,255,.1);color:#b464ff;border:1px solid rgba(180,100,255,.2);}
+.sw-ver{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--neon);background:rgba(0,255,231,.07);padding:3px 8px;border-radius:2px;}
+.sw-name{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;color:var(--white);margin-bottom:8px;}
+.sw-desc{font-size:.83rem;color:var(--muted);line-height:1.55;flex:1;margin-bottom:16px;}
+.sw-foot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border);}
+.sw-plat{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:1px;}
+.sw-dl{font-family:'Orbitron',monospace;font-size:.6rem;background:var(--neon);color:var(--bg);padding:7px 14px;border-radius:2px;text-decoration:none;transition:all .2s;font-weight:700;letter-spacing:1px;display:inline-flex;align-items:center;gap:6px;}
+.sw-dl:hover{background:#00ffd0;box-shadow:0 0 20px rgba(0,255,231,.4);}
+.del-btn{position:absolute;top:8px;right:8px;background:rgba(255,32,64,.85);color:#fff;border:none;width:30px;height:30px;font-size:.9rem;cursor:pointer;border-radius:2px;display:none;align-items:center;justify-content:center;z-index:10;}
+.del-btn:hover{background:var(--red);}
+.del-mode .sw-card .del-btn{display:flex;}
+.admin-mode .sw-card{cursor:pointer;}
+.empty{text-align:center;padding:80px 40px;color:var(--muted);}
+.empty-icon{font-size:4rem;margin-bottom:16px;opacity:.25;}
+.empty h3{font-family:'Orbitron',monospace;font-size:1rem;color:var(--text);margin-bottom:8px;}
+
+/* COMMUNITY */
+.community{background:linear-gradient(135deg,rgba(0,255,231,.03),rgba(255,32,64,.03));border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.community p{color:var(--muted);line-height:1.8;margin-bottom:32px;font-size:1.05rem;}
+.community .section-heading{margin-bottom:20px;}
+.community .section-title{margin-bottom:8px;}
+.community-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.metric{background:var(--card);border:1px solid var(--border);padding:32px;text-align:center;}
+.metric-v{font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--white);display:block;}
+.metric-v .u{font-size:1.1rem;color:var(--neon);}
+.metric-n{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+
+/* MODALS */
+.overlay{position:fixed;inset:0;background:rgba(7,10,15,.93);backdrop-filter:blur(12px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.overlay.on{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border);width:100%;max-width:580px;padding:44px;position:relative;animation:fadeInUp .3s ease;max-height:90vh;overflow-y:auto;}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--neon),var(--neon2),var(--red));}
+.m-close{position:absolute;top:16px;right:16px;background:none;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;border-radius:2px;}
+.m-close:hover{border-color:var(--red);color:var(--red);}
+.modal h2{font-family:'Orbitron',monospace;font-size:1.2rem;color:var(--white);margin-bottom:6px;}
+.modal .sub{color:var(--muted);font-size:.88rem;margin-bottom:28px;}
+.fg{margin-bottom:18px;}
+.fl{display:block;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:2px;color:var(--neon);text-transform:uppercase;margin-bottom:7px;}
+.fi,.fs,.ft{width:100%;background:var(--card);border:1px solid var(--border);border-radius:2px;color:var(--white);font-family:'Rajdhani',sans-serif;font-size:.95rem;padding:11px 14px;outline:none;transition:border-color .2s;}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--neon);}
+.fi::placeholder,.ft::placeholder{color:var(--muted);}
+.fs{appearance:none;cursor:pointer;}
+.fs option{background:var(--bg2);}
+.ft{resize:vertical;min-height:80px;}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.img-wrap{margin-top:10px;border:1px solid var(--border);background:var(--card);min-height:80px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.img-wrap img{max-width:100%;max-height:140px;object-fit:cover;width:100%;}
+.img-ph{color:var(--muted);font-size:.75rem;font-family:'Share Tech Mono',monospace;padding:16px;text-align:center;}
+.or{text-align:center;margin:8px 0;color:var(--muted);font-size:.7rem;font-family:'Share Tech Mono',monospace;}
+.upbtn{width:100%;padding:10px;background:transparent;border:1px dashed rgba(0,255,231,.25);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:.7rem;cursor:pointer;transition:all .2s;border-radius:2px;letter-spacing:1px;}
+.upbtn:hover{border-color:var(--neon);color:var(--neon);}
+
+/* LOADING */
+#loadingOverlay{position:fixed;inset:0;background:var(--bg);z-index:400;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;}
+#loadingOverlay.gone{display:none;}
+.spinner{width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--neon);border-radius:50%;animation:spin 1s linear infinite;}
+.loading-txt{font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted);letter-spacing:3px;}
+
+/* FOOTER */
+footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;}
+.fbrand .logo{display:block;font-size:1.2rem;margin-bottom:16px;}
+.fbrand p{color:var(--muted);font-size:.86rem;line-height:1.7;max-width:280px;}
+.fcol h4{font-family:'Orbitron',monospace;font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--neon);margin-bottom:18px;}
+.fcol ul{list-style:none;}
+.fcol li{margin-bottom:9px;}
+.fcol a{color:var(--muted);text-decoration:none;font-size:.86rem;transition:color .2s;}
+.fcol a:hover{color:var(--text);}
+.fbot{padding:22px 80px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.fbot p{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:1px;}
+.nc{color:var(--neon);}
+
+/* NOTIF */
+.notif{position:fixed;bottom:28px;right:28px;background:var(--card);border:1px solid rgba(0,255,231,.3);border-left:3px solid var(--neon);padding:14px 22px;font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--neon);z-index:999;transform:translateX(280px);opacity:0;transition:all .4s;letter-spacing:1px;max-width:340px;}
+.notif.show{transform:translateX(0);opacity:1;}
+.notif.err{border-left-color:var(--red);color:var(--red);border-color:rgba(255,32,64,.3);}
+
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes spin{to{transform:rotate(360deg)}}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--neon);}
+@media(max-width:1100px){
+  .hero,.section,.search-section,.cat-section,.community{padding-left:30px;padding-right:30px;}
+  .cat-grid{grid-template-columns:repeat(3,1fr);}
+  footer,.fbot{padding-left:30px;padding-right:30px;}
+  .community{grid-template-columns:1fr;gap:40px;}
+}
+@media(max-width:700px){
+  .hero{padding:110px 20px 60px;}
+  .section{padding:50px 20px;}
+  .cat-grid{grid-template-columns:repeat(2,1fr);}
+  .nav-links{display:none;}
+  footer{grid-template-columns:1fr;padding:40px 20px;}
+  .fbot{padding:20px;flex-direction:column;gap:8px;text-align:center;}
+  .f2{grid-template-columns:1fr;}
+  .admin-bar{padding:0 16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-txt">CHARGEMENT...</div>
+</div>
+
+<!-- ADMIN BAR -->
+<div class="admin-bar" id="adminBar">
+  <div class="admin-badge">⚙ MODE ADMIN ACTIF</div>
+  <div class="abar-right">
+    <button class="ab ab-add" onclick="openAdd()">+ Ajouter</button>
+    <button class="ab ab-del" id="delBtn" onclick="toggleDel()">🗑 Supprimer</button>
+    <button class="ab ab-out" onclick="adminOut()">✕ Déconnexion</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a class="logo" href="#"><span>VAULT</span>EX</a>
+  <ul class="nav-links">
+    <li><a href="#logiciels">Logiciels</a></li>
+    <li><a href="#categories">Catégories</a></li>
+    <li><a href="#community">Communauté</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="#" class="btn btn-outline" id="adminNavBtn" onclick="handleAdmin(event)">⚙ Admin</a>
+    <a href="#" class="btn btn-primary" onclick="handleAdd(event)">+ Soumettre</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div><div class="hero-glow"></div><div class="hero-glow-red"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🟢 PLATEFORME COMMUNAUTAIRE · LOGICIELS LIBRES UNIQUEMENT</div>
+    <h1>DÉCOUVREZ LES<br><span class="accent">MEILLEURS</span><br><span class="accent-red">FREEWARE</span></h1>
+    <p>Plateforme communautaire dédiée au partage de logiciels gratuits et open source — jeux indé, utilitaires, outils créatifs. 100% légal, 100% libre.</p>
+    <div class="hero-actions">
+      <a href="#search" class="btn btn-primary">⚡ Explorer</a>
+      <a href="#" class="btn btn-red" onclick="handleAdd(event)">+ Soumettre</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num" id="heroTotal">—<span></span></div><div class="stat-label">Logiciels</div></div>
+      <div><div class="stat-num">18<span>K</span></div><div class="stat-label">Membres actifs</div></div>
+      <div><div class="stat-num">140<span>K</span></div><div class="stat-label">Téléchargements</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<div class="search-section" id="search">
+  <div class="search-box">
+    <div class="search-wrap">
+      <input class="search-input" id="searchInput" type="text" placeholder="Rechercher un logiciel, un jeu, un utilitaire..." autocomplete="off">
+      <button class="search-btn" onclick="doSearch()">🔍</button>
+    </div>
+    <div class="search-tags">
+      <span class="stag active" data-cat="all" onclick="setFilter(this,'all')">Tous</span>
+      <span class="stag" data-cat="Jeux" onclick="setFilter(this,'Jeux')">🎮 Jeux</span>
+      <span class="stag" data-cat="Vidéo" onclick="setFilter(this,'Vidéo')">🎬 Vidéo</span>
+      <span class="stag" data-cat="Audio" onclick="setFilter(this,'Audio')">🎵 Audio</span>
+      <span class="stag" data-cat="Système" onclick="setFilter(this,'Système')">🖥️ Système</span>
+      <span class="stag" data-cat="Dev" onclick="setFilter(this,'Dev')">👨‍💻 Dev</span>
+      <span class="stag" data-cat="Créatif" onclick="setFilter(this,'Créatif')">🎨 Créatif</span>
+    </div>
+    <div class="search-info" id="searchInfo"></div>
+  </div>
+</div>
+
+<!-- LOGICIELS -->
+<section class="section" id="logiciels">
+  <div class="section-header">
+    <div>
+      <div class="section-title">// BIBLIOTHÈQUE</div>
+      <div class="section-heading" id="sectionLabel">Tous les Logiciels</div>
+    </div>
+  </div>
+  <div class="cards-grid" id="cardsGrid"></div>
+  <div class="empty" id="emptyMsg" style="display:none">
+    <div class="empty-icon">🔍</div>
+    <h3>Aucun résultat</h3>
+    <p>Essaie un autre mot-clé ou une autre catégorie.</p>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<div class="cat-section" id="categories">
+  <div class="section-header">
+    <div>
+      <div class="section-title">// NAVIGATION</div>
+      <div class="section-heading">Parcourir par Catégorie</div>
+    </div>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card" onclick="catClick('Jeux')"><span class="cat-icon-big">🎮</span><div class="cat-name">Jeux</div><div class="cat-cnt" id="cnt-Jeux">0</div></div>
+    <div class="cat-card" onclick="catClick('Vidéo')"><span class="cat-icon-big">🎬</span><div class="cat-name">Vidéo</div><div class="cat-cnt" id="cnt-Vidéo">0</div></div>
+    <div class="cat-card" onclick="catClick('Audio')"><span class="cat-icon-big">🎵</span><div class="cat-name">Audio</div><div class="cat-cnt" id="cnt-Audio">0</div></div>
+    <div class="cat-card" onclick="catClick('Système')"><span class="cat-icon-big">🖥️</span><div class="cat-name">Système</div><div class="cat-cnt" id="cnt-Système">0</div></div>
+    <div class="cat-card" onclick="catClick('Dev')"><span class="cat-icon-big">👨‍💻</span><div class="cat-name">Dev</div><div class="cat-cnt" id="cnt-Dev">0</div></div>
+    <div class="cat-card" onclick="catClick('Créatif')"><span class="cat-icon-big">🎨</span><div class="cat-name">Créatif</div><div class="cat-cnt" id="cnt-Créatif">0</div></div>
+  </div>
+</div>
+
+<!-- COMMUNITY -->
+<div class="community" id="community">
+  <div>
+    <div class="section-title">// COMMUNAUTÉ</div>
+    <div class="section-heading">Rejoins la<br>Communauté</div>
+    <p>Des milliers de passionnés partagent, testent et recommandent les meilleurs outils gratuits. Contribue et aide la communauté à grandir.</p>
+    <div class="community-btns">
+      <a href="#" class="btn btn-primary">Créer un compte</a>
+      <a href="#" class="btn btn-outline">Voir le forum</a>
+    </div>
+  </div>
+  <div class="metrics">
+    <div class="metric"><span class="metric-v">18<span class="u">K</span></span><div class="metric-n">Membres</div></div>
+    <div class="metric"><span class="metric-v" id="mSofts">—</span><div class="metric-n">Logiciels</div></div>
+    <div class="metric"><span class="metric-v">140<span class="u">K</span></span><div class="metric-n">DL ce mois</div></div>
+    <div class="metric"><span class="metric-v">100<span class="u">%</span></span><div class="metric-n">Légal</div></div>
+  </div>
+</div>
+
+<footer>
+  <div class="fbrand"><a class="logo" href="#"><span>VAULT</span>EX</a><p>Plateforme communautaire — logiciels gratuits & open source uniquement.</p></div>
+  <div class="fcol"><h4>Navigation</h4><ul><li><a href="#">Explorer</a></li><li><a href="#categories">Catégories</a></li></ul></div>
+  <div class="fcol"><h4>Communauté</h4><ul><li><a href="#">Forum</a></li><li><a href="#">Discord</a></li></ul></div>
+  <div class="fcol"><h4>Infos</h4><ul><li><a href="#">À propos</a></li><li><a href="#">CGU</a></li></ul></div>
+</footer>
+<div class="fbot">
+  <p>© 2025 <span class="nc">VAULTEX</span> — Freeware & Open Source uniquement</p>
+  <p class="nc">FREEWARE · OPEN SOURCE · LEGAL</p>
+</div>
+
+<!-- MODAL ADD/EDIT -->
+<div class="overlay" id="addModal" onclick="oClose(event,'addModal')">
+  <div class="modal">
+    <button class="m-close" onclick="closeM('addModal')">✕</button>
+    <h2 id="addTitle">Ajouter un Logiciel</h2>
+    <p class="sub">Seuls les logiciels freeware / open source sont acceptés.</p>
+    <div class="fg"><label class="fl">Nom *</label><input class="fi" id="f_name" type="text" placeholder="Ex: Blender, Godot Engine..."></div>
+    <div class="f2">
+      <div class="fg"><label class="fl">Catégorie *</label>
+        <select class="fs" id="f_cat">
+          <option value="">— Choisir —</option>
+          <option>Jeux</option><option>Vidéo</option><option>Audio</option>
+          <option>Système</option><option>Dev</option><option>Créatif</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Version</label><input class="fi" id="f_ver" type="text" placeholder="Ex: v3.5.0"></div>
+    </div>
+    <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="f_desc" placeholder="Décris le logiciel en quelques phrases..."></textarea></div>
+    <div class="f2">
+      <div class="fg"><label class="fl">Plateformes</label><input class="fi" id="f_plat" type="text" placeholder="WIN · MAC · LINUX"></div>
+      <div class="fg"><label class="fl">Licence</label>
+        <select class="fs" id="f_lic">
+          <option>Freeware</option><option>Open Source - MIT</option>
+          <option>Open Source - GPL</option><option>Creative Commons</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label class="fl">Lien de téléchargement *</label><input class="fi" id="f_link" type="url" placeholder="https://..."></div>
+    <div class="fg">
+      <label class="fl">Image</label>
+      <input class="fi" id="f_imgurl" type="url" placeholder="URL de l'image (https://...)" oninput="prevUrl()">
+      <div class="or">— OU UPLOAD DEPUIS TON APPAREIL —</div>
+      <input type="file" id="f_imgfile" accept="image/*" style="display:none" onchange="prevFile()">
+      <button class="upbtn" onclick="document.getElementById('f_imgfile').click()">📁 Choisir une image</button>
+      <div class="img-wrap" id="imgWrap"><span class="img-ph">Aucune image</span></div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;margin-top:6px;" onclick="submitSW()">
+      ⚡ <span id="submitTxt">Ajouter le logiciel</span>
+    </button>
+  </div>
+</div>
+
+<!-- MODAL LOGIN ADMIN -->
+<div class="overlay" id="loginModal" onclick="oClose(event,'loginModal')">
+  <div class="modal" style="max-width:380px;">
+    <button class="m-close" onclick="closeM('loginModal')">✕</button>
+    <h2>Accès Admin</h2>
+    <p class="sub">Entrez le mot de passe administrateur.</p>
+    <div class="fg"><label class="fl">Mot de passe</label><input class="fi" id="pwdIn" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPwd()"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="checkPwd()">🔑 Connexion</button>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+// ════════════════════════════════════
+//  CONFIG — pré-rempli, invisible pour les visiteurs
+// ════════════════════════════════════
+const API_KEY    = '$2a$10$Dyqi1HRyv.sF/5uTeg8LouoHnKbOcMU7kuGJVx9jzwh7bFtQ.u4l2';
+const MASTER_KEY = '$2a$10$IAnBjAjR1AM7Z2OBWEF7KeQxhW.eF28945X8NpKeHUMCHuNnKAbcC';
+const BIN_ID     = '69b06e8f84682b3562866eda';
+const ADMIN_PWD = 'vaultex2025'; // Change ce mot de passe ici
+
+// ════════════════════════════════════
+//  STATE
+// ════════════════════════════════════
+let db = [], filterCat='all', filterQ='', isAdmin=false, delMode=false, editId=null, b64img=null;
+const ICONS = {Jeux:'🎮',Vidéo:'🎬',Audio:'🎵',Système:'🖥️',Dev:'👨‍💻',Créatif:'🎨'};
+
+// ════════════════════════════════════
+//  JSONBin API
+// ════════════════════════════════════
+async function apiGet(){
+  const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{
+    headers:{'X-Master-Key':MASTER_KEY}
+  });
+  if(!r.ok) throw new Error('GET '+r.status);
+  const j = await r.json();
+  return j.record?.softwares || [];
+}
+
+async function apiPut(data){
+  const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{
+    method:'PUT',
+    headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},
+    body: JSON.stringify({softwares: data})
+  });
+  if(!r.ok) throw new Error('PUT '+r.status);
+}
+
+// ════════════════════════════════════
+//  INIT
+// ════════════════════════════════════
+async function init(){
+  try{
+    db = await apiGet();
+  } catch(e){
+    notify('❌ Connexion échouée : '+e.message, true);
+    db = [];
+  }
+  document.getElementById('loadingOverlay').classList.add('gone');
+  render();
+}
+
+// ════════════════════════════════════
+//  RENDER
+// ════════════════════════════════════
+function render(){
+  let list = db.slice();
+  if(filterCat!=='all') list=list.filter(s=>s.cat===filterCat);
+  if(filterQ){
+    const q=filterQ.toLowerCase();
+    list=list.filter(s=>
+      s.name.toLowerCase().includes(q)||
+      s.desc.toLowerCase().includes(q)||
+      s.cat.toLowerCase().includes(q)||
+      (s.platform||'').toLowerCase().includes(q)
+    );
+  }
+
+  document.getElementById('heroTotal').innerHTML=db.length+'<span></span>';
+  document.getElementById('mSofts').textContent=db.length;
+  document.getElementById('sectionLabel').textContent=filterCat==='all'?'Tous les Logiciels':filterCat;
+  document.getElementById('searchInfo').innerHTML=list.length
+    ?`<span>${list.length}</span> logiciel${list.length>1?'s':''} trouvé${list.length>1?'s':''}`:'';
+
+  Object.keys(ICONS).forEach(cat=>{
+    const el=document.getElementById('cnt-'+cat);
+    if(el){const n=db.filter(s=>s.cat===cat).length; el.textContent=n+' logiciel'+(n>1?'s':'');}
+  });
+
+  const grid=document.getElementById('cardsGrid');
+  const empty=document.getElementById('emptyMsg');
+  if(!list.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+
+  grid.innerHTML=list.map(s=>{
+    const sc=(s.cat||'').replace(/[éèêë]/g,'e').replace(/[^\w]/g,'');
+    const imgHtml=s.img
+      ?`<img class="sw-img" src="${esc(s.img)}" alt="${esc(s.name)}" loading="lazy"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+         <div class="sw-img-ph" style="display:none">${ICONS[s.cat]||'📦'}</div>`
+      :`<div class="sw-img-ph">${ICONS[s.cat]||'📦'}</div>`;
+    return `<div class="sw-card" data-id="${s.id}">
+      ${imgHtml}
+      <button class="del-btn" onclick="delCard('${s.id}',event)">✕</button>
+      <div class="sw-body">
+        <div class="sw-top">
+          <span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>
+          ${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}
+        </div>
+        <div class="sw-name">${esc(s.name)}</div>
+        <div class="sw-desc">${esc(s.desc)}</div>
+        <div class="sw-foot">
+          <span class="sw-plat">${esc(s.platform||'')}</span>
+          <a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">⬇ TÉLÉCHARGER</a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  if(isAdmin){
+    grid.querySelectorAll('.sw-card').forEach(c=>{
+      c.addEventListener('click',function(e){
+        if(!delMode&&!e.target.closest('.del-btn,.sw-dl')) openEdit(this.dataset.id);
+      });
+    });
+  }
+}
+
+// ════════════════════════════════════
+//  SEARCH
+// ════════════════════════════════════
+document.getElementById('searchInput').addEventListener('input',function(){filterQ=this.value.trim();render();});
+document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+function doSearch(){filterQ=document.getElementById('searchInput').value.trim();render();document.getElementById('logiciels').scrollIntoView({behavior:'smooth'});}
+function setFilter(el,cat){
+  filterCat=cat;filterQ='';
+  document.getElementById('searchInput').value='';
+  document.querySelectorAll('.stag').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  else{const t=document.querySelector(`.stag[data-cat="${cat}"]`);if(t)t.classList.add('active');}
+  render();
+}
+function catClick(cat){setFilter(null,cat);document.getElementById('logiciels').scrollIntoView({behavior:'smooth'});}
+
+// ════════════════════════════════════
+//  ADMIN
+// ════════════════════════════════════
+function handleAdmin(e){e.preventDefault();if(isAdmin){notify('Déjà connecté en admin');return;}document.getElementById('pwdIn').value='';openM('loginModal');}
+function handleAdd(e){e.preventDefault();openAdd();}
+
+function checkPwd(){
+  if(document.getElementById('pwdIn').value===ADMIN_PWD){
+    isAdmin=true;closeM('loginModal');
+    document.getElementById('adminBar').classList.add('visible');
+    document.getElementById('mainNav').style.top='44px';
+    document.body.classList.add('admin-mode');
+    document.getElementById('adminNavBtn').textContent='✅ Admin';
+    notify('✅ Mode admin activé !');render();
+  } else {
+    notify('❌ Mot de passe incorrect',true);
+    document.getElementById('pwdIn').value='';
+  }
+}
+
+function adminOut(){
+  isAdmin=false;delMode=false;
+  document.getElementById('adminBar').classList.remove('visible');
+  document.getElementById('mainNav').style.top='';
+  document.body.classList.remove('admin-mode','del-mode');
+  document.getElementById('adminNavBtn').textContent='⚙ Admin';
+  document.getElementById('delBtn').classList.remove('on');
+  notify('Déconnecté');render();
+}
+
+function toggleDel(){
+  delMode=!delMode;
+  document.body.classList.toggle('del-mode',delMode);
+  const b=document.getElementById('delBtn');
+  b.classList.toggle('on',delMode);
+  b.textContent=delMode?'✕ Annuler':'🗑 Supprimer';
+  notify(delMode?'⚠️ Clique ✕ sur une carte pour supprimer':'Mode suppression désactivé');
+}
+
+async function delCard(id,e){
+  e.stopPropagation();if(!isAdmin)return;
+  if(!confirm('Supprimer définitivement ce logiciel ?'))return;
+  db=db.filter(s=>s.id!==id);
+  notify('⏳ Suppression...');
+  try{await apiPut(db);notify('🗑 Logiciel supprimé');}catch(err){notify('❌ Erreur : '+err.message,true);}
+  render();
+}
+
+// ════════════════════════════════════
+//  ADD / EDIT
+// ════════════════════════════════════
+function openAdd(){editId=null;b64img=null;document.getElementById('addTitle').textContent='Ajouter un Logiciel';document.getElementById('submitTxt').textContent='Ajouter le logiciel';clearF();openM('addModal');}
+function openEdit(id){
+  const s=db.find(x=>x.id===id);if(!s)return;
+  editId=id;b64img=null;
+  document.getElementById('addTitle').textContent='Modifier : '+s.name;
+  document.getElementById('submitTxt').textContent='Enregistrer';
+  document.getElementById('f_name').value=s.name;
+  document.getElementById('f_cat').value=s.cat;
+  document.getElementById('f_ver').value=s.version||'';
+  document.getElementById('f_desc').value=s.desc;
+  document.getElementById('f_plat').value=s.platform||'';
+  document.getElementById('f_lic').value=s.license||'Freeware';
+  document.getElementById('f_link').value=s.link||'';
+  const isB64=s.img&&s.img.startsWith('data:');
+  document.getElementById('f_imgurl').value=(!isB64&&s.img)?s.img:'';
+  if(isB64)b64img=s.img;
+  document.getElementById('imgWrap').innerHTML=s.img?`<img src="${esc(s.img)}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%">`:'<span class="img-ph">Aucune image</span>';
+  openM('addModal');
+}
+function clearF(){
+  ['f_name','f_ver','f_desc','f_plat','f_link','f_imgurl'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f_cat').value='';document.getElementById('f_lic').value='Freeware';
+  document.getElementById('imgWrap').innerHTML='<span class="img-ph">Aucune image</span>';
+  document.getElementById('f_imgfile').value='';
+}
+function prevUrl(){
+  b64img=null;const url=document.getElementById('f_imgurl').value.trim();
+  document.getElementById('imgWrap').innerHTML=url
+    ?`<img src="${esc(url)}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%" onerror="this.parentElement.innerHTML='<span class=\\'img-ph\\'>Image inaccessible</span>'">`
+    :'<span class="img-ph">Aucune image</span>';
+}
+function prevFile(){
+  const file=document.getElementById('f_imgfile').files[0];if(!file)return;
+  if(file.size>1.5*1024*1024){notify('❌ Image trop lourde (max 1.5 Mo)',true);return;}
+  const r=new FileReader();
+  r.onload=e=>{b64img=e.target.result;document.getElementById('f_imgurl').value='';document.getElementById('imgWrap').innerHTML=`<img src="${e.target.result}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%">`;};
+  r.readAsDataURL(file);
+}
+async function submitSW(){
+  const name=document.getElementById('f_name').value.trim();
+  const cat=document.getElementById('f_cat').value;
+  const desc=document.getElementById('f_desc').value.trim();
+  const link=document.getElementById('f_link').value.trim();
+  if(!name||!cat||!desc||!link){notify('❌ Remplis les champs obligatoires (*)',true);return;}
+  const img=b64img||document.getElementById('f_imgurl').value.trim();
+  const version=document.getElementById('f_ver').value.trim();
+  const platform=document.getElementById('f_plat').value.trim();
+  const license=document.getElementById('f_lic').value;
+  if(editId){
+    const i=db.findIndex(s=>s.id===editId);
+    if(i>-1)db[i]={...db[i],name,cat,desc,link,img,version,platform,license};
+  } else {
+    db.unshift({id:'s'+Date.now(),name,cat,desc,link,img,version,platform,license,added:Date.now()});
+  }
+  notify('⏳ Sauvegarde en cours...');
+  try{
+    await apiPut(db);
+    notify(editId?'✅ Modifié — visible par tous !':'✅ Ajouté — visible par tous !');
+    closeM('addModal');render();
+  } catch(err){ notify('❌ Erreur sauvegarde : '+err.message,true); }
+}
+
+// ════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════
+function openM(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden';}
+function closeM(id){document.getElementById(id).classList.remove('on');document.body.style.overflow='';}
+function oClose(e,id){if(e.target.id===id)closeM(id);}
+let nt;
+function notify(msg,err=false){
+  const el=document.getElementById('notif');
+  el.textContent=msg;el.className='notif'+(err?' err':'');
+  void el.offsetWidth;el.classList.add('show');
+  clearTimeout(nt);nt=setTimeout(()=>el.classList.remove('show'),3400);
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ════════════════════════════════════
+//  BOOT
+// ════════════════════════════════════
+init();
+</script>
+</body>
+</html>
