@@ -99,14 +99,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .cat-name{font-family:'Orbitron',monospace;font-size:.62rem;font-weight:700;letter-spacing:2px;color:var(--text);text-transform:uppercase;margin-bottom:4px;}
 .cat-cnt{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted);}
 /* CARDS */
-.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;}
 .sw-card{background:var(--card);border:1px solid var(--border);overflow:hidden;transition:all .3s;position:relative;display:flex;flex-direction:column;}
 .sw-card:hover{border-color:rgba(0,255,231,.35);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4);}
 .sw-card::after{content:'';position:absolute;left:0;top:0;width:2px;height:0;background:var(--neon);transition:height .3s;}
 .sw-card:hover::after{height:100%;}
-.sw-img{width:100%;height:160px;object-fit:cover;display:block;}
-.sw-img-ph{width:100%;height:160px;background:linear-gradient(135deg,var(--bg3),#1a2535);display:flex;align-items:center;justify-content:center;font-size:3.5rem;border-bottom:1px solid var(--border);}
-.sw-body{padding:20px;flex:1;display:flex;flex-direction:column;}
+.sw-img{width:100%;height:100px;object-fit:cover;display:block;}
+.sw-img-ph{width:100%;height:100px;background:linear-gradient(135deg,var(--bg3),#1a2535);display:flex;align-items:center;justify-content:center;font-size:2.5rem;border-bottom:1px solid var(--border);}
+.sw-body{padding:12px;flex:1;display:flex;flex-direction:column;}
 .sw-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:6px;flex-wrap:wrap;}
 .ctag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:1px;text-transform:uppercase;border-radius:2px;}
 .t-Jeux{background:rgba(255,32,64,.1);color:var(--red);border:1px solid rgba(255,32,64,.2);}
@@ -121,7 +121,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .sub-tag.horreur{background:rgba(100,0,50,.2);color:#ff6090;border-color:rgba(255,60,100,.2);}
 .sw-ver{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--neon);background:rgba(0,255,231,.07);padding:3px 8px;border-radius:2px;}
 .sw-name{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;color:var(--white);margin-bottom:8px;}
-.sw-desc{font-size:.83rem;color:var(--muted);line-height:1.55;flex:1;margin-bottom:16px;}
+.sw-desc{font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;height:2.4em;flex:none;}
 .sw-foot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border);}
 .sw-plat{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:1px;}
 .sw-dl{font-family:'Orbitron',monospace;font-size:.6rem;background:var(--neon);color:var(--bg);padding:7px 14px;border-radius:2px;text-decoration:none;transition:all .2s;font-weight:700;letter-spacing:1px;display:inline-flex;align-items:center;gap:6px;}
@@ -1159,7 +1159,7 @@ function openSWModal(id){
         <span style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted);">Ajouté le ${addedDate}</span>
       </div>
       <div class="sw-modal-title">${esc(s.name)}</div>
-      <div class="sw-modal-desc">${esc(s.desc)}</div>
+      <div class="sw-modal-desc">${esc(s.desc.length>180?s.desc.substring(0,180)+'...':s.desc)}</div>
       <div class="sw-modal-info">
         <div class="sw-modal-info-item"><div class="sw-modal-info-label">Plateforme</div><div class="sw-modal-info-val">${esc(s.platform||'—')}</div></div>
         <div class="sw-modal-info-item"><div class="sw-modal-info-label">Licence</div><div class="sw-modal-info-val">${esc(s.license||'—')}</div></div>
