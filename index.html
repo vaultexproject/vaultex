@@ -395,26 +395,26 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <div class="filter-row">
       <span class="filter-label" data-i18n="filter_cat">Cat.</span>
       <span class="stag active" data-cat="all" onclick="setFilter(this,'all')" data-i18n="all">Tous</span>
-      <span class="stag" data-cat="Jeux" onclick="setFilter(this,'Jeux')">🎮 Jeux</span>
-      <span class="stag" data-cat="Vidéo" onclick="setFilter(this,'Vidéo')">🎬 Vidéo</span>
-      <span class="stag" data-cat="Audio" onclick="setFilter(this,'Audio')">🎵 Audio</span>
-      <span class="stag" data-cat="Système" onclick="setFilter(this,'Système')">🖥️ Système</span>
-      <span class="stag" data-cat="Dev" onclick="setFilter(this,'Dev')">👨‍💻 Dev</span>
-      <span class="stag" data-cat="Créatif" onclick="setFilter(this,'Créatif')">🎨 Créatif</span>
-      <span class="stag" data-cat="OS" onclick="setFilter(this,'OS')">🐧 OS</span>
+      <span class="stag" data-cat="Jeux" onclick="setFilter(this,'Jeux')" data-i18n="cat_games">🎮 Jeux</span>
+      <span class="stag" data-cat="Vidéo" onclick="setFilter(this,'Vidéo')" data-i18n="cat_video">🎬 Vidéo</span>
+      <span class="stag" data-cat="Audio" onclick="setFilter(this,'Audio')" data-i18n="cat_audio">🎵 Audio</span>
+      <span class="stag" data-cat="Système" onclick="setFilter(this,'Système')" data-i18n="cat_sys">🖥️ Système</span>
+      <span class="stag" data-cat="Dev" onclick="setFilter(this,'Dev')" data-i18n="cat_dev">👨‍💻 Dev</span>
+      <span class="stag" data-cat="Créatif" onclick="setFilter(this,'Créatif')" data-i18n="cat_creative">🎨 Créatif</span>
+      <span class="stag" data-cat="OS" onclick="setFilter(this,'OS')" data-i18n="cat_os">🐧 OS</span>
     </div>
     <div class="subcat-row" id="subcatRow">
       <span class="filter-label" data-i18n="filter_genre">Genre</span>
       <span class="stag sub active" data-sub="all" onclick="setSubFilter(this,'all')" data-i18n="all">Tous</span>
-      <span class="stag sub" data-sub="Action" onclick="setSubFilter(this,'Action')">⚔️ Action</span>
-      <span class="stag sub" data-sub="FPS" onclick="setSubFilter(this,'FPS')">🔫 FPS</span>
-      <span class="stag sub" data-sub="RPG" onclick="setSubFilter(this,'RPG')">🧙 RPG</span>
-      <span class="stag sub" data-sub="Horreur" onclick="setSubFilter(this,'Horreur')">👻 Horreur</span>
-      <span class="stag sub" data-sub="Indé" onclick="setSubFilter(this,'Indé')">🎲 Indé</span>
-      <span class="stag sub" data-sub="Stratégie" onclick="setSubFilter(this,'Stratégie')">🗺️ Stratégie</span>
-      <span class="stag sub" data-sub="Aventure" onclick="setSubFilter(this,'Aventure')">🌍 Aventure</span>
-      <span class="stag sub" data-sub="Puzzle" onclick="setSubFilter(this,'Puzzle')">🧩 Puzzle</span>
-      <span class="stag sub" data-sub="NSFW" onclick="setSubFilter(this,'NSFW')">🔞 NSFW</span>
+      <span class="stag sub" data-sub="Action" onclick="setSubFilter(this,'Action')" data-i18n="sub_action">⚔️ Action</span>
+      <span class="stag sub" data-sub="FPS" onclick="setSubFilter(this,'FPS')" data-i18n="sub_fps">🔫 FPS</span>
+      <span class="stag sub" data-sub="RPG" onclick="setSubFilter(this,'RPG')" data-i18n="sub_rpg">🧙 RPG</span>
+      <span class="stag sub" data-sub="Horreur" onclick="setSubFilter(this,'Horreur')" data-i18n="sub_horror">👻 Horreur</span>
+      <span class="stag sub" data-sub="Indé" onclick="setSubFilter(this,'Indé')" data-i18n="sub_indie">🎲 Indé</span>
+      <span class="stag sub" data-sub="Stratégie" onclick="setSubFilter(this,'Stratégie')" data-i18n="sub_strat">🗺️ Stratégie</span>
+      <span class="stag sub" data-sub="Aventure" onclick="setSubFilter(this,'Aventure')" data-i18n="sub_adventure">🌍 Aventure</span>
+      <span class="stag sub" data-sub="Puzzle" onclick="setSubFilter(this,'Puzzle')" data-i18n="sub_puzzle">🧩 Puzzle</span>
+      <span class="stag sub" data-sub="NSFW" onclick="setSubFilter(this,'NSFW')" data-i18n="sub_nsfw">🔞 NSFW</span>
     </div>
     <div class="search-info" id="searchInfo"></div>
   </div>
@@ -846,7 +846,7 @@ function render(){
     const sc=(s.cat||'').replace(/[éèêëÉ]/g,'e').replace(/[^a-zA-Z0-9]/g,'');
     const imgHtml=s.img?`<img class="sw-img" src="${esc(s.img)}" alt="${esc(s.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="sw-img-ph" style="display:none">${ICONS[s.cat]||'📦'}</div>`:`<div class="sw-img-ph">${ICONS[s.cat]||'📦'}</div>`;
     const subHtml=s.subcat?`<span class="sub-tag ${s.subcat==='NSFW'?'nsfw':s.subcat==='Horreur'?'horreur':''}">${s.subcat}</span>`:'';
-    return `<div class="sw-card" data-id="${s.id}">${imgHtml}<button class="del-btn" onclick="delCard('${s.id}',event)">✕</button><div class="sw-body"><div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${subHtml}${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}</div><div class="sw-name">${esc(s.name)}</div><div class="sw-desc">${esc(s.desc)}</div><div class="sw-foot"><span class="sw-plat">${esc(s.platform||'')}</span><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span data-i18n="btn_dl">⬇ TÉLÉCHARGER</span></a></div></div></div>`;
+    return `<div class="sw-card" data-id="${s.id}">${imgHtml}<button class="del-btn" onclick="delCard('${s.id}',event)">✕</button><div class="sw-body"><div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${subHtml}${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}</div><div class="sw-name">${esc(s.name)}</div><div class="sw-desc">${esc(s.desc)}</div><div class="sw-foot"><span class="sw-plat">${esc(s.platform||'')}</span><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${t('btn_dl')}</a></div></div></div>`;
   }).join('');
   grid.querySelectorAll('.sw-card').forEach(c=>c.addEventListener('click',function(e){
     if(e.target.closest('.del-btn,.sw-dl'))return;
@@ -1187,7 +1187,7 @@ function openSWModal(id){
         <div class="sw-modal-info-item"><div class="sw-modal-info-label">${t('platform')}</div><div class="sw-modal-info-val">${esc(s.platform||'—')}</div></div>
         <div class="sw-modal-info-item"><div class="sw-modal-info-label">${t('license')}</div><div class="sw-modal-info-val">${esc(s.license||'—')}</div></div>
       </div>
-      <a class="sw-modal-dl" href="${esc(s.link)}" target="_blank" rel="noopener"><span data-i18n="btn_dl">⬇ TÉLÉCHARGER</span></a>
+      <a class="sw-modal-dl" href="${esc(s.link)}" target="_blank" rel="noopener">${t('btn_dl')}</a>
     </div>`;
   document.getElementById('swModal').classList.add('open');
   document.body.style.overflow='hidden';
@@ -1275,6 +1275,10 @@ const LANGS={
     results:'résultat', results_pl:'résultats', no_results:'Aucun résultat',
     // SW card download
     paypal_btn:'Soutenir',
+    cat_games:'🎮 Jeux', cat_video:'🎬 Vidéo', cat_audio:'🎵 Audio', cat_sys:'🖥️ Système',
+    cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Créatif', cat_os:'🐧 OS',
+    sub_action:'⚔️ Action', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Horreur',
+    sub_indie:'🎲 Indé', sub_strat:'🗺️ Stratégie', sub_adventure:'🌍 Aventure', sub_puzzle:'🧩 Puzzle', sub_nsfw:'🔞 NSFW',
     nav_soft:'Logiciels', nav_cat:'Catégories', nav_comm:'Communauté',
     hero_badge:'🟢 PLATEFORME COMMUNAUTAIRE · LOGICIELS LIBRES UNIQUEMENT',
     hero_title:'DÉCOUVREZ LES<br><span class="accent">MEILLEURS</span><br><span class="accent-red">FREEWARE</span>',
@@ -1348,6 +1352,10 @@ const LANGS={
     loading:'LOADING...',
     results:'result', results_pl:'results', no_results:'No results',
     paypal_btn:'Support',
+    cat_games:'🎮 Games', cat_video:'🎬 Video', cat_audio:'🎵 Audio', cat_sys:'🖥️ System',
+    cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Creative', cat_os:'🐧 OS',
+    sub_action:'⚔️ Action', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Horror',
+    sub_indie:'🎲 Indie', sub_strat:'🗺️ Strategy', sub_adventure:'🌍 Adventure', sub_puzzle:'🧩 Puzzle', sub_nsfw:'🔞 NSFW',
     nav_soft:'Software', nav_cat:'Categories', nav_comm:'Community',
     hero_badge:'🟢 COMMUNITY PLATFORM · FREE SOFTWARE ONLY',
     hero_title:'DISCOVER THE<br><span class="accent">BEST</span><br><span class="accent-red">FREEWARE</span>',
@@ -1421,6 +1429,10 @@ const LANGS={
     loading:'ЗАГРУЗКА...',
     results:'результат', results_pl:'результатов', no_results:'Нет результатов',
     paypal_btn:'Поддержать',
+    cat_games:'🎮 Игры', cat_video:'🎬 Видео', cat_audio:'🎵 Аудио', cat_sys:'🖥️ Система',
+    cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Творчество', cat_os:'🐧 ОС',
+    sub_action:'⚔️ Экшн', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Хоррор',
+    sub_indie:'🎲 Инди', sub_strat:'🗺️ Стратегия', sub_adventure:'🌍 Приключение', sub_puzzle:'🧩 Головоломка', sub_nsfw:'🔞 NSFW',
     nav_soft:'Программы', nav_cat:'Категории', nav_comm:'Сообщество',
     hero_badge:'🟢 СООБЩЕСТВО · ТОЛЬКО БЕСПЛАТНОЕ ПО',
     hero_title:'ОТКРОЙТЕ ДЛЯ СЕБЯ<br><span class="accent">ЛУЧШИЕ</span><br><span class="accent-red">ПРОГРАММЫ</span>',
