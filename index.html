@@ -238,6 +238,8 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 .social-discord:hover{background:rgba(88,101,242,.28);box-shadow:0 0 16px rgba(88,101,242,.25);}
 .social-youtube{background:rgba(255,0,0,.1);color:#ff4444;border-color:rgba(255,0,0,.2);}
 .social-youtube:hover{background:rgba(255,0,0,.22);box-shadow:0 0 16px rgba(255,0,0,.2);}
+.social-paypal{background:rgba(0,112,186,.12);color:#009cde;border-color:rgba(0,112,186,.25);}
+.social-paypal:hover{background:rgba(0,112,186,.25);box-shadow:0 0 16px rgba(0,112,186,.2);}
 .editable-text{transition:outline .2s;}
 .admin-mode .editable-text{outline:1px dashed rgba(255,160,0,.4);cursor:pointer;position:relative;}
 .admin-mode .editable-text:hover{outline:2px solid rgba(255,160,0,.7);background:rgba(255,160,0,.04);}
@@ -344,6 +346,10 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <a id="youtubeBtn" href="#" target="_blank" rel="noopener" class="social-btn social-youtube" style="display:none">
       <svg width="16" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.2 31.2 0 0 0 0 12a31.2 31.2 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.2 31.2 0 0 0 24 12a31.2 31.2 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
       YouTube
+    </a>
+    <a id="paypalBtn" href="#" target="_blank" rel="noopener" class="social-btn social-paypal" style="display:none">
+      <svg width="14" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.291-.077.44-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.103zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg>
+      Soutenir
     </a>
     <a href="#" class="btn btn-outline" id="adminNavBtn" onclick="handleAdmin(event)">⚙ Admin</a>
     <a href="#" class="btn btn-primary" id="addBtn" onclick="handleAdd(event)">+ Soumettre</a>
@@ -656,6 +662,13 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
           Lien YouTube (laisser vide pour masquer)
         </label>
         <input class="fi" id="se_youtube" type="url" placeholder="https://youtube.com/@...">
+      </div>
+      <div class="fg">
+        <label class="fl">
+          <svg width="12" height="14" viewBox="0 0 24 24" fill="#009cde" style="vertical-align:middle;margin-right:5px;"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.291-.077.44-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.103zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg>
+          Lien PayPal / don (laisser vide pour masquer)
+        </label>
+        <input class="fi" id="se_paypal" type="url" placeholder="https://paypal.me/...">
       </div>
     </div>
 
@@ -1206,8 +1219,10 @@ function applySiteConfig(){
   // Boutons sociaux
   const db=document.getElementById('discordBtn');
   const yt=document.getElementById('youtubeBtn');
+  const pp=document.getElementById('paypalBtn');
   if(db){db.href=cfg.discordUrl||'#';db.style.display=cfg.discordUrl?'inline-flex':'none';}
   if(yt){yt.href=cfg.youtubeUrl||'#';yt.style.display=cfg.youtubeUrl?'inline-flex':'none';}
+  if(pp){pp.href=cfg.paypalUrl||'#';pp.style.display=cfg.paypalUrl?'inline-flex':'none';}
 }
 function openSiteEditor(){
   if(!isAdmin)return;
@@ -1221,6 +1236,7 @@ function openSiteEditor(){
   document.getElementById('se_desc').value=cfg.heroDesc||(desc?desc.textContent:'');
   document.getElementById('se_discord').value=cfg.discordUrl||'';
   document.getElementById('se_youtube').value=cfg.youtubeUrl||'';
+  document.getElementById('se_paypal').value=cfg.paypalUrl||'';
   openM('siteEditorModal');
 }
 async function saveSiteConfig(){
@@ -1230,6 +1246,7 @@ async function saveSiteConfig(){
     heroDesc:document.getElementById('se_desc').value.trim(),
     discordUrl:document.getElementById('se_discord').value.trim(),
     youtubeUrl:document.getElementById('se_youtube').value.trim(),
+    paypalUrl:document.getElementById('se_paypal').value.trim(),
   };
   applySiteConfig();
   notify('⏳ Sauvegarde...');
