@@ -233,6 +233,18 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 .fbot{padding:22px 80px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
 .fbot p{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted);letter-spacing:1px;}
 .nc{color:var(--neon);}
+.social-btn{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:4px;font-family:'Orbitron',monospace;font-size:.58rem;font-weight:700;letter-spacing:1px;text-decoration:none;transition:all .2s;border:1px solid transparent;cursor:pointer;}
+.social-discord{background:rgba(88,101,242,.15);color:#5865f2;border-color:rgba(88,101,242,.3);}
+.social-discord:hover{background:rgba(88,101,242,.28);box-shadow:0 0 16px rgba(88,101,242,.25);}
+.social-youtube{background:rgba(255,0,0,.1);color:#ff4444;border-color:rgba(255,0,0,.2);}
+.social-youtube:hover{background:rgba(255,0,0,.22);box-shadow:0 0 16px rgba(255,0,0,.2);}
+.editable-text{transition:outline .2s;}
+.admin-mode .editable-text{outline:1px dashed rgba(255,160,0,.4);cursor:pointer;position:relative;}
+.admin-mode .editable-text:hover{outline:2px solid rgba(255,160,0,.7);background:rgba(255,160,0,.04);}
+.admin-mode .editable-text:hover::after{content:'✏️';position:absolute;top:-10px;right:0;font-size:.7rem;background:#ffa000;color:#000;padding:1px 5px;border-radius:2px;font-family:sans-serif;}
+.site-edit-section{margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:20px;}
+.site-edit-section:last-child{border-bottom:none;margin-bottom:0;}
+.site-edit-section h4{font-family:'Orbitron',monospace;font-size:.6rem;letter-spacing:2px;color:var(--neon);margin-bottom:14px;text-transform:uppercase;}
 .notif{position:fixed;bottom:28px;right:28px;background:var(--card);border:1px solid rgba(0,255,231,.3);border-left:3px solid var(--neon);padding:14px 22px;font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--neon);z-index:999;transform:translateX(280px);opacity:0;transition:all .4s;letter-spacing:1px;max-width:340px;}
 .notif.show{transform:translateX(0);opacity:1;}
 .notif.err{border-left-color:var(--red);color:var(--red);border-color:rgba(255,32,64,.3);}
@@ -288,6 +300,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   <div class="admin-badge">⚙ MODE ADMIN ACTIF</div>
   <div class="abar-right">
     <button class="ab ab-add" onclick="openAdd()">+ Ajouter</button>
+    <button class="ab" style="background:rgba(255,160,0,.15);color:#ffa000;border:1px solid rgba(255,160,0,.3);" onclick="openSiteEditor()">✏️ Modifier le site</button>
     <button class="ab ab-del" id="delBtn" onclick="toggleDel()">🗑 Supprimer</button>
     <button class="ab ab-out" onclick="adminOut()">✕ Déconnexion</button>
   </div>
@@ -302,6 +315,14 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <li><a onclick="showPage('community')" id="nl-comm">Communauté</a></li>
   </ul>
   <div class="nav-actions">
+    <a id="discordBtn" href="#" target="_blank" rel="noopener" class="social-btn social-discord" style="display:none">
+      <svg width="16" height="12" viewBox="0 0 71 55" fill="currentColor"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.6.7a.2.2 0 0 0-.2.1 40.7 40.7 0 0 0-1.8 3.7 54 54 0 0 0-16.2 0A37.7 37.7 0 0 0 25.6.8a.2.2 0 0 0-.2-.1A58.4 58.4 0 0 0 10.9 4.9a.2.2 0 0 0-.1.1C1.6 18.1-.9 31 .3 43.7a.2.2 0 0 0 .1.2 58.8 58.8 0 0 0 17.7 9 .2.2 0 0 0 .2-.1 42 42 0 0 0 3.6-5.9.2.2 0 0 0-.1-.3 38.7 38.7 0 0 1-5.5-2.6.2.2 0 0 1 0-.4l1.1-.8a.2.2 0 0 1 .2 0c11.5 5.3 24 5.3 35.4 0a.2.2 0 0 1 .2 0l1.1.8a.2.2 0 0 1 0 .4 36 36 0 0 1-5.5 2.6.2.2 0 0 0-.1.3 47.2 47.2 0 0 0 3.6 5.9.2.2 0 0 0 .2.1 58.7 58.7 0 0 0 17.8-9 .2.2 0 0 0 .1-.2c1.5-15.2-2.5-28-10.5-39.6a.2.2 0 0 0-.1-.2ZM23.7 36c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2Zm23.6 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2Z"/></svg>
+      Discord
+    </a>
+    <a id="youtubeBtn" href="#" target="_blank" rel="noopener" class="social-btn social-youtube" style="display:none">
+      <svg width="16" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.2 31.2 0 0 0 0 12a31.2 31.2 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.2 31.2 0 0 0 24 12a31.2 31.2 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+      YouTube
+    </a>
     <a href="#" class="btn btn-outline" id="adminNavBtn" onclick="handleAdmin(event)">⚙ Admin</a>
     <a href="#" class="btn btn-primary" id="addBtn" onclick="handleAdd(event)">+ Soumettre</a>
   </div>
@@ -312,9 +333,9 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 <section class="hero">
   <div class="hero-grid"></div><div class="hero-glow"></div><div class="hero-glow-red"></div>
   <div class="hero-content">
-    <div class="hero-badge">🟢 PLATEFORME COMMUNAUTAIRE · LOGICIELS LIBRES UNIQUEMENT</div>
-    <h1>DÉCOUVREZ LES<br><span class="accent">MEILLEURS</span><br><span class="accent-red">FREEWARE</span></h1>
-    <p>Plateforme communautaire dédiée au partage de logiciels gratuits et open source — jeux indé, utilitaires, outils créatifs. 100% légal, 100% libre.</p>
+    <div class="hero-badge editable-text" id="heroBadge" onclick="editSiteText('heroBadge')">🟢 PLATEFORME COMMUNAUTAIRE · LOGICIELS LIBRES UNIQUEMENT</div>
+    <h1 class="editable-text" id="heroTitle" onclick="editSiteText('heroTitle')">DÉCOUVREZ LES<br><span class="accent">MEILLEURS</span><br><span class="accent-red">FREEWARE</span></h1>
+    <p class="editable-text" id="heroDesc" onclick="editSiteText('heroDesc')">Plateforme communautaire dédiée au partage de logiciels gratuits et open source — jeux indé, utilitaires, outils créatifs. 100% légal, 100% libre.</p>
     <div class="hero-actions">
       <a href="#search" class="btn btn-primary">⚡ Explorer</a>
       <a href="#" class="btn btn-comm" onclick="showPage('community');return false;">💬 Communauté</a>
@@ -575,6 +596,42 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   </div>
 </div>
 
+<!-- MODAL ÉDITION DU SITE -->
+<div class="overlay" id="siteEditorModal" onclick="oClose(event,'siteEditorModal')">
+  <div class="modal" style="max-width:560px;max-height:85vh;overflow-y:auto;">
+    <button class="m-close" onclick="closeM('siteEditorModal')">✕</button>
+    <h2>✏️ Modifier le site</h2>
+    <p class="sub">Textes affichés sur la page + liens sociaux</p>
+
+    <div class="site-edit-section">
+      <h4>🏠 Page d'accueil</h4>
+      <div class="fg"><label class="fl">Badge hero (petit texte en haut)</label><input class="fi" id="se_badge" type="text"></div>
+      <div class="fg"><label class="fl">Titre principal (HTML autorisé)</label><textarea class="ft" id="se_title" style="min-height:80px;font-size:.8rem;"></textarea></div>
+      <div class="fg"><label class="fl">Description sous le titre</label><textarea class="ft" id="se_desc" style="min-height:80px;"></textarea></div>
+    </div>
+
+    <div class="site-edit-section">
+      <h4>🔗 Liens sociaux</h4>
+      <div class="fg">
+        <label class="fl">
+          <svg width="14" height="11" viewBox="0 0 71 55" fill="#5865f2" style="vertical-align:middle;margin-right:5px;"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.6.7a.2.2 0 0 0-.2.1 40.7 40.7 0 0 0-1.8 3.7 54 54 0 0 0-16.2 0A37.7 37.7 0 0 0 25.6.8a.2.2 0 0 0-.2-.1A58.4 58.4 0 0 0 10.9 4.9a.2.2 0 0 0-.1.1C1.6 18.1-.9 31 .3 43.7a.2.2 0 0 0 .1.2 58.8 58.8 0 0 0 17.7 9 .2.2 0 0 0 .2-.1 42 42 0 0 0 3.6-5.9.2.2 0 0 0-.1-.3 38.7 38.7 0 0 1-5.5-2.6.2.2 0 0 1 0-.4l1.1-.8a.2.2 0 0 1 .2 0c11.5 5.3 24 5.3 35.4 0a.2.2 0 0 1 .2 0l1.1.8a.2.2 0 0 1 0 .4 36 36 0 0 1-5.5 2.6.2.2 0 0 0-.1.3 47.2 47.2 0 0 0 3.6 5.9.2.2 0 0 0 .2.1 58.7 58.7 0 0 0 17.8-9 .2.2 0 0 0 .1-.2c1.5-15.2-2.5-28-10.5-39.6a.2.2 0 0 0-.1-.2ZM23.7 36c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2Zm23.6 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2Z"/></svg>
+          Lien Discord (laisser vide pour masquer)
+        </label>
+        <input class="fi" id="se_discord" type="url" placeholder="https://discord.gg/...">
+      </div>
+      <div class="fg">
+        <label class="fl">
+          <svg width="14" height="10" viewBox="0 0 24 24" fill="#ff4444" style="vertical-align:middle;margin-right:5px;"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.2 31.2 0 0 0 0 12a31.2 31.2 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.2 31.2 0 0 0 24 12a31.2 31.2 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+          Lien YouTube (laisser vide pour masquer)
+        </label>
+        <input class="fi" id="se_youtube" type="url" placeholder="https://youtube.com/@...">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="saveSiteConfig()">💾 Enregistrer les modifications</button>
+  </div>
+</div>
+
 <div class="notif" id="notif"></div>
 
 <script>
@@ -646,7 +703,7 @@ const DEFAULT_SW=[
 
 
 // ═══════════════ STATE ═══════════════
-let db=[],community=[],filterCat='all',filterSub='all',filterQ='',isAdmin=false,delMode=false,editId=null,b64img=null;
+let db=[],community=[],siteConfig={},filterCat='all',filterSub='all',filterQ='',isAdmin=false,delMode=false,editId=null,b64img=null;
 const ICONS={Jeux:'🎮',Vidéo:'🎬',Audio:'🎵',Système:'🖥️',Dev:'👨‍💻',Créatif:'🎨',OS:'🐧'};
 const POST_LABELS={bug:'🐛 Bug',jeu:'🎮 Jeu gratuit',logiciel:'💾 Logiciel',suggestion:'💡 Suggestion'};
 
@@ -667,10 +724,10 @@ async function apiGet(){
   const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':MASTER_KEY}});
   if(!r.ok)throw new Error('GET '+r.status);
   const j=await r.json();
-  return{softwares:j.record?.softwares||null, community:j.record?.community||[]};
+  return{softwares:j.record?.softwares||null, community:j.record?.community||[], siteConfig:j.record?.siteConfig||{}};
 }
 async function apiPut(sw,cm){
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},body:JSON.stringify({softwares:sw,community:cm})});
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},body:JSON.stringify({softwares:sw,community:cm,siteConfig:siteConfig})});
   if(!r.ok)throw new Error('PUT '+r.status);
 }
 
@@ -679,6 +736,8 @@ async function init(){
   try{
     const data=await apiGet();
     community=data.community||[];
+    siteConfig=data.siteConfig||{};
+    applySiteConfig();
     if(data.softwares && data.softwares.length > 0){
       // Merge images manquantes depuis DEFAULT_SW sans toucher aux données user
       const defaultMap={};
@@ -1041,6 +1100,68 @@ async function delPostMod(id){
   try{await apiPut(db,community);notify('🗑 Post supprimé');}catch(err){notify('❌ '+err.message,true);}
   renderCommunity();renderSide();renderModeration();
   document.getElementById('heroComm').innerHTML=community.length+'<span></span>';
+}
+
+// ═══════════════ SITE CONFIG ═══════════════
+function applySiteConfig(){
+  const cfg=siteConfig;
+  // Textes hero
+  if(cfg.heroBadge){
+    const el=document.getElementById('heroBadge');
+    if(el)el.innerHTML='🟢 '+cfg.heroBadge;
+  }
+  if(cfg.heroTitle){
+    const el=document.getElementById('heroTitle');
+    if(el)el.innerHTML=cfg.heroTitle;
+  }
+  if(cfg.heroDesc){
+    const el=document.getElementById('heroDesc');
+    if(el)el.textContent=cfg.heroDesc;
+  }
+  // Boutons sociaux
+  const db=document.getElementById('discordBtn');
+  const yt=document.getElementById('youtubeBtn');
+  if(db){db.href=cfg.discordUrl||'#';db.style.display=cfg.discordUrl?'inline-flex':'none';}
+  if(yt){yt.href=cfg.youtubeUrl||'#';yt.style.display=cfg.youtubeUrl?'inline-flex':'none';}
+}
+function openSiteEditor(){
+  if(!isAdmin)return;
+  const cfg=siteConfig;
+  // Récupérer le texte actuel du DOM
+  const badge=document.getElementById('heroBadge');
+  const title=document.getElementById('heroTitle');
+  const desc=document.getElementById('heroDesc');
+  document.getElementById('se_badge').value=cfg.heroBadge||(badge?badge.textContent.replace('🟢 ',''):'');
+  document.getElementById('se_title').value=cfg.heroTitle||(title?title.innerHTML:'');
+  document.getElementById('se_desc').value=cfg.heroDesc||(desc?desc.textContent:'');
+  document.getElementById('se_discord').value=cfg.discordUrl||'';
+  document.getElementById('se_youtube').value=cfg.youtubeUrl||'';
+  openM('siteEditorModal');
+}
+async function saveSiteConfig(){
+  siteConfig={
+    heroBadge:document.getElementById('se_badge').value.trim(),
+    heroTitle:document.getElementById('se_title').value.trim(),
+    heroDesc:document.getElementById('se_desc').value.trim(),
+    discordUrl:document.getElementById('se_discord').value.trim(),
+    youtubeUrl:document.getElementById('se_youtube').value.trim(),
+  };
+  applySiteConfig();
+  notify('⏳ Sauvegarde...');
+  try{
+    await apiPut(db,community);
+    notify('✅ Site mis à jour !');
+    closeM('siteEditorModal');
+  }catch(e){notify('❌ '+e.message,true);}
+}
+function editSiteText(field){
+  if(!isAdmin)return;
+  openSiteEditor();
+  setTimeout(()=>{
+    const map={heroBadge:'se_badge',heroTitle:'se_title',heroDesc:'se_desc'};
+    const el=document.getElementById(map[field]);
+    if(el){el.focus();el.select();}
+  },200);
 }
 
 // ═══════════════ INIT ═══════════════
