@@ -270,7 +270,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 .sw-modal-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;gap:12px;flex-wrap:wrap;}
 .sw-modal-tags{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 .sw-modal-title{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:var(--white);margin-bottom:12px;}
-.sw-modal-desc{font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:20px;}
+.sw-modal-desc{font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:20px;display:block;overflow:visible;-webkit-line-clamp:unset;-webkit-box-orient:unset;height:auto;}
 .sw-modal-info{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;}
 .sw-modal-info-item{background:rgba(0,0,0,.2);border:1px solid var(--border);padding:10px 14px;border-radius:2px;}
 .sw-modal-info-label{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--neon);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
@@ -1172,7 +1172,7 @@ function openSWModal(id){
         <span style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted);">Ajouté le ${addedDate}</span>
       </div>
       <div class="sw-modal-title">${esc(s.name)}</div>
-      <div class="sw-modal-desc">${esc(s.desc.length>180?s.desc.substring(0,180)+'...':s.desc)}</div>
+      <div class="sw-modal-desc">${esc(s.desc)}</div>
       <div class="sw-modal-info">
         <div class="sw-modal-info-item"><div class="sw-modal-info-label">Plateforme</div><div class="sw-modal-info-val">${esc(s.platform||'—')}</div></div>
         <div class="sw-modal-info-item"><div class="sw-modal-info-label">Licence</div><div class="sw-modal-info-val">${esc(s.license||'—')}</div></div>
