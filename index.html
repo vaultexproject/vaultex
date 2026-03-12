@@ -313,20 +313,25 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   .admin-bar{padding:0 16px;}
   .community-page{padding:100px 20px 60px;}
 }
+
+.lang-switcher{display:flex;gap:4px;align-items:center;}
+.lang-btn{padding:4px 9px;font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:1px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;border-radius:2px;transition:all .2s;}
+.lang-btn:hover{border-color:var(--neon);color:var(--neon);}
+.lang-btn.active{background:rgba(0,255,231,.12);border-color:var(--neon);color:var(--neon);}
 </style>
 </head>
 <body>
 
-<div id="loadingOverlay"><div class="spinner"></div><div class="loading-txt">CHARGEMENT...</div></div>
+<div id="loadingOverlay"><div class="spinner"></div><div class="loading-txt" data-i18n="loading">CHARGEMENT...</div></div>
 
 <!-- ADMIN BAR -->
 <div class="admin-bar" id="adminBar">
-  <div class="admin-badge">⚙ MODE ADMIN ACTIF</div>
+  <div class="admin-badge" data-i18n="admin_active">⚙ MODE ADMIN ACTIF</div>
   <div class="abar-right">
-    <button class="ab ab-add" onclick="openAdd()">+ Ajouter</button>
-    <button class="ab" style="background:rgba(255,160,0,.15);color:#ffa000;border:1px solid rgba(255,160,0,.3);" onclick="openSiteEditor()">✏️ Modifier le site</button>
-    <button class="ab ab-del" id="delBtn" onclick="toggleDel()">🗑 Supprimer</button>
-    <button class="ab ab-out" onclick="adminOut()">✕ Déconnexion</button>
+    <button class="ab ab-add" onclick="openAdd()" data-i18n="admin_add">+ Ajouter</button>
+    <button class="ab" style="background:rgba(255,160,0,.15);color:#ffa000;border:1px solid rgba(255,160,0,.3);" onclick="openSiteEditor()" data-i18n="admin_edit_site">✏️ Modifier le site</button>
+    <button class="ab ab-del" id="delBtn" onclick="toggleDel()" data-i18n="admin_del">🗑 Supprimer</button>
+    <button class="ab ab-out" onclick="adminOut()" data-i18n="admin_logout">✕ Déconnexion</button>
   </div>
 </div>
 
@@ -334,9 +339,9 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 <nav id="mainNav">
   <a class="logo" onclick="showPage('home')"><span>VAULT</span>EX</a>
   <ul class="nav-links">
-    <li><a onclick="showPage('home');gotoSection('#logiciels')" id="nl-logiciels">Logiciels</a></li>
-    <li><a onclick="showPage('home');gotoSection('#categories')" id="nl-cat">Catégories</a></li>
-    <li><a onclick="showPage('community')" id="nl-comm">Communauté</a></li>
+    <li><a onclick="showPage('home');gotoSection('#logiciels')" id="nl-logiciels" data-i18n="nav_soft">Logiciels</a></li>
+    <li><a onclick="showPage('home');gotoSection('#categories')" id="nl-cat" data-i18n="nav_cat">Catégories</a></li>
+    <li><a onclick="showPage('community')" id="nl-comm" data-i18n="nav_comm">Communauté</a></li>
   </ul>
   <div class="nav-actions">
     <a id="discordBtn" href="#" target="_blank" rel="noopener" class="social-btn social-discord" style="display:none">
@@ -348,11 +353,16 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       YouTube
     </a>
     <a id="paypalBtn" href="#" target="_blank" rel="noopener" class="social-btn social-paypal" style="display:none">
-      <svg width="14" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.291-.077.44-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.103zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg>
+      <svg width="14" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.291-.077.44-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.103zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg data-i18n="paypal_btn">
       Soutenir
     </a>
-    <a href="#" class="btn btn-outline" id="adminNavBtn" onclick="handleAdmin(event)">⚙ Admin</a>
-    <a href="#" class="btn btn-primary" id="addBtn" onclick="handleAdd(event)">+ Soumettre</a>
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('ru')">RU</button>
+    </div>
+    <a href="#" class="btn btn-outline" id="adminNavBtn" onclick="handleAdmin(event)" data-i18n="btn_admin">⚙ Admin</a>
+    <a href="#" class="btn btn-primary" id="addBtn" onclick="handleAdd(event)" data-i18n="btn_submit">+ Soumettre</a>
   </div>
 </nav>
 
@@ -361,17 +371,17 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 <section class="hero">
   <div class="hero-grid"></div><div class="hero-glow"></div><div class="hero-glow-red"></div>
   <div class="hero-content">
-    <div class="hero-badge editable-text" id="heroBadge" onclick="editSiteText('heroBadge')">🟢 PLATEFORME COMMUNAUTAIRE · LOGICIELS LIBRES UNIQUEMENT</div>
-    <h1 class="editable-text" id="heroTitle" onclick="editSiteText('heroTitle')">DÉCOUVREZ LES<br><span class="accent">MEILLEURS</span><br><span class="accent-red">FREEWARE</span></h1>
-    <p class="editable-text" id="heroDesc" onclick="editSiteText('heroDesc')">Plateforme communautaire dédiée au partage de logiciels gratuits et open source — jeux indé, utilitaires, outils créatifs. 100% légal, 100% libre.</p>
+    <div class="hero-badge editable-text" id="heroBadge" onclick="editSiteText('heroBadge')"><span data-i18n="hero_badge">🟢 PLATEFORME COMMUNAUTAIRE · LOGICIELS LIBRES UNIQUEMENT</span></div>
+    <h1 class="editable-text" id="heroTitle" onclick="editSiteText('heroTitle')"><span data-i18n="hero_title">DÉCOUVREZ LES<br><span class="accent">MEILLEURS</span><br><span class="accent-red">FREEWARE</span></span></h1>
+    <p class="editable-text" id="heroDesc" onclick="editSiteText('heroDesc')"><span data-i18n="hero_desc">Plateforme communautaire dédiée au partage de logiciels gratuits et open source — jeux indé, utilitaires, outils créatifs. 100% légal, 100% libre.</span></p>
     <div class="hero-actions">
-      <a href="#search" class="btn btn-primary">⚡ Explorer</a>
-      <a href="#" class="btn btn-comm" onclick="showPage('community');return false;">💬 Communauté</a>
+      <a href="#search" class="btn btn-primary" data-i18n="btn_explore">⚡ Explorer</a>
+      <a href="#" class="btn btn-comm" onclick="showPage('community');return false;" data-i18n="btn_community">💬 Communauté</a>
     </div>
     <div class="hero-stats">
-      <div><div class="stat-num" id="heroTotal">—<span></span></div><div class="stat-label">Logiciels</div></div>
-      <div><div class="stat-num" id="heroComm">—<span></span></div><div class="stat-label">Posts comm.</div></div>
-      <div><div class="stat-num">100<span>%</span></div><div class="stat-label">Gratuit</div></div>
+      <div><div class="stat-num" id="heroTotal">—<span></span></div><div class="stat-label" data-i18n="stat_soft">Logiciels</div></div>
+      <div><div class="stat-num" id="heroComm">—<span></span></div><div class="stat-label" data-i18n="stat_comm">Posts comm.</div></div>
+      <div><div class="stat-num">100<span>%</span></div><div class="stat-label" data-i18n="stat_free">Gratuit</div></div>
     </div>
   </div>
 </section>
@@ -379,12 +389,12 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 <div class="search-section" id="search">
   <div class="search-box">
     <div class="search-wrap">
-      <input class="search-input" id="searchInput" type="text" placeholder="Rechercher un logiciel, un jeu, un utilitaire..." autocomplete="off">
+      <input class="search-input" id="searchInput" type="text" placeholder="Rechercher un logiciel, un jeu, un utilitaire..." data-i18n-ph="search_ph" autocomplete="off">
       <button class="search-btn" onclick="doSearch()">🔍</button>
     </div>
     <div class="filter-row">
-      <span class="filter-label">Cat.</span>
-      <span class="stag active" data-cat="all" onclick="setFilter(this,'all')">Tous</span>
+      <span class="filter-label" data-i18n="filter_cat">Cat.</span>
+      <span class="stag active" data-cat="all" onclick="setFilter(this,'all')" data-i18n="all">Tous</span>
       <span class="stag" data-cat="Jeux" onclick="setFilter(this,'Jeux')">🎮 Jeux</span>
       <span class="stag" data-cat="Vidéo" onclick="setFilter(this,'Vidéo')">🎬 Vidéo</span>
       <span class="stag" data-cat="Audio" onclick="setFilter(this,'Audio')">🎵 Audio</span>
@@ -394,8 +404,8 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       <span class="stag" data-cat="OS" onclick="setFilter(this,'OS')">🐧 OS</span>
     </div>
     <div class="subcat-row" id="subcatRow">
-      <span class="filter-label">Genre</span>
-      <span class="stag sub active" data-sub="all" onclick="setSubFilter(this,'all')">Tous</span>
+      <span class="filter-label" data-i18n="filter_genre">Genre</span>
+      <span class="stag sub active" data-sub="all" onclick="setSubFilter(this,'all')" data-i18n="all">Tous</span>
       <span class="stag sub" data-sub="Action" onclick="setSubFilter(this,'Action')">⚔️ Action</span>
       <span class="stag sub" data-sub="FPS" onclick="setSubFilter(this,'FPS')">🔫 FPS</span>
       <span class="stag sub" data-sub="RPG" onclick="setSubFilter(this,'RPG')">🧙 RPG</span>
@@ -437,15 +447,15 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 <div class="community-page">
   <div class="comm-hero">
     <div class="section-title">// ESPACE COMMUNAUTÉ</div>
-    <div class="section-heading">Forum & Partage</div>
+    <div class="section-heading" data-i18n="sect_forum">Forum & Partage</div>
     <p>Signale un bug, partage un jeu ou logiciel gratuit, propose une idée.</p>
   </div>
   <div class="ctab-bar">
-    <button class="ctab active" onclick="switchCommTab(this,'bugs')">🐛 Bugs</button>
-    <button class="ctab" onclick="switchCommTab(this,'jeux')">🎮 Jeux gratuits</button>
-    <button class="ctab" onclick="switchCommTab(this,'logiciels')">💾 Logiciels</button>
-    <button class="ctab" onclick="switchCommTab(this,'suggestions')">💡 Suggestions</button>
-    <button class="ctab" id="adminCommTab" onclick="switchCommTab(this,'admin')" style="display:none;color:#ffa000;">⚙ Modération</button>
+    <button class="ctab active" onclick="switchCommTab(this,'bugs')" data-i18n="tab_bugs">🐛 Bugs</button>
+    <button class="ctab" onclick="switchCommTab(this,'jeux')" data-i18n="tab_games">🎮 Jeux gratuits</button>
+    <button class="ctab" onclick="switchCommTab(this,'logiciels')" data-i18n="tab_soft">💾 Logiciels</button>
+    <button class="ctab" onclick="switchCommTab(this,'suggestions')" data-i18n="tab_suggest">💡 Suggestions</button>
+    <button class="ctab" id="adminCommTab" onclick="switchCommTab(this,'admin')" style="display:none;color:#ffa000;" data-i18n="tab_mod">⚙ Modération</button>
   </div>
 
   <!-- TAB BUGS -->
@@ -453,11 +463,11 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <div class="comm-grid">
       <div>
         <div class="post-form">
-          <h3>🐛 Signaler un bug</h3>
-          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="bug_author" placeholder="Anonyme"></div>
+          <h3 data-i18n="form_bug">🐛 Signaler un bug</h3>
+          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="bug_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
           <div class="fg"><label class="fl">Titre *</label><input class="fi" id="bug_title" placeholder="Ex: Page blanche sur mobile..."></div>
-          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="bug_desc" placeholder="Décris le bug, comment le reproduire..."></textarea></div>
-          <button class="btn btn-red" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('bug')">🐛 Envoyer le rapport</button>
+          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="bug_desc" data-i18n-ph="ph_bug_desc" placeholder="Décris le bug, comment le reproduire..."></textarea></div>
+          <button class="btn btn-red" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('bug')" data-i18n="btn_bug">🐛 Envoyer le rapport</button>
         </div>
         <div class="posts-list" id="posts-bug"></div>
       </div>
@@ -470,12 +480,12 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <div class="comm-grid">
       <div>
         <div class="post-form">
-          <h3>🎮 Proposer un jeu gratuit</h3>
-          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="jeu_author" placeholder="Anonyme"></div>
+          <h3 data-i18n="form_game">🎮 Proposer un jeu gratuit</h3>
+          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="jeu_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
           <div class="fg"><label class="fl">Nom du jeu *</label><input class="fi" id="jeu_title" placeholder="Ex: 0 A.D., Minetest..."></div>
-          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="jeu_desc" placeholder="Pourquoi tu le recommandes ?"></textarea></div>
+          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="jeu_desc" data-i18n-ph="ph_game_desc" placeholder="Pourquoi tu le recommandes ?"></textarea></div>
           <div class="fg"><label class="fl">Lien (optionnel)</label><input class="fi" id="jeu_link" type="url" placeholder="https://..."></div>
-          <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('jeu')">🎮 Proposer</button>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('jeu')" data-i18n="btn_game">🎮 Proposer</button>
         </div>
         <div class="posts-list" id="posts-jeu"></div>
       </div>
@@ -488,12 +498,12 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <div class="comm-grid">
       <div>
         <div class="post-form">
-          <h3>💾 Proposer un logiciel</h3>
-          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="log_author" placeholder="Anonyme"></div>
+          <h3 data-i18n="form_soft">💾 Proposer un logiciel</h3>
+          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="log_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
           <div class="fg"><label class="fl">Nom du logiciel *</label><input class="fi" id="log_title" placeholder="Ex: VLC, GIMP, Blender..."></div>
-          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="log_desc" placeholder="À quoi ça sert, pourquoi le recommander ?"></textarea></div>
+          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="log_desc" data-i18n-ph="ph_soft_desc" placeholder="À quoi ça sert, pourquoi le recommander ?"></textarea></div>
           <div class="fg"><label class="fl">Lien (optionnel)</label><input class="fi" id="log_link" type="url" placeholder="https://..."></div>
-          <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('logiciel')">💾 Proposer</button>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('logiciel')" data-i18n="btn_soft_comm">💾 Proposer</button>
         </div>
         <div class="posts-list" id="posts-logiciel"></div>
       </div>
@@ -506,11 +516,11 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <div class="comm-grid">
       <div>
         <div class="post-form">
-          <h3>💡 Proposer une suggestion</h3>
-          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="sug_author" placeholder="Anonyme"></div>
+          <h3 data-i18n="form_sug">💡 Proposer une suggestion</h3>
+          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="sug_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
           <div class="fg"><label class="fl">Titre *</label><input class="fi" id="sug_title" placeholder="Ex: Ajouter un filtre par OS..."></div>
-          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="sug_desc" placeholder="Explique ta suggestion en détail..."></textarea></div>
-          <button class="btn" style="width:100%;justify-content:center;padding:13px;border:1px solid var(--neon2);color:var(--neon2);background:rgba(255,0,170,.06);" onclick="submitPost('suggestion')">💡 Envoyer la suggestion</button>
+          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="sug_desc" data-i18n-ph="ph_sug_desc" placeholder="Explique ta suggestion en détail..."></textarea></div>
+          <button class="btn" style="width:100%;justify-content:center;padding:13px;border:1px solid var(--neon2);color:var(--neon2);background:rgba(255,0,170,.06);" onclick="submitPost('suggestion')" data-i18n="btn_sug">💡 Envoyer la suggestion</button>
         </div>
         <div class="posts-list" id="posts-suggestion"></div>
       </div>
@@ -519,9 +529,9 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   </div>  <!-- TAB ADMIN MODERATION -->
   <div class="ctab-content" id="ctab-admin">
     <div class="mod-header">
-      <div class="section-title">// PANNEAU DE MODÉRATION</div>
+      <div class="section-title" data-i18n="mod_title">// PANNEAU DE MODÉRATION</div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px;">
-        <span style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted);">Filtrer :</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted);" data-i18n="filter_lbl">Filtrer :</span>
         <span class="stag active" data-mf="all" onclick="setModFilter(this,'all')">Tous</span>
         <span class="stag" data-mf="bug" onclick="setModFilter(this,'bug')">🐛 Bugs</span>
         <span class="stag" data-mf="jeu" onclick="setModFilter(this,'jeu')">🎮 Jeux</span>
@@ -537,13 +547,13 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 
 <footer>
   <div class="fbrand"><a class="logo" onclick="showPage('home')"><span>VAULT</span>EX</a><p>Plateforme communautaire — logiciels gratuits & open source uniquement.</p></div>
-  <div class="fcol"><h4>Navigation</h4><ul><li><a onclick="showPage('home')">Explorer</a></li><li><a onclick="showPage('home');gotoSection('#categories')">Catégories</a></li></ul></div>
-  <div class="fcol"><h4>Communauté</h4><ul><li><a onclick="showPage('community')">Forum</a></li><li><a onclick="showPage('community')">Signaler un bug</a></li></ul></div>
-  <div class="fcol"><h4>Infos</h4><ul><li><a href="#">À propos</a></li><li><a href="#">CGU</a></li></ul></div>
+  <div class="fcol" data-i18n="foot_nav"><h4>Navigation</h4><ul><li><a onclick="showPage('home')" data-i18n="foot_explore">Explorer</a></li><li><a onclick="showPage('home');gotoSection('#categories')">Catégories</a></li></ul></div>
+  <div class="fcol" data-i18n="foot_comm"><h4>Communauté</h4><ul><li><a onclick="showPage('community')" data-i18n="foot_forum">Forum</a></li><li><a onclick="showPage('community')" data-i18n="foot_bug">Signaler un bug</a></li></ul></div>
+  <div class="fcol" data-i18n="foot_info"><h4>Infos</h4><ul><li><a href="#" data-i18n="foot_about">À propos</a></li><li><a href="#" data-i18n="foot_cgu">CGU</a></li></ul></div>
 </footer>
 <div class="fbot">
   <p>© 2025 <span class="nc">VAULTEX</span> — Freeware & Open Source uniquement</p>
-  <p class="nc">FREEWARE · OPEN SOURCE · LEGAL</p>
+  <p class="nc" data-i18n="foot_tagline">FREEWARE · OPEN SOURCE · LEGAL</p>
 </div>
 
 <!-- MODAL AJOUTER LOGICIEL (admin only) -->
@@ -602,10 +612,10 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 <div class="overlay" id="loginModal" onclick="oClose(event,'loginModal')">
   <div class="modal" style="max-width:380px;">
     <button class="m-close" onclick="closeM('loginModal')">✕</button>
-    <h2>Accès Admin</h2>
-    <p class="sub">Entrez le mot de passe administrateur.</p>
+    <h2 data-i18n="modal_login_title">Accès Admin</h2>
+    <p class="sub" data-i18n="modal_login_sub">Entrez le mot de passe administrateur.</p>
     <div class="fg"><label class="fl">Mot de passe</label><input class="fi" id="pwdIn" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPwd()"></div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="checkPwd()">🔑 Connexion</button>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="checkPwd()" data-i18n="btn_login">🔑 Connexion</button>
   </div>
 </div>
 
@@ -613,14 +623,14 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 <div class="overlay" id="editPostModal" onclick="oClose(event,'editPostModal')">
   <div class="modal" style="max-width:520px;">
     <button class="m-close" onclick="closeM('editPostModal')">✕</button>
-    <h2>✏️ Modifier le post</h2>
+    <h2 data-i18n="modal_edit_post">✏️ Modifier le post</h2>
     <p class="sub" id="editPostSub"></p>
     <input type="hidden" id="ep_id">
-    <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="ep_author" placeholder="Anonyme"></div>
+    <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="ep_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
     <div class="fg"><label class="fl">Titre *</label><input class="fi" id="ep_title" placeholder="Titre..."></div>
     <div class="fg"><label class="fl">Contenu *</label><textarea class="ft" id="ep_content" style="min-height:120px;" placeholder="Contenu..."></textarea></div>
     <div class="fg"><label class="fl">Lien (optionnel)</label><input class="fi" id="ep_link" type="url" placeholder="https://..."></div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;margin-top:4px;" onclick="saveEditPost()">💾 Enregistrer les modifications</button>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;margin-top:4px;" onclick="saveEditPost()" data-i18n="btn_save_post">💾 Enregistrer les modifications</button>
   </div>
 </div>
 
@@ -637,7 +647,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 <div class="overlay" id="siteEditorModal" onclick="oClose(event,'siteEditorModal')">
   <div class="modal" style="max-width:560px;max-height:85vh;overflow-y:auto;">
     <button class="m-close" onclick="closeM('siteEditorModal')">✕</button>
-    <h2>✏️ Modifier le site</h2>
+    <h2 data-i18n="admin_edit_site" data-i18n="se_title_modal">✏️ Modifier le site</h2>
     <p class="sub">Textes affichés sur la page + liens sociaux</p>
 
     <div class="site-edit-section">
@@ -803,12 +813,12 @@ async function init(){
       db=DEFAULT_SW.slice();
     }
   }catch(e){
-    notify('⚠️ Hors ligne — affichage local uniquement');
+    notify(t('notif_offline'));
     db=DEFAULT_SW.slice();
     community=[];
   }
   document.getElementById('loadingOverlay').classList.add('gone');
-  render();
+  try{const sl=localStorage.getItem('vx_lang');if(sl&&LANGS[sl]){setLang(sl);}else{render();}}catch(e){render();}
 }
 
 // ═══════════════ RENDER LOGICIELS ═══════════════
@@ -821,7 +831,7 @@ function render(){
   document.getElementById('heroTotal').innerHTML=db.length+'<span></span>';
   document.getElementById('heroComm').innerHTML=community.length+'<span></span>';
   document.getElementById('sectionLabel').textContent=filterCat==='all'?'Tous les Logiciels':(filterSub!=='all'?filterSub+' — ':'')+filterCat;
-  document.getElementById('searchInfo').innerHTML=list.length?`<span>${list.length}</span> résultat${list.length>1?'s':''}`:filterQ?'<span style="color:var(--red)">Aucun résultat</span>':'';
+  document.getElementById('searchInfo').innerHTML=list.length?`<span>${list.length}</span> ${list.length>1?t('results_pl'):t('results')}`:filterQ?`<span style="color:var(--red)">${t('no_results')}</span>`:'';
 
   ['Jeux','Vidéo','Audio','Système','Dev','Créatif','OS'].forEach(cat=>{
     const el=document.getElementById('cnt-'+cat);
@@ -830,13 +840,13 @@ function render(){
 
   const grid=document.getElementById('cardsGrid');
   const empty=document.getElementById('emptyMsg');
-  if(!list.length){grid.innerHTML='';empty.style.display='block';return;}
+  if(!list.length){grid.innerHTML='';empty.style.display='block';empty.innerHTML=`<div style='text-align:center;padding:80px 20px;color:var(--muted)'><div style='font-size:3rem;opacity:.2;margin-bottom:16px'>🔍</div><h3>${t('empty_title')}</h3><p>${t('empty_sub')}</p></div>`;return;}
   empty.style.display='none';
   grid.innerHTML=list.map(s=>{
     const sc=(s.cat||'').replace(/[éèêëÉ]/g,'e').replace(/[^a-zA-Z0-9]/g,'');
     const imgHtml=s.img?`<img class="sw-img" src="${esc(s.img)}" alt="${esc(s.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="sw-img-ph" style="display:none">${ICONS[s.cat]||'📦'}</div>`:`<div class="sw-img-ph">${ICONS[s.cat]||'📦'}</div>`;
     const subHtml=s.subcat?`<span class="sub-tag ${s.subcat==='NSFW'?'nsfw':s.subcat==='Horreur'?'horreur':''}">${s.subcat}</span>`:'';
-    return `<div class="sw-card" data-id="${s.id}">${imgHtml}<button class="del-btn" onclick="delCard('${s.id}',event)">✕</button><div class="sw-body"><div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${subHtml}${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}</div><div class="sw-name">${esc(s.name)}</div><div class="sw-desc">${esc(s.desc)}</div><div class="sw-foot"><span class="sw-plat">${esc(s.platform||'')}</span><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">⬇ TÉLÉCHARGER</a></div></div></div>`;
+    return `<div class="sw-card" data-id="${s.id}">${imgHtml}<button class="del-btn" onclick="delCard('${s.id}',event)">✕</button><div class="sw-body"><div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${subHtml}${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}</div><div class="sw-name">${esc(s.name)}</div><div class="sw-desc">${esc(s.desc)}</div><div class="sw-foot"><span class="sw-plat">${esc(s.platform||'')}</span><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span data-i18n="btn_dl">⬇ TÉLÉCHARGER</span></a></div></div></div>`;
   }).join('');
   grid.querySelectorAll('.sw-card').forEach(c=>c.addEventListener('click',function(e){
     if(e.target.closest('.del-btn,.sw-dl'))return;
@@ -882,7 +892,7 @@ function renderCommunity(){
       if(sb!==sa)return sb-sa;
       return b.date-a.date;
     });
-    if(!posts.length){el.innerHTML=`<div class="empty"><div class="empty-icon">💬</div><h3>Aucun post</h3><p>Sois le premier à partager !</p></div>`;return;}
+    if(!posts.length){el.innerHTML=`<div class="empty"><div class="empty-icon">💬</div><h3>${t("post_empty")}</h3><p>${t("post_empty_sub")}</p></div>`;return;}
     el.innerHTML=posts.map((p,idx)=>{
       const score=(p.likes||0)-(p.dislikes||0);
       const isTop=idx===0&&(p.likes||0)>0;
@@ -894,14 +904,14 @@ function renderCommunity(){
           <span class="post-type pt-${p.type}">${POST_LABELS[p.type]||p.type}</span>
           <div style="display:flex;gap:8px;align-items:center;">
             ${isTop?'<span class="post-rank top">🏆 TOP</span>':''}
-            <span class="post-rank">Score : ${score>=0?'+':''}${score}</span>
+            <span class="post-rank">${t('score')} : ${score>=0?'+':''}${score}</span>
           </div>
         </div>
         <div class="post-title">${esc(p.title)}</div>
         <div class="post-body">${esc(p.content)}</div>
         ${p.link?`<a class="post-link" href="${esc(p.link)}" target="_blank" rel="noopener">🔗 Lien</a>`:''}
         <div class="post-footer">
-          <div class="post-author" style="margin-top:0">Par <span>${esc(p.author||'Anonyme')}</span> · <span class="post-added">${dateStr}</span></div>
+          <div class="post-author" style="margin-top:0">${t('by')} <span>${esc(p.author||'Anonyme')}</span> · <span class="post-added">${dateStr}</span></div>
           <div class="like-bar">
             <button class="like-btn ${vv==='like'?'voted':''}" onclick="vote('${p.id}','like')">👍 ${p.likes||0}</button>
             <button class="dislike-btn ${vv==='dislike'?'voted':''}" onclick="vote('${p.id}','dislike')">👎 ${p.dislikes||0}</button>
@@ -912,7 +922,7 @@ function renderCommunity(){
   });
 }
 function renderSide(){
-  const html=`<div class="side-box"><h4>📊 Stats</h4><div class="side-stat-row"><span>Total posts</span><span class="side-stat-v">${community.length}</span></div><div class="side-stat-row"><span>🐛 Bugs</span><span class="side-stat-v">${community.filter(p=>p.type==='bug').length}</span></div><div class="side-stat-row"><span>🎮 Jeux</span><span class="side-stat-v">${community.filter(p=>p.type==='jeu').length}</span></div><div class="side-stat-row"><span>💾 Logiciels</span><span class="side-stat-v">${community.filter(p=>p.type==='logiciel').length}</span></div><div class="side-stat-row"><span>💡 Suggestions</span><span class="side-stat-v">${community.filter(p=>p.type==='suggestion').length}</span></div></div><div class="rules-box"><h4>📋 Règles</h4><ul><li>Reste respectueux</li><li>Freeware/open source uniquement</li><li>Pas de spam ni de liens malveillants</li><li>Signale de vrais bugs</li></ul></div>`;
+  const html=`<div class="side-box"><h4>${t('stats_title')}</h4><div class="side-stat-row"><span>${t('total_posts')}</span><span class="side-stat-v">${community.length}</span></div><div class="side-stat-row"><span>🐛 Bugs</span><span class="side-stat-v">${community.filter(p=>p.type==='bug').length}</span></div><div class="side-stat-row"><span>🎮 Jeux</span><span class="side-stat-v">${community.filter(p=>p.type==='jeu').length}</span></div><div class="side-stat-row"><span>💾 Logiciels</span><span class="side-stat-v">${community.filter(p=>p.type==='logiciel').length}</span></div><div class="side-stat-row"><span>💡 Suggestions</span><span class="side-stat-v">${community.filter(p=>p.type==='suggestion').length}</span></div></div><div class="rules-box"><h4>${t('rules_title')}</h4><ul>${t('rules').map(r=>`<li>${r}</li>`).join('')}</ul></div>`;
   ['side-bugs','side-jeux','side-logiciels','side-suggestions'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});
 }
 
@@ -931,7 +941,7 @@ async function submitPost(type){
   const[aId,tId,dId,lId]=m[type];
   const title=document.getElementById(tId).value.trim();
   const content=document.getElementById(dId).value.trim();
-  if(!title||!content){notify('❌ Titre et description obligatoires',true);return;}
+  if(!title||!content){notify(t('err_fields'),true);return;}
   const post={id:'p'+Date.now(),type,title,content,author:document.getElementById(aId).value.trim()||'Anonyme',link:lId?document.getElementById(lId).value.trim():'',date:Date.now()};
   community.unshift(post);
   notify('⏳ Publication...');
@@ -949,7 +959,7 @@ async function delPost(id,e){
   e.stopPropagation();if(!isAdmin)return;
   if(!confirm('Supprimer ce post ?'))return;
   community=community.filter(p=>p.id!==id);
-  try{await apiPut(db,community);notify('🗑 Post supprimé');}catch(err){notify('❌ '+err.message,true);}
+  try{await apiPut(db,community);notify(t('notif_post_deleted'));}catch(err){notify('❌ '+err.message,true);}
   renderCommunity();renderSide();
 }
 
@@ -989,8 +999,8 @@ async function checkPwd(){
     document.getElementById('adminNavBtn').textContent='✅ Admin';
     document.getElementById('addBtn').classList.add('visible');
     document.getElementById('adminCommTab').style.display='block';
-    notify('✅ Mode admin activé !');render();renderCommunity();
-  }else{notify('❌ Mot de passe incorrect',true);document.getElementById('pwdIn').value='';}
+    notify(t('notif_admin_on'));render();renderCommunity();
+  }else{notify(t('err_pwd'),true);document.getElementById('pwdIn').value='';}
 }
 function adminOut(){
   isAdmin=false;delMode=false;
@@ -1001,7 +1011,7 @@ function adminOut(){
   document.getElementById('addBtn').classList.remove('visible');
   document.getElementById('adminCommTab').style.display='none';
   document.getElementById('delBtn').classList.remove('on');
-  notify('Déconnecté');render();renderCommunity();
+  notify(t('notif_logout'));render();renderCommunity();
 }
 function toggleDel(){
   delMode=!delMode;
@@ -1016,19 +1026,19 @@ async function delCard(id,e){
   if(!confirm('Supprimer ce logiciel ?'))return;
   db=db.filter(s=>s.id!==id);
   notify('⏳ Suppression...');
-  try{await apiPut(db,community);notify('🗑 Supprimé');}catch(err){notify('❌ '+err.message,true);}
+  try{await apiPut(db,community);notify(t('notif_deleted'));}catch(err){notify('❌ '+err.message,true);}
   render();
 }
 
 // ═══════════════ MODAL LOGICIEL ═══════════════
 function onCatChange(){const cat=document.getElementById('f_cat').value;document.getElementById('subcat_field').style.display=cat==='Jeux'?'block':'none';onSubChange();}
 function onSubChange(){const sub=document.getElementById('f_sub').value;document.getElementById('nsfwWarn').style.display=sub==='NSFW'?'block':'none';}
-function openAdd(){if(!isAdmin){notify('❌ Connexion admin requise',true);return;}editId=null;b64img=null;document.getElementById('addTitle').textContent='Ajouter un Logiciel';document.getElementById('submitTxt').textContent='Ajouter le logiciel';clearF();openM('addModal');}
+function openAdd(){if(!isAdmin){notify('❌ Connexion admin requise',true);return;}editId=null;b64img=null;document.getElementById('addTitle').textContent=t('modal_add_title');document.getElementById('submitTxt').textContent=t('btn_add_sw');clearF();openM('addModal');}
 function openEdit(id){
   const s=db.find(x=>x.id===id);if(!s)return;
   editId=id;b64img=null;
-  document.getElementById('addTitle').textContent='Modifier : '+s.name;
-  document.getElementById('submitTxt').textContent='Enregistrer';
+  document.getElementById('addTitle').textContent=t('modal_edit_title')+s.name;
+  document.getElementById('submitTxt').textContent=t('modal_save');
   document.getElementById('f_name').value=s.name;
   document.getElementById('f_cat').value=s.cat;
   document.getElementById('f_ver').value=s.version||'';
@@ -1041,17 +1051,17 @@ function openEdit(id){
   const isB64=s.img&&s.img.startsWith('data:');
   document.getElementById('f_imgurl').value=(!isB64&&s.img)?s.img:'';
   if(isB64)b64img=s.img;
-  document.getElementById('imgWrap').innerHTML=s.img?`<img src="${esc(s.img)}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%">`:'<span class="img-ph">Aucune image</span>';
+  document.getElementById('imgWrap').innerHTML=s.img?`<img src="${esc(s.img)}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%">`:t('no_img');
   openM('addModal');
 }
 function clearF(){
   ['f_name','f_ver','f_desc','f_plat','f_link','f_imgurl'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f_cat').value='';document.getElementById('f_lic').value='Freeware';
   document.getElementById('f_sub').value='';document.getElementById('subcat_field').style.display='none';document.getElementById('nsfwWarn').style.display='none';
-  document.getElementById('imgWrap').innerHTML='<span class="img-ph">Aucune image</span>';
+  document.getElementById('imgWrap').innerHTML=t('no_img');
   document.getElementById('f_imgfile').value='';
 }
-function prevUrl(){b64img=null;const url=document.getElementById('f_imgurl').value.trim();document.getElementById('imgWrap').innerHTML=url?`<img src="${esc(url)}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%" onerror="this.parentElement.innerHTML='<span class=\\'img-ph\\'>Image inaccessible</span>'">`:'<span class="img-ph">Aucune image</span>';}
+function prevUrl(){b64img=null;const url=document.getElementById('f_imgurl').value.trim();document.getElementById('imgWrap').innerHTML=url?`<img src="${esc(url)}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%" onerror="this.parentElement.innerHTML='<span class=\\'img-ph\\'>Image inaccessible</span>'">`:t('no_img');}
 function prevFile(){const file=document.getElementById('f_imgfile').files[0];if(!file)return;if(file.size>1.5*1024*1024){notify('❌ Image trop lourde (max 1.5 Mo)',true);return;}const r=new FileReader();r.onload=e=>{b64img=e.target.result;document.getElementById('f_imgurl').value='';document.getElementById('imgWrap').innerHTML=`<img src="${e.target.result}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%">`;};r.readAsDataURL(file);}
 async function submitSW(){
   const name=document.getElementById('f_name').value.trim();
@@ -1066,8 +1076,8 @@ async function submitSW(){
   const subcat=cat==='Jeux'?document.getElementById('f_sub').value:'';
   if(editId){const i=db.findIndex(s=>s.id===editId);if(i>-1)db[i]={...db[i],name,cat,desc,link,img,version,platform,license,subcat};}
   else db.unshift({id:'s'+Date.now(),name,cat,desc,link,img,version,platform,license,subcat,added:Date.now()});
-  notify('⏳ Sauvegarde...');
-  try{await apiPut(db,community);notify(editId?'✅ Modifié !':'✅ Ajouté !');closeM('addModal');render();}
+  notify(t('notif_saving'));
+  try{await apiPut(db,community);notify(t(editId?'notif_edited':'notif_added'));closeM('addModal');render();}
   catch(err){notify('❌ '+err.message,true);}
 }
 
@@ -1102,8 +1112,8 @@ function renderModeration(){
           <div class="post-title" style="margin-top:8px;">${esc(p.title)}</div>
         </div>
         <div class="mod-actions">
-          <button class="mod-btn mod-btn-edit" onclick="openEditPost('${p.id}')">✏️ Modifier</button>
-          <button class="mod-btn mod-btn-del" onclick="delPostMod('${p.id}')">🗑 Supprimer</button>
+          <button class="mod-btn mod-btn-edit" onclick="openEditPost('${p.id}')">${t('btn_mod_edit')}</button>
+          <button class="mod-btn mod-btn-del" onclick="delPostMod('${p.id}')" data-i18n="admin_del">🗑 Supprimer</button>
         </div>
       </div>
       <div class="post-body">${esc(p.content)}</div>
@@ -1130,22 +1140,22 @@ async function saveEditPost(){
   const id=document.getElementById('ep_id').value;
   const title=document.getElementById('ep_title').value.trim();
   const content=document.getElementById('ep_content').value.trim();
-  if(!title||!content){notify('❌ Titre et contenu obligatoires',true);return;}
+  if(!title||!content){notify(t('err_fields2'),true);return;}
   const i=community.findIndex(p=>p.id===id);
   if(i<0)return;
   community[i]={...community[i],title,content,author:document.getElementById('ep_author').value.trim()||'Anonyme',link:document.getElementById('ep_link').value.trim(),edited:Date.now()};
-  notify('⏳ Sauvegarde...');
+  notify(t('notif_saving'));
   try{
     await apiPut(db,community);
-    notify('✅ Post modifié !');
+    notify(t('notif_post_edited'));
     closeM('editPostModal');
     renderCommunity();renderSide();renderModeration();
   }catch(e){notify('❌ '+e.message,true);}
 }
 async function delPostMod(id){
-  if(!confirm('Supprimer ce post définitivement ?'))return;
+  if(!confirm(t('confirm_del_post')))return;
   community=community.filter(p=>p.id!==id);
-  try{await apiPut(db,community);notify('🗑 Post supprimé');}catch(err){notify('❌ '+err.message,true);}
+  try{await apiPut(db,community);notify(t('notif_post_deleted'));}catch(err){notify('❌ '+err.message,true);}
   renderCommunity();renderSide();renderModeration();
   document.getElementById('heroComm').innerHTML=community.length+'<span></span>';
 }
@@ -1169,15 +1179,15 @@ function openSWModal(id){
           ${subHtml}
           ${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}
         </div>
-        <span style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted);">Ajouté le ${addedDate}</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted);">${t('added')} ${addedDate}</span>
       </div>
       <div class="sw-modal-title">${esc(s.name)}</div>
       <div class="sw-modal-desc">${esc(s.desc)}</div>
       <div class="sw-modal-info">
-        <div class="sw-modal-info-item"><div class="sw-modal-info-label">Plateforme</div><div class="sw-modal-info-val">${esc(s.platform||'—')}</div></div>
-        <div class="sw-modal-info-item"><div class="sw-modal-info-label">Licence</div><div class="sw-modal-info-val">${esc(s.license||'—')}</div></div>
+        <div class="sw-modal-info-item"><div class="sw-modal-info-label">${t('platform')}</div><div class="sw-modal-info-val">${esc(s.platform||'—')}</div></div>
+        <div class="sw-modal-info-item"><div class="sw-modal-info-label">${t('license')}</div><div class="sw-modal-info-val">${esc(s.license||'—')}</div></div>
       </div>
-      <a class="sw-modal-dl" href="${esc(s.link)}" target="_blank" rel="noopener">⬇ TÉLÉCHARGER</a>
+      <a class="sw-modal-dl" href="${esc(s.link)}" target="_blank" rel="noopener"><span data-i18n="btn_dl">⬇ TÉLÉCHARGER</span></a>
     </div>`;
   document.getElementById('swModal').classList.add('open');
   document.body.style.overflow='hidden';
@@ -1198,6 +1208,284 @@ function closeSWModalDirect(){
     overlay.style.opacity='';
     document.body.style.overflow='';
   },350);
+}
+
+// ═══════════════ I18N — TRADUCTIONS ═══════════════
+const LANGS={
+  fr:{
+    // Forms community
+    lbl_pseudo:'Pseudo', lbl_title:'Titre *', lbl_desc:'Description *', lbl_link:'Lien (optionnel)',
+    ph_anon:'Anonyme', ph_bug_title:'Ex: Page blanche sur mobile...', ph_bug_desc:'Décris le bug, comment le reproduire...',
+    ph_game_title:'Ex: 0 A.D., Minetest...', ph_game_desc:'Pourquoi tu le recommandes ?',
+    ph_soft_title:'Ex: VLC, GIMP, Blender...', ph_soft_desc:'À quoi ça sert, pourquoi le recommander ?',
+    ph_sug_desc:'Explique ta suggestion en détail...',
+    btn_bug:'🐛 Envoyer le rapport', btn_game:'🎮 Proposer', btn_soft_comm:'💾 Proposer', btn_sug:'💡 Envoyer',
+    form_bug:'🐛 Signaler un bug', form_game:'🎮 Proposer un jeu gratuit',
+    form_soft:'💾 Proposer un logiciel', form_sug:'💡 Proposer une suggestion',
+    filter_lbl:'Filtrer :',
+    // Footer nav
+    foot_nav:'Navigation', foot_comm:'Communauté', foot_info:'Infos',
+    foot_explore:'Explorer', foot_cats:'Catégories', foot_forum:'Forum',
+    foot_bug:'Signaler un bug', foot_about:'À propos', foot_cgu:'CGU',
+    foot_tagline:'FREEWARE · OPEN SOURCE · LEGAL',
+    // Section
+    sect_forum:'Forum & Partage',
+    // Hero buttons
+    btn_explore:'⚡ Explorer', btn_community:'💬 Communauté',
+    // Modal add software
+    modal_add_title:'Ajouter un Logiciel', modal_add_sub:'Seuls les logiciels freeware / open source sont acceptés.',
+    modal_edit_title:'Modifier : ', modal_save:'Enregistrer',
+    lbl_cat:'Catégorie *', lbl_ver:'Version', lbl_subcat:'Sous-catégorie (genre)',
+    lbl_plat:'Plateformes', lbl_lic:'Licence', lbl_img:'Image',
+    opt_choose:'— Choisir —', opt_none:'— Aucune —',
+    ph_name:'Ex: Blender, Godot Engine...', ph_ver:'Ex: v3.5.0', ph_desc_sw:'Décris le logiciel en quelques phrases...',
+    ph_plat:'WIN · MAC · LINUX', no_img:'Aucune image',
+    btn_add_sw:'⚡ Ajouter le logiciel',
+    ph_imgurl:'URL de l\'image (https://...)', btn_upload:'📁 Choisir une image',
+    // Login modal
+    modal_login_title:'Accès Admin', modal_login_sub:'Entrez le mot de passe administrateur.',
+    lbl_pwd:'Mot de passe', btn_login:'🔑 Connexion',
+    // Edit post modal
+    modal_edit_post:'✏️ Modifier le post', btn_save_post:'💾 Enregistrer les modifications',
+    lbl_content:'Contenu *',
+    // Moderation
+    mod_title:'// PANNEAU DE MODÉRATION', mod_filter:'Filtrer :',
+    btn_mod_edit:'✏️ Modifier', btn_mod_del:'🗑 Supprimer',
+    // Site editor
+    se_title_modal:'✏️ Modifier le site', se_sub:'Textes affichés sur la page + liens sociaux',
+    se_home:'🏠 Accueil', se_badge_lbl:'Badge hero (texte en haut)',
+    se_title_lbl:'Titre principal (HTML autorisé)', se_desc_lbl:'Description sous le titre',
+    se_social:'🔗 Liens sociaux',
+    se_discord_lbl:'Lien Discord (laisser vide pour masquer)',
+    se_yt_lbl:'Lien YouTube (laisser vide pour masquer)',
+    se_pp_lbl:'Lien PayPal / don (laisser vide pour masquer)',
+    btn_save_site:'💾 Enregistrer les modifications',
+    // Notifications
+    notif_admin_on:'✅ Mode admin activé !', notif_logout:'Déconnecté',
+    notif_added:'✅ Ajouté !', notif_edited:'✅ Modifié !', notif_deleted:'🗑 Supprimé',
+    notif_post_added:'✅ Post envoyé !', notif_post_deleted:'🗑 Post supprimé',
+    notif_saving:'⏳ Sauvegarde...', notif_saved:'✅ Site mis à jour !', notif_post_edited:'✅ Post modifié !',
+    notif_offline:'⚠️ Hors ligne — données locales',
+    err_pwd:'❌ Mot de passe incorrect', err_fields:'❌ Titre et description obligatoires',
+    err_fields2:'❌ Titre et contenu obligatoires', err_required:'❌ Remplis les champs obligatoires',
+    // Delete confirm
+    confirm_del_sw:'Supprimer ce logiciel ?', confirm_del_post:'Supprimer ce post définitivement ?',
+    // Loading
+    loading:'CHARGEMENT...',
+    results:'résultat', results_pl:'résultats', no_results:'Aucun résultat',
+    // SW card download
+    paypal_btn:'Soutenir',
+    nav_soft:'Logiciels', nav_cat:'Catégories', nav_comm:'Communauté',
+    hero_badge:'🟢 PLATEFORME COMMUNAUTAIRE · LOGICIELS LIBRES UNIQUEMENT',
+    hero_title:'DÉCOUVREZ LES<br><span class="accent">MEILLEURS</span><br><span class="accent-red">FREEWARE</span>',
+    hero_desc:'Plateforme communautaire dédiée au partage de logiciels gratuits et open source — jeux indé, utilitaires, outils créatifs. 100% légal, 100% libre.',
+    stat_soft:'Logiciels', stat_comm:'Posts comm.', stat_free:'Gratuit',
+    search_ph:'Rechercher un logiciel, un jeu, un utilitaire...',
+    filter_cat:'Cat.', filter_genre:'Genre', all:'Tous',
+    section_soft:'// LOGICIELS & JEUX', section_cat:'// CATÉGORIES',
+    btn_dl:'⬇ TÉLÉCHARGER', btn_admin:'⚙ Admin', btn_submit:'+ Soumettre',
+    tab_bugs:'🐛 Bugs', tab_games:'🎮 Jeux gratuits', tab_soft:'💾 Logiciels',
+    tab_suggest:'💡 Suggestions', tab_mod:'⚙ Modération',
+    admin_active:'⚙ MODE ADMIN ACTIF', admin_add:'+ Ajouter',
+    admin_edit_site:'✏️ Modifier le site', admin_del:'🗑 Supprimer', admin_logout:'✕ Déconnexion',
+    footer_desc:'Plateforme communautaire — logiciels gratuits &amp; open source uniquement.',
+    footer_copy:'© 2025 <span class="nc">VAULTEX</span> — Freeware &amp; Open Source uniquement',
+    empty_title:'Aucun résultat', empty_sub:'Essaie une autre recherche ou catégorie.',
+    added:'Ajouté le', platform:'Plateforme', license:'Licence',
+    by:'Par', score:'Score', top_badge:'🏆 TOP',
+    post_empty:'Aucun post', post_empty_sub:'Sois le premier à partager !',
+    rules_title:'📋 Règles', stats_title:'📊 Stats',
+    rules:['Reste respectueux','Freeware/open source uniquement','Pas de spam ni de liens malveillants','Signale de vrais bugs'],
+    total_posts:'Total posts',
+  },
+  en:{
+    lbl_pseudo:'Username', lbl_title:'Title *', lbl_desc:'Description *', lbl_link:'Link (optional)',
+    ph_anon:'Anonymous', ph_bug_title:'Ex: Blank page on mobile...', ph_bug_desc:'Describe the bug, how to reproduce it...',
+    ph_game_title:'Ex: 0 A.D., Minetest...', ph_game_desc:'Why do you recommend it?',
+    ph_soft_title:'Ex: VLC, GIMP, Blender...', ph_soft_desc:'What is it for, why recommend it?',
+    ph_sug_desc:'Explain your suggestion in detail...',
+    btn_bug:'🐛 Send report', btn_game:'🎮 Submit', btn_soft_comm:'💾 Submit', btn_sug:'💡 Send',
+    form_bug:'🐛 Report a bug', form_game:'🎮 Submit a free game',
+    form_soft:'💾 Submit software', form_sug:'💡 Submit a suggestion',
+    filter_lbl:'Filter:',
+    foot_nav:'Navigation', foot_comm:'Community', foot_info:'Info',
+    foot_explore:'Explore', foot_cats:'Categories', foot_forum:'Forum',
+    foot_bug:'Report a bug', foot_about:'About', foot_cgu:'Terms',
+    foot_tagline:'FREEWARE · OPEN SOURCE · LEGAL',
+    sect_forum:'Forum & Sharing',
+    btn_explore:'⚡ Explore', btn_community:'💬 Community',
+    modal_add_title:'Add Software', modal_add_sub:'Only freeware / open source software is accepted.',
+    modal_edit_title:'Edit: ', modal_save:'Save',
+    lbl_cat:'Category *', lbl_ver:'Version', lbl_subcat:'Subcategory (genre)',
+    lbl_plat:'Platforms', lbl_lic:'License', lbl_img:'Image',
+    opt_choose:'— Choose —', opt_none:'— None —',
+    ph_name:'Ex: Blender, Godot Engine...', ph_ver:'Ex: v3.5.0', ph_desc_sw:'Describe the software in a few sentences...',
+    ph_plat:'WIN · MAC · LINUX', no_img:'No image',
+    btn_add_sw:'⚡ Add software',
+    ph_imgurl:'Image URL (https://...)', btn_upload:'📁 Choose an image',
+    modal_login_title:'Admin Access', modal_login_sub:'Enter the administrator password.',
+    lbl_pwd:'Password', btn_login:'🔑 Login',
+    modal_edit_post:'✏️ Edit post', btn_save_post:'💾 Save changes',
+    lbl_content:'Content *',
+    mod_title:'// MODERATION PANEL', mod_filter:'Filter:',
+    btn_mod_edit:'✏️ Edit', btn_mod_del:'🗑 Delete',
+    se_title_modal:'✏️ Edit site', se_sub:'Texts displayed on the page + social links',
+    se_home:'🏠 Home page', se_badge_lbl:'Hero badge (small text at top)',
+    se_title_lbl:'Main title (HTML allowed)', se_desc_lbl:'Description below title',
+    se_social:'🔗 Social links',
+    se_discord_lbl:'Discord link (leave empty to hide)',
+    se_yt_lbl:'YouTube link (leave empty to hide)',
+    se_pp_lbl:'PayPal / donation link (leave empty to hide)',
+    btn_save_site:'💾 Save changes',
+    notif_admin_on:'✅ Admin mode activated!', notif_logout:'Logged out',
+    notif_added:'✅ Added!', notif_edited:'✅ Updated!', notif_deleted:'🗑 Deleted',
+    notif_post_added:'✅ Post sent!', notif_post_deleted:'🗑 Post deleted',
+    notif_saving:'⏳ Saving...', notif_saved:'✅ Site updated!', notif_post_edited:'✅ Post updated!',
+    notif_offline:'⚠️ Offline — local data',
+    err_pwd:'❌ Incorrect password', err_fields:'❌ Title and description required',
+    err_fields2:'❌ Title and content required', err_required:'❌ Fill in required fields',
+    confirm_del_sw:'Delete this software?', confirm_del_post:'Permanently delete this post?',
+    loading:'LOADING...',
+    results:'result', results_pl:'results', no_results:'No results',
+    paypal_btn:'Support',
+    nav_soft:'Software', nav_cat:'Categories', nav_comm:'Community',
+    hero_badge:'🟢 COMMUNITY PLATFORM · FREE SOFTWARE ONLY',
+    hero_title:'DISCOVER THE<br><span class="accent">BEST</span><br><span class="accent-red">FREEWARE</span>',
+    hero_desc:'Community platform dedicated to sharing free and open source software — indie games, utilities, creative tools. 100% legal, 100% free.',
+    stat_soft:'Software', stat_comm:'Comm. posts', stat_free:'Free',
+    search_ph:'Search for software, a game, a utility...',
+    filter_cat:'Cat.', filter_genre:'Genre', all:'All',
+    section_soft:'// SOFTWARE & GAMES', section_cat:'// CATEGORIES',
+    btn_dl:'⬇ DOWNLOAD', btn_admin:'⚙ Admin', btn_submit:'+ Submit',
+    tab_bugs:'🐛 Bugs', tab_games:'🎮 Free games', tab_soft:'💾 Software',
+    tab_suggest:'💡 Suggestions', tab_mod:'⚙ Moderation',
+    admin_active:'⚙ ADMIN MODE ACTIVE', admin_add:'+ Add',
+    admin_edit_site:'✏️ Edit site', admin_del:'🗑 Delete', admin_logout:'✕ Logout',
+    footer_desc:'Community platform — free &amp; open source software only.',
+    footer_copy:'© 2025 <span class="nc">VAULTEX</span> — Freeware &amp; Open Source only',
+    empty_title:'No results', empty_sub:'Try another search or category.',
+    added:'Added on', platform:'Platform', license:'License',
+    by:'By', score:'Score', top_badge:'🏆 TOP',
+    post_empty:'No posts', post_empty_sub:'Be the first to share!',
+    rules_title:'📋 Rules', stats_title:'📊 Stats',
+    rules:['Be respectful','Freeware/open source only','No spam or malicious links','Report real bugs'],
+    total_posts:'Total posts',
+  },
+  ru:{
+    lbl_pseudo:'Имя', lbl_title:'Заголовок *', lbl_desc:'Описание *', lbl_link:'Ссылка (необязательно)',
+    ph_anon:'Аноним', ph_bug_title:'Напр.: Пустая страница на телефоне...', ph_bug_desc:'Опиши баг, как его воспроизвести...',
+    ph_game_title:'Напр.: 0 A.D., Minetest...', ph_game_desc:'Почему ты рекомендуешь?',
+    ph_soft_title:'Напр.: VLC, GIMP, Blender...', ph_soft_desc:'Для чего, почему стоит рекомендовать?',
+    ph_sug_desc:'Подробно объясни своё предложение...',
+    btn_bug:'🐛 Отправить отчёт', btn_game:'🎮 Предложить', btn_soft_comm:'💾 Предложить', btn_sug:'💡 Отправить',
+    form_bug:'🐛 Сообщить о баге', form_game:'🎮 Предложить бесплатную игру',
+    form_soft:'💾 Предложить программу', form_sug:'💡 Предложить идею',
+    filter_lbl:'Фильтр:',
+    foot_nav:'Навигация', foot_comm:'Сообщество', foot_info:'Инфо',
+    foot_explore:'Обзор', foot_cats:'Категории', foot_forum:'Форум',
+    foot_bug:'Сообщить о баге', foot_about:'О нас', foot_cgu:'Условия',
+    foot_tagline:'БЕСПЛАТНО · ОТКРЫТЫЙ КОД · ЛЕГАЛЬНО',
+    sect_forum:'Форум и обмен',
+    btn_explore:'⚡ Обзор', btn_community:'💬 Сообщество',
+    modal_add_title:'Добавить программу', modal_add_sub:'Принимается только бесплатное / открытое ПО.',
+    modal_edit_title:'Редактировать: ', modal_save:'Сохранить',
+    lbl_cat:'Категория *', lbl_ver:'Версия', lbl_subcat:'Подкатегория (жанр)',
+    lbl_plat:'Платформы', lbl_lic:'Лицензия', lbl_img:'Изображение',
+    opt_choose:'— Выбрать —', opt_none:'— Нет —',
+    ph_name:'Напр.: Blender, Godot...', ph_ver:'Напр.: v3.5.0', ph_desc_sw:'Опиши программу в нескольких предложениях...',
+    ph_plat:'WIN · MAC · LINUX', no_img:'Нет изображения',
+    btn_add_sw:'⚡ Добавить программу',
+    ph_imgurl:'URL изображения (https://...)', btn_upload:'📁 Выбрать изображение',
+    modal_login_title:'Доступ администратора', modal_login_sub:'Введите пароль администратора.',
+    lbl_pwd:'Пароль', btn_login:'🔑 Войти',
+    modal_edit_post:'✏️ Редактировать пост', btn_save_post:'💾 Сохранить изменения',
+    lbl_content:'Содержание *',
+    mod_title:'// ПАНЕЛЬ МОДЕРАЦИИ', mod_filter:'Фильтр:',
+    btn_mod_edit:'✏️ Изменить', btn_mod_del:'🗑 Удалить',
+    se_title_modal:'✏️ Редактировать сайт', se_sub:'Тексты на странице + социальные ссылки',
+    se_home:'🏠 Главная страница', se_badge_lbl:'Значок hero (текст вверху)',
+    se_title_lbl:'Главный заголовок (HTML разрешён)', se_desc_lbl:'Описание под заголовком',
+    se_social:'🔗 Социальные сети',
+    se_discord_lbl:'Ссылка Discord (оставь пустым чтобы скрыть)',
+    se_yt_lbl:'Ссылка YouTube (оставь пустым чтобы скрыть)',
+    se_pp_lbl:'PayPal / донат (оставь пустым чтобы скрыть)',
+    btn_save_site:'💾 Сохранить изменения',
+    notif_admin_on:'✅ Режим администратора активирован!', notif_logout:'Выход выполнен',
+    notif_added:'✅ Добавлено!', notif_edited:'✅ Изменено!', notif_deleted:'🗑 Удалено',
+    notif_post_added:'✅ Пост отправлен!', notif_post_deleted:'🗑 Пост удалён',
+    notif_saving:'⏳ Сохранение...', notif_saved:'✅ Сайт обновлён!', notif_post_edited:'✅ Пост обновлён!',
+    notif_offline:'⚠️ Офлайн — локальные данные',
+    err_pwd:'❌ Неверный пароль', err_fields:'❌ Заголовок и описание обязательны',
+    err_fields2:'❌ Заголовок и содержание обязательны', err_required:'❌ Заполни обязательные поля',
+    confirm_del_sw:'Удалить эту программу?', confirm_del_post:'Удалить этот пост навсегда?',
+    loading:'ЗАГРУЗКА...',
+    results:'результат', results_pl:'результатов', no_results:'Нет результатов',
+    paypal_btn:'Поддержать',
+    nav_soft:'Программы', nav_cat:'Категории', nav_comm:'Сообщество',
+    hero_badge:'🟢 СООБЩЕСТВО · ТОЛЬКО БЕСПЛАТНОЕ ПО',
+    hero_title:'ОТКРОЙТЕ ДЛЯ СЕБЯ<br><span class="accent">ЛУЧШИЕ</span><br><span class="accent-red">ПРОГРАММЫ</span>',
+    hero_desc:'Сообщество для обмена бесплатными программами и играми с открытым кодом — инди-игры, утилиты, творческие инструменты. 100% легально, 100% бесплатно.',
+    stat_soft:'Программ', stat_comm:'Постов', stat_free:'Бесплатно',
+    search_ph:'Поиск программы, игры, утилиты...',
+    filter_cat:'Кат.', filter_genre:'Жанр', all:'Все',
+    section_soft:'// ПРОГРАММЫ И ИГРЫ', section_cat:'// КАТЕГОРИИ',
+    btn_dl:'⬇ СКАЧАТЬ', btn_admin:'⚙ Админ', btn_submit:'+ Добавить',
+    tab_bugs:'🐛 Баги', tab_games:'🎮 Бесплатные игры', tab_soft:'💾 Программы',
+    tab_suggest:'💡 Предложения', tab_mod:'⚙ Модерация',
+    admin_active:'⚙ РЕЖИМ АДМИНИСТРАТОРА', admin_add:'+ Добавить',
+    admin_edit_site:'✏️ Редактировать сайт', admin_del:'🗑 Удалить', admin_logout:'✕ Выйти',
+    footer_desc:'Сообщество — только бесплатное и открытое ПО.',
+    footer_copy:'© 2025 <span class="nc">VAULTEX</span> — Только бесплатное ПО',
+    empty_title:'Нет результатов', empty_sub:'Попробуй другой запрос или категорию.',
+    added:'Добавлено', platform:'Платформа', license:'Лицензия',
+    by:'Автор', score:'Счёт', top_badge:'🏆 ТОП',
+    post_empty:'Нет постов', post_empty_sub:'Будь первым!',
+    rules_title:'📋 Правила', stats_title:'📊 Статистика',
+    rules:['Будьте вежливы','Только бесплатное/открытое ПО','Запрещён спам и вредоносные ссылки','Сообщайте только о реальных багах'],
+    total_posts:'Всего постов',
+  }
+};
+let currentLang='fr';
+function t(key){return LANGS[currentLang]?.[key]||LANGS.fr[key]||key;}
+function setLang(lang){
+  currentLang=lang;
+  try{localStorage.setItem('vx_lang',lang);}catch(e){}
+  // Update lang buttons
+  document.querySelectorAll('.lang-btn').forEach(b=>{
+    b.classList.toggle('active', b.textContent.trim().toLowerCase()===lang);
+  });
+  // Apply all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    const val=t(key);
+    if(val!==undefined)el.innerHTML=val;
+  });
+  // Force hero title (has inner spans)
+  const heroTitleEl=document.getElementById('heroTitle');
+  if(heroTitleEl){const v=t('hero_title');if(v)heroTitleEl.innerHTML=v;}
+  // Force hero badge
+  const heroBadgeEl=document.getElementById('heroBadge');
+  if(heroBadgeEl){const v=t('hero_badge');if(v)heroBadgeEl.innerHTML='🟢 '+v.replace('🟢 ','');}
+  // Apply placeholders
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key=el.getAttribute('data-i18n-ph');
+    const val=t(key);
+    if(val)el.placeholder=val;
+  });
+  // Update form labels dynamically
+  const formLabels={
+    'bug_author':['ph_anon'],'jeu_author':['ph_anon'],'log_author':['ph_anon'],'sug_author':['ph_anon'],
+    'bug_desc':['ph_bug_desc'],'jeu_desc':['ph_game_desc'],'log_desc':['ph_soft_desc'],'sug_desc':['ph_sug_desc'],
+  };
+  // Update admin bar texts
+  const addBtn2=document.getElementById('addBtn');
+  if(addBtn2)addBtn2.textContent=t('btn_submit');
+  const adminBtn=document.getElementById('adminNavBtn');
+  if(adminBtn&&!isAdmin)adminBtn.textContent=t('btn_admin');
+  // Re-render dynamic content
+  render();
+  renderCommunity();
+  renderSide();
 }
 
 // ═══════════════ SITE CONFIG ═══════════════
@@ -1249,10 +1537,10 @@ async function saveSiteConfig(){
     paypalUrl:document.getElementById('se_paypal').value.trim(),
   };
   applySiteConfig();
-  notify('⏳ Sauvegarde...');
+  notify(t('notif_saving'));
   try{
     await apiPut(db,community);
-    notify('✅ Site mis à jour !');
+    notify(t('notif_saved'));
     closeM('siteEditorModal');
   }catch(e){notify('❌ '+e.message,true);}
 }
