@@ -1111,6 +1111,7 @@ function showPage(name){
   if(m[name])document.getElementById(m[name]).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
   if(name==='community'){renderCommunity();renderSide();}
+  if(name==='home'){render();}
 }
 function gotoSection(sel){setTimeout(()=>{const el=document.querySelector(sel);if(el)el.scrollIntoView({behavior:'smooth'});},120);}
 
@@ -1128,28 +1129,32 @@ async function apiPut(sw,cm){
 
 // ═══════════════ INIT ═══════════════
 async function init(){
+  showSkeleton();
   try{
     const data=await apiGet();
     community=data.community||[];
     siteConfig=data.siteConfig||{};
     applySiteConfig();
     if(data.softwares && data.softwares.length > 0){
-      // Merge images manquantes depuis DEFAULT_SW sans toucher aux données user
       const defaultMap={};
       DEFAULT_SW.forEach(s=>{defaultMap[s.id]=s;});
-      let needsSave=false;
+      let needSave=false;
       db=data.softwares.map(s=>{
-        if(!s.img && defaultMap[s.id] && defaultMap[s.id].img){
-          needsSave=true;
-          return{...s,img:defaultMap[s.id].img};
+        if(defaultMap[s.id]){
+          let changed=false;
+          if(!s.img && defaultMap[s.id].img){s.img=defaultMap[s.id].img;changed=true;}
+          if(!s.desc_fr && defaultMap[s.id].desc_fr){s.desc_fr=defaultMap[s.id].desc_fr;changed=true;}
+          if(!s.desc_en && defaultMap[s.id].desc_en){s.desc_en=defaultMap[s.id].desc_en;changed=true;}
+          if(!s.desc_ru && defaultMap[s.id].desc_ru){s.desc_ru=defaultMap[s.id].desc_ru;changed=true;}
+          if(!s.desc_fr && s.desc){s.desc_fr=s.desc;changed=true;}
+          if(changed)needSave=true;
         }
         return s;
       });
-      // Ajouter nouveaux defaults manquants
       const existingIds=new Set(db.map(s=>s.id));
       const newItems=DEFAULT_SW.filter(s=>!existingIds.has(s.id));
-      if(newItems.length>0){db=[...db,...newItems];needsSave=true;}
-      if(needsSave){try{await apiPut(db,community);}catch(e){}}
+      if(newItems.length>0){db=[...db,...newItems];needSave=true;}
+      if(needSave){try{await apiPut(db,community);}catch(e){}}
     } else {
       db=DEFAULT_SW.slice();
     }
@@ -1163,7 +1168,6 @@ async function init(){
   rndInit();
   try{const sv=localStorage.getItem('vx_view');if(sv)setViewMode(sv);}catch(e){}
   updateFavBadge();
-  showSkeleton();
 }
 
 // ═══════════════ RENDER LOGICIELS ═══════════════
