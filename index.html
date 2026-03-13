@@ -318,6 +318,42 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 .lang-btn{padding:4px 9px;font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:1px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;border-radius:2px;transition:all .2s;}
 .lang-btn:hover{border-color:var(--neon);color:var(--neon);}
 .lang-btn.active{background:rgba(0,255,231,.12);border-color:var(--neon);color:var(--neon);}
+
+/* ═══ RANDOMIZER ═══ */
+.hero{justify-content:space-between;gap:60px;align-items:center;}
+.hero-content{flex:0 0 36%;max-width:36%;}
+.rnd-widget{position:relative;z-index:2;flex:0 0 60%;max-width:60%;min-width:0;}
+.rnd-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.rnd-label{font-family:'Orbitron',monospace;font-size:.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.rnd-counter{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--neon);opacity:.6;}
+.rnd-card{background:rgba(0,255,231,.04);border:1px solid rgba(0,255,231,.12);border-radius:4px;overflow:hidden;cursor:pointer;transition:all .3s cubic-bezier(.23,1,.32,1);position:relative;}
+.rnd-card:hover{border-color:rgba(0,255,231,.4);background:rgba(0,255,231,.08);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,255,231,.1);}
+.rnd-img{width:100%;height:300px;object-fit:cover;display:block;}
+.rnd-img-ph{width:100%;height:300px;display:flex;align-items:center;justify-content:center;font-size:5rem;background:rgba(0,255,231,.03);}
+.rnd-body{padding:22px 24px;}
+.rnd-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.rnd-cat{font-family:'Orbitron',monospace;font-size:.5rem;letter-spacing:1.5px;padding:3px 8px;border-radius:2px;background:rgba(0,255,231,.1);color:var(--neon);border:1px solid rgba(0,255,231,.2);}
+.rnd-ver{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);}
+.rnd-name{font-family:'Orbitron',monospace;font-size:1.25rem;font-weight:700;color:var(--fg);margin-bottom:8px;letter-spacing:.5px;}
+.rnd-desc{font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--muted);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.rnd-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;}
+.rnd-plat{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);}
+.rnd-open{font-family:'Orbitron',monospace;font-size:.55rem;letter-spacing:1px;color:var(--neon);opacity:.7;}
+/* Progress bar */
+.rnd-progress-wrap{margin-top:12px;position:relative;}
+.rnd-progress-bg{width:100%;height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;}
+.rnd-progress-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--neon),#00e5d0);transition:none;transform-origin:left;}
+/* Nav arrows */
+.rnd-nav{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;}
+.rnd-arrow{width:34px;height:34px;border:1px solid rgba(0,255,231,.2);background:rgba(0,255,231,.06);color:var(--neon);border-radius:2px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:monospace;}
+.rnd-arrow:hover{background:rgba(0,255,231,.15);border-color:var(--neon);}
+.rnd-dots{display:flex;gap:5px;align-items:center;}
+.rnd-dot{width:5px;height:5px;border-radius:50%;background:rgba(0,255,231,.2);transition:all .3s;}
+.rnd-dot.active{background:var(--neon);width:16px;border-radius:3px;}
+/* Fade anim */
+@keyframes rndFadeIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+.rnd-card.fade-in{animation:rndFadeIn .3s ease forwards;}
+@media(max-width:1100px){.rnd-widget{display:none;}}
 </style>
 </head>
 <body>
@@ -382,6 +418,33 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       <div><div class="stat-num" id="heroTotal">—<span></span></div><div class="stat-label" data-i18n="stat_soft">Logiciels</div></div>
       <div><div class="stat-num" id="heroComm">—<span></span></div><div class="stat-label" data-i18n="stat_comm">Posts comm.</div></div>
       <div><div class="stat-num">100<span>%</span></div><div class="stat-label" data-i18n="stat_free">Gratuit</div></div>
+    </div>
+  </div>
+  <!-- RANDOMIZER -->
+  <div class="rnd-widget" id="rndWidget">
+    <div class="rnd-header">
+      <span class="rnd-label" id="rndLabel">// LOGICIEL ALÉATOIRE</span>
+      <span class="rnd-counter" id="rndCounter"></span>
+    </div>
+    <div class="rnd-card" id="rndCard" onclick="rndOpenModal()">
+      <div class="rnd-img-ph" id="rndImgPh">📦</div>
+      <div class="rnd-body">
+        <div class="rnd-top"><span class="rnd-cat" id="rndCat">—</span><span class="rnd-ver" id="rndVer"></span></div>
+        <div class="rnd-name" id="rndName">Chargement...</div>
+        <div class="rnd-desc" id="rndDesc"></div>
+        <div class="rnd-footer">
+          <span class="rnd-plat" id="rndPlat"></span>
+          <span class="rnd-open" id="rndOpen">VOIR →</span>
+        </div>
+      </div>
+    </div>
+    <div class="rnd-progress-wrap">
+      <div class="rnd-progress-bg"><div class="rnd-progress-bar" id="rndBar"></div></div>
+    </div>
+    <div class="rnd-nav">
+      <button class="rnd-arrow" onclick="rndPrev()" title="Précédent">&#8592;</button>
+      <div class="rnd-dots" id="rndDots"></div>
+      <button class="rnd-arrow" onclick="rndNext()" title="Suivant">&#8594;</button>
     </div>
   </div>
 </section>
@@ -819,6 +882,7 @@ async function init(){
   }
   document.getElementById('loadingOverlay').classList.add('gone');
   try{const sl=localStorage.getItem('vx_lang');if(sl&&LANGS[sl]){setLang(sl);}else{render();}}catch(e){render();}
+  rndInit();
 }
 
 // ═══════════════ RENDER LOGICIELS ═══════════════
@@ -1279,6 +1343,7 @@ const LANGS={
     cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Créatif', cat_os:'🐧 OS',
     sub_action:'⚔️ Action', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Horreur',
     sub_indie:'🎲 Indé', sub_strat:'🗺️ Stratégie', sub_adventure:'🌍 Aventure', sub_puzzle:'🧩 Puzzle', sub_nsfw:'🔞 NSFW',
+    rnd_label:'// LOGICIEL ALÉATOIRE', rnd_open:'VOIR →',
     nav_soft:'Logiciels', nav_cat:'Catégories', nav_comm:'Communauté',
     hero_badge:'🟢 PLATEFORME COMMUNAUTAIRE · LOGICIELS LIBRES UNIQUEMENT',
     hero_title:'DÉCOUVREZ LES<br><span class="accent">MEILLEURS</span><br><span class="accent-red">FREEWARE</span>',
@@ -1356,6 +1421,7 @@ const LANGS={
     cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Creative', cat_os:'🐧 OS',
     sub_action:'⚔️ Action', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Horror',
     sub_indie:'🎲 Indie', sub_strat:'🗺️ Strategy', sub_adventure:'🌍 Adventure', sub_puzzle:'🧩 Puzzle', sub_nsfw:'🔞 NSFW',
+    rnd_label:'// RANDOM SOFTWARE', rnd_open:'VIEW →',
     nav_soft:'Software', nav_cat:'Categories', nav_comm:'Community',
     hero_badge:'🟢 COMMUNITY PLATFORM · FREE SOFTWARE ONLY',
     hero_title:'DISCOVER THE<br><span class="accent">BEST</span><br><span class="accent-red">FREEWARE</span>',
@@ -1433,6 +1499,7 @@ const LANGS={
     cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Творчество', cat_os:'🐧 ОС',
     sub_action:'⚔️ Экшн', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Хоррор',
     sub_indie:'🎲 Инди', sub_strat:'🗺️ Стратегия', sub_adventure:'🌍 Приключение', sub_puzzle:'🧩 Головоломка', sub_nsfw:'🔞 NSFW',
+    rnd_label:'// СЛУЧАЙНАЯ ПРОГРАММА', rnd_open:'ОТКРЫТЬ →',
     nav_soft:'Программы', nav_cat:'Категории', nav_comm:'Сообщество',
     hero_badge:'🟢 СООБЩЕСТВО · ТОЛЬКО БЕСПЛАТНОЕ ПО',
     hero_title:'ОТКРОЙТЕ ДЛЯ СЕБЯ<br><span class="accent">ЛУЧШИЕ</span><br><span class="accent-red">ПРОГРАММЫ</span>',
@@ -1498,6 +1565,94 @@ function setLang(lang){
   render();
   renderCommunity();
   renderSide();
+  rndInit();
+}
+
+
+// ═══════════════ RANDOMIZER ═══════════════
+let rndQueue=[], rndIdx=0, rndTimer=null, rndProgress=null, rndDuration=6000;
+const RND_SIZE=5;
+
+function rndShuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function rndBuild(){
+  if(!db||!db.length)return;
+  rndQueue=rndShuffle(db).slice(0,RND_SIZE);
+  rndIdx=0;
+  rndRenderDots();
+}
+function rndRenderDots(){
+  const el=document.getElementById('rndDots');
+  if(!el)return;
+  el.innerHTML=rndQueue.map((_,i)=>`<div class="rnd-dot${i===rndIdx?' active':''}"></div>`).join('');
+}
+function rndShow(animate=true){
+  const s=rndQueue[rndIdx];
+  if(!s)return;
+  const card=document.getElementById('rndCard');
+  if(animate){card.classList.remove('fade-in');void card.offsetWidth;card.classList.add('fade-in');}
+  // Image
+  const ph=document.getElementById('rndImgPh');
+  const existImg=card.querySelector('img.rnd-img');
+  if(existImg)existImg.remove();
+  if(s.img){
+    ph.style.display='none';
+    const img=document.createElement('img');
+    img.className='rnd-img'; img.src=s.img; img.alt=s.name;
+    img.onerror=()=>{img.remove();ph.style.display='flex';};
+    card.insertBefore(img,card.firstChild);
+  } else {
+    ph.style.display='flex';
+    ph.textContent=ICONS[s.cat]||'📦';
+  }
+  // Texts
+  document.getElementById('rndCat').textContent=(ICONS[s.cat]||'')+' '+esc(s.cat);
+  document.getElementById('rndVer').textContent=s.version?esc(s.version):'';
+  document.getElementById('rndName').textContent=esc(s.name);
+  document.getElementById('rndDesc').textContent=esc(s.desc);
+  document.getElementById('rndPlat').textContent=esc(s.platform||'');
+  document.getElementById('rndCounter').textContent=(rndIdx+1)+' / '+rndQueue.length;
+  document.getElementById('rndOpen').textContent=t('rnd_open')||'VOIR →';
+  document.getElementById('rndLabel').textContent=t('rnd_label')||'// LOGICIEL ALÉATOIRE';
+  rndRenderDots();
+  rndStartTimer();
+}
+function rndStartTimer(){
+  clearInterval(rndTimer); clearInterval(rndProgress);
+  const bar=document.getElementById('rndBar');
+  if(!bar)return;
+  bar.style.transition='none'; bar.style.width='100%';
+  const start=Date.now();
+  rndProgress=setInterval(()=>{
+    const elapsed=Date.now()-start;
+    const pct=Math.max(0,100-(elapsed/rndDuration*100));
+    bar.style.width=pct+'%';
+    if(pct<=0){clearInterval(rndProgress);}
+  },30);
+  rndTimer=setTimeout(()=>{rndNext(false);},rndDuration);
+}
+function rndNext(manual=true){
+  clearTimeout(rndTimer); clearInterval(rndProgress);
+  rndIdx=(rndIdx+1)%rndQueue.length;
+  if(rndIdx===0)rndQueue=rndShuffle(db).slice(0,RND_SIZE);
+  rndShow(true);
+}
+function rndPrev(){
+  clearTimeout(rndTimer); clearInterval(rndProgress);
+  rndIdx=(rndIdx-1+rndQueue.length)%rndQueue.length;
+  rndShow(true);
+}
+function rndOpenModal(){
+  const s=rndQueue[rndIdx];
+  if(s)openSWModal(s.id);
+}
+function rndInit(){
+  if(!db||!db.length)return;
+  rndBuild();
+  rndShow(false);
 }
 
 // ═══════════════ SITE CONFIG ═══════════════
