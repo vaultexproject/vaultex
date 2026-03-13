@@ -354,6 +354,57 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 @keyframes rndFadeIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
 .rnd-card.fade-in{animation:rndFadeIn .3s ease forwards;}
 @media(max-width:1100px){.rnd-widget{display:none;}}
+
+/* ── Toolbar (tri, plateforme, vue) ── */
+.search-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;flex-wrap:wrap;}
+.toolbar-left{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.toolbar-right{display:flex;gap:8px;align-items:center;}
+.sort-select{font-family:'Share Tech Mono',monospace;font-size:.68rem;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:5px 10px;border-radius:3px;cursor:pointer;outline:none;transition:all .2s;}
+.sort-select:hover,.sort-select:focus{border-color:var(--neon);color:var(--neon);}
+.view-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;border-radius:3px;transition:all .2s;font-size:.85rem;}
+.view-btn:hover,.view-btn.active{border-color:var(--neon);color:var(--neon);background:rgba(0,255,231,.08);}
+.plat-tag{padding:4px 10px;border:1px solid var(--border);border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted);cursor:pointer;transition:all .2s;letter-spacing:1px;}
+.plat-tag:hover,.plat-tag.active{border-color:rgba(120,80,255,.6);color:#a78bfa;}
+
+/* ── Favoris bouton ── */
+.fav-btn{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;border:none;background:rgba(0,0,0,.55);color:rgba(255,255,255,.4);font-size:.85rem;cursor:pointer;z-index:3;transition:all .2s;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.fav-btn:hover{color:#ff4d7a;transform:scale(1.15);}
+.fav-btn.active{color:#ff4d7a;}
+
+/* ── Notation étoiles ── */
+.star-row{display:flex;align-items:center;gap:3px;margin-top:6px;}
+.star{font-size:.85rem;cursor:pointer;transition:all .15s;color:rgba(255,255,255,.2);line-height:1;}
+.star.active{color:#ffd700;}
+.star:hover{transform:scale(1.2);}
+.rating-count{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--muted);margin-left:4px;}
+
+/* ── Badge vérifié + vues ── */
+.badge-verified{display:inline-flex;align-items:center;gap:4px;font-family:'Orbitron',monospace;font-size:.45rem;letter-spacing:1px;padding:2px 7px;border-radius:2px;background:rgba(0,255,100,.1);border:1px solid rgba(0,255,100,.25);color:#00ff64;margin-left:6px;vertical-align:middle;}
+.view-count{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--muted);display:flex;align-items:center;gap:3px;}
+
+/* ── Mode liste ── */
+.cards-grid.list-mode{grid-template-columns:1fr!important;}
+.cards-grid.list-mode .sw-card{flex-direction:row;max-height:100px;}
+.cards-grid.list-mode .sw-img{width:100px;height:100px;flex-shrink:0;object-fit:cover;}
+.cards-grid.list-mode .sw-img-ph{width:100px;height:100px;flex-shrink:0;font-size:2rem;}
+.cards-grid.list-mode .sw-body{padding:10px 14px;justify-content:center;}
+.cards-grid.list-mode .sw-desc{display:none;}
+.cards-grid.list-mode .sw-name{font-size:.78rem;margin-bottom:4px;}
+.cards-grid.list-mode .star-row{margin-top:2px;}
+
+/* ── Skeleton loading ── */
+@keyframes skPulse{0%,100%{opacity:.3}50%{opacity:.6}}
+.sk-card{background:var(--card);border:1px solid var(--border);border-radius:0;overflow:hidden;animation:skPulse 1.4s ease-in-out infinite;}
+.sk-img{width:100%;height:120px;background:rgba(255,255,255,.06);}
+.sk-body{padding:12px;}
+.sk-line{height:10px;border-radius:2px;background:rgba(255,255,255,.08);margin-bottom:8px;}
+.sk-line.w80{width:80%;}
+.sk-line.w60{width:60%;}
+.sk-line.w40{width:40%;}
+
+/* ── Page Favoris ── */
+.fav-empty{text-align:center;padding:80px 20px;color:var(--muted);}
+.fav-empty .empty-icon{font-size:3rem;opacity:.2;margin-bottom:16px;}
 </style>
 </head>
 <body>
@@ -480,13 +531,37 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       <span class="stag sub" data-sub="Puzzle" onclick="setSubFilter(this,'Puzzle')" data-i18n="sub_puzzle">🧩 Puzzle</span>
       <span class="stag sub" data-sub="NSFW" onclick="setSubFilter(this,'NSFW')" data-i18n="sub_nsfw">🔞 NSFW</span>
     </div>
+    <!-- TOOLBAR -->
+    <div class="search-toolbar">
+      <div class="toolbar-left">
+        <span class="filter-label" data-i18n="filter_plat">Plat.</span>
+        <span class="plat-tag active" data-plat="all" onclick="setPlatFilter(this,'all')" data-i18n="all">Tous</span>
+        <span class="plat-tag" data-plat="WIN" onclick="setPlatFilter(this,'WIN')">🪟 WIN</span>
+        <span class="plat-tag" data-plat="MAC" onclick="setPlatFilter(this,'MAC')">🍎 MAC</span>
+        <span class="plat-tag" data-plat="LINUX" onclick="setPlatFilter(this,'LINUX')">🐧 LINUX</span>
+        <span class="plat-tag" data-plat="WEB" onclick="setPlatFilter(this,'WEB')">🌐 WEB</span>
+      </div>
+      <div class="toolbar-right">
+        <select class="sort-select" id="sortSelect" onchange="setSortMode(this.value)">
+          <option value="default" data-i18n="sort_default">📅 Récents</option>
+          <option value="az" data-i18n="sort_az">🔤 A→Z</option>
+          <option value="rating" data-i18n="sort_rating">⭐ Mieux notés</option>
+          <option value="views" data-i18n="sort_views">👁 Plus vus</option>
+          <option value="favs" data-i18n="sort_favs">❤️ Favoris d'abord</option>
+        </select>
+        <button class="view-btn active" id="viewGrid" onclick="setViewMode('grid')" title="Grille">⊞</button>
+        <button class="view-btn" id="viewList" onclick="setViewMode('list')" title="Liste">☰</button>
+        <button class="view-btn" onclick="showFavPage()" title="Mes favoris" style="position:relative" id="favNavBtn">❤️<span id="favBadge" style="position:absolute;top:-4px;right:-4px;font-size:.45rem;background:var(--red);color:#fff;border-radius:50%;width:14px;height:14px;display:none;align-items:center;justify-content:center;font-family:Orbitron,monospace;"></span></button>
+      </div>
+    </div>
     <div class="search-info" id="searchInfo"></div>
   </div>
 </div>
 
 <section class="section" id="logiciels">
   <div class="section-header">
-    <div><div class="section-title">// BIBLIOTHÈQUE</div><div class="section-heading" id="sectionLabel">Tous les Logiciels</div></div>
+    <div><div class="section-title" id="sectionTitle">// BIBLIOTHÈQUE</div><div class="section-heading" id="sectionLabel">Tous les Logiciels</div></div>
+    <button id="favBackBtn" onclick="hideFavPage()" style="display:none;font-family:Orbitron,monospace;font-size:.6rem;padding:8px 16px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;border-radius:2px;letter-spacing:1px;transition:all .2s;" onmouseover="this.style.borderColor='var(--neon)';this.style.color='var(--neon)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">← Retour</button>
   </div>
   <div class="cards-grid" id="cardsGrid"></div>
   <div class="empty" id="emptyMsg" style="display:none"></div>
@@ -1018,13 +1093,17 @@ const DEFAULT_SW=[
 
 
 // ═══════════════ STATE ═══════════════
-let db=[],community=[],siteConfig={},filterCat='all',filterSub='all',filterQ='',isAdmin=false,delMode=false,editId=null,b64img=null;
+let db=[],community=[],siteConfig={},filterCat='all',filterSub='all',filterQ='',filterPlat='all',sortMode='default',viewMode='grid',showFavs=false,isAdmin=false,delMode=false,editId=null,b64img=null;
 const ICONS={Jeux:'🎮',Vidéo:'🎬',Audio:'🎵',Système:'🖥️',Dev:'👨‍💻',Créatif:'🎨',OS:'🐧'};
 function getDesc(s){return s['desc_'+currentLang]||s.desc_fr||s.desc||'';}
 const POST_LABELS={bug:'🐛 Bug',jeu:'🎮 Jeu gratuit',logiciel:'💾 Logiciel',suggestion:'💡 Suggestion'};
 
 // ═══════════════ NAV ═══════════════
 function showPage(name){
+  showFavs=false;
+  document.getElementById('favBackBtn').style.display='none';
+  document.getElementById('sectionTitle').textContent='// BIBLIOTHÈQUE';
+  document.getElementById('sectionLabel').textContent=filterCat==='all'?'Tous les Logiciels':filterCat;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
@@ -1082,19 +1161,33 @@ async function init(){
   document.getElementById('loadingOverlay').classList.add('gone');
   try{const sl=localStorage.getItem('vx_lang');if(sl&&LANGS[sl]){setLang(sl);}else{render();}}catch(e){render();}
   rndInit();
+  try{const sv=localStorage.getItem('vx_view');if(sv)setViewMode(sv);}catch(e){}
+  updateFavBadge();
+  showSkeleton();
 }
 
 // ═══════════════ RENDER LOGICIELS ═══════════════
 function render(){
   let list=db.slice();
-  if(filterCat!=='all')list=list.filter(s=>s.cat===filterCat);
-  if(filterCat==='Jeux'&&filterSub!=='all')list=list.filter(s=>s.subcat===filterSub);
-  if(filterQ){const q=filterQ.toLowerCase();list=list.filter(s=>s.name.toLowerCase().includes(q)||getDesc(s).toLowerCase().includes(q)||(s.subcat||'').toLowerCase().includes(q));}
+  // Favoris page
+  if(showFavs){const favs=getFavs();list=list.filter(s=>favs.includes(s.id));}
+  else{
+    if(filterCat!=='all')list=list.filter(s=>s.cat===filterCat);
+    if(filterCat==='Jeux'&&filterSub!=='all')list=list.filter(s=>s.subcat===filterSub);
+    if(filterPlat!=='all')list=list.filter(s=>(s.platform||'').toUpperCase().includes(filterPlat));
+    if(filterQ){const q=filterQ.toLowerCase();list=list.filter(s=>s.name.toLowerCase().includes(q)||getDesc(s).toLowerCase().includes(q)||(s.subcat||'').toLowerCase().includes(q));}
+  }
+  // Tri
+  if(sortMode==='az')list.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sortMode==='rating')list.sort((a,b)=>getAvgRating(b)-getAvgRating(a));
+  else if(sortMode==='views')list.sort((a,b)=>(b.views||0)-(a.views||0));
+  else if(sortMode==='favs'){const favs=getFavs();list.sort((a,b)=>(favs.includes(b.id)?1:0)-(favs.includes(a.id)?1:0));}
+  else list.sort((a,b)=>(b.added||0)-(a.added||0));
 
   document.getElementById('heroTotal').innerHTML=db.length+'<span></span>';
   document.getElementById('heroComm').innerHTML=community.length+'<span></span>';
-  document.getElementById('sectionLabel').textContent=filterCat==='all'?'Tous les Logiciels':(filterSub!=='all'?filterSub+' — ':'')+filterCat;
-  document.getElementById('searchInfo').innerHTML=list.length?`<span>${list.length}</span> ${list.length>1?t('results_pl'):t('results')}`:filterQ?`<span style="color:var(--red)">${t('no_results')}</span>`:'';
+  if(!showFavs)document.getElementById('sectionLabel').textContent=filterCat==='all'?'Tous les Logiciels':(filterSub!=='all'?filterSub+' — ':'')+filterCat;
+  document.getElementById('searchInfo').innerHTML=list.length?`<span>${list.length}</span> ${list.length>1?t('results_pl'):t('results')}`:filterQ||filterPlat!=='all'||showFavs?`<span style="color:var(--red)">${t('no_results')}</span>`:'';
 
   ['Jeux','Vidéo','Audio','Système','Dev','Créatif','OS'].forEach(cat=>{
     const el=document.getElementById('cnt-'+cat);
@@ -1109,13 +1202,157 @@ function render(){
     const sc=(s.cat||'').replace(/[éèêëÉ]/g,'e').replace(/[^a-zA-Z0-9]/g,'');
     const imgHtml=s.img?`<img class="sw-img" src="${esc(s.img)}" alt="${esc(s.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="sw-img-ph" style="display:none">${ICONS[s.cat]||'📦'}</div>`:`<div class="sw-img-ph">${ICONS[s.cat]||'📦'}</div>`;
     const subHtml=s.subcat?`<span class="sub-tag ${s.subcat==='NSFW'?'nsfw':s.subcat==='Horreur'?'horreur':''}">${s.subcat}</span>`:'';
-    return `<div class="sw-card" data-id="${s.id}">${imgHtml}<button class="del-btn" onclick="delCard('${s.id}',event)">✕</button><div class="sw-body"><div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${subHtml}${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}</div><div class="sw-name">${esc(s.name)}</div><div class="sw-desc">${esc(getDesc(s))}</div><div class="sw-foot"><span class="sw-plat">${esc(s.platform||'')}</span><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${t('btn_dl')}</a></div></div></div>`;
+    const favActive=isFav(s.id)?'active':'';
+    const avg=getAvgRating(s);
+    const userRating=getUserRating(s.id);
+    const verifiedBadge=s.verified?`<span class="badge-verified">✔ VÉRIFIÉ</span>`:'';
+    const adminVerifyBtn=isAdmin?`<button class="fav-btn" style="right:44px;color:${s.verified?'#00ff64':'rgba(255,255,255,.3)'}" onclick="toggleVerified('${s.id}',event)" title="Vérifier">✔</button>`:'';
+    const viewsHtml=s.views?`<span class="view-count">👁 ${s.views}</span>`:'';
+    return `<div class="sw-card" data-id="${s.id}">${imgHtml}<button class="del-btn" onclick="delCard('${s.id}',event)">✕</button>${adminVerifyBtn}<button class="fav-btn ${favActive}" onclick="toggleFav('${s.id}',event)" title="Favori">❤️</button><div class="sw-body"><div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${subHtml}${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}${verifiedBadge}</div><div class="sw-name">${esc(s.name)}</div><div class="sw-desc">${esc(getDesc(s))}</div>${starHtml(s.id,avg,userRating)}<div class="sw-foot"><span style="display:flex;align-items:center;gap:8px">${viewsHtml}<span class="sw-plat">${esc(s.platform||'')}</span></span><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${t('btn_dl')}</a></div></div></div>`;
   }).join('');
   grid.querySelectorAll('.sw-card').forEach(c=>c.addEventListener('click',function(e){
     if(e.target.closest('.del-btn,.sw-dl'))return;
     if(isAdmin&&!delMode){openEdit(this.dataset.id);}
     else if(!delMode){openSWModal(this.dataset.id);}
   }));
+}
+
+
+// ═══════════════ FAVORIS ═══════════════
+function getFavs(){try{return JSON.parse(localStorage.getItem('vx_favs')||'[]');}catch(e){return[];}}
+function saveFavs(f){try{localStorage.setItem('vx_favs',JSON.stringify(f));}catch(e){}}
+function isFav(id){return getFavs().includes(id);}
+function toggleFav(id,e){
+  e.stopPropagation();
+  const favs=getFavs();
+  const idx=favs.indexOf(id);
+  if(idx>=0)favs.splice(idx,1);else favs.push(id);
+  saveFavs(favs);
+  updateFavBadge();
+  render();
+}
+function updateFavBadge(){
+  const n=getFavs().length;
+  const badge=document.getElementById('favBadge');
+  if(!badge)return;
+  badge.textContent=n;
+  badge.style.display=n>0?'flex':'none';
+}
+function showFavPage(){
+  showFavs=true;
+  document.getElementById('favBackBtn').style.display='flex';
+  document.getElementById('sectionTitle').textContent='// FAVORIS';
+  document.getElementById('sectionLabel').textContent='Mes Favoris';
+  render();
+  document.getElementById('logiciels').scrollIntoView({behavior:'smooth'});
+}
+function hideFavPage(){
+  showFavs=false;
+  document.getElementById('favBackBtn').style.display='none';
+  document.getElementById('sectionTitle').textContent='// BIBLIOTHÈQUE';
+  document.getElementById('sectionLabel').textContent=filterCat==='all'?'Tous les Logiciels':filterCat;
+  render();
+}
+
+// ═══════════════ NOTATION ═══════════════
+function getRatings(){try{return JSON.parse(localStorage.getItem('vx_ratings')||'{}');}catch(e){return {};}}
+function saveRatings(r){try{localStorage.setItem('vx_ratings',JSON.stringify(r));}catch(e){}}
+function getUserRating(id){return getRatings()[id]||0;}
+function rateSW(id, stars, e){
+  e.stopPropagation();
+  const ratings=getRatings();
+  const prev=ratings[id]||0;
+  // Toggle: cliquer sur la même étoile enlève la note
+  ratings[id]=prev===stars?0:stars;
+  saveRatings(ratings);
+  // Mettre à jour la note globale dans db
+  const idx=db.findIndex(s=>s.id===id);
+  if(idx>=0){
+    const r=ratings[id];
+    if(r===0){
+      // retirer la note perso du total
+      if(db[idx].ratingSum&&db[idx].ratingCount){
+        db[idx].ratingSum=Math.max(0,(db[idx].ratingSum||0)-prev);
+        db[idx].ratingCount=Math.max(0,(db[idx].ratingCount||0)-1);
+      }
+    } else {
+      if(prev>0){
+        // modifier la note existante
+        db[idx].ratingSum=((db[idx].ratingSum||0)-prev)+r;
+      } else {
+        db[idx].ratingSum=(db[idx].ratingSum||0)+r;
+        db[idx].ratingCount=(db[idx].ratingCount||0)+1;
+      }
+    }
+    apiPut(db,community).catch(()=>{});
+  }
+  render();
+}
+function getAvgRating(s){
+  if(!s.ratingCount||s.ratingCount===0)return 0;
+  return s.ratingSum/s.ratingCount;
+}
+function starHtml(id, avg, userRating){
+  const filled=userRating>0?userRating:Math.round(avg);
+  let h='<div class="star-row">';
+  for(let i=1;i<=5;i++){
+    h+=`<span class="star${i<=filled?' active':''}" onclick="rateSW('${id}',${i},event)" onmouseover="hoverStars('${id}',${i})" onmouseout="unhoverStars('${id}',${userRating>0?userRating:Math.round(avg)})">★</span>`;
+  }
+  const cnt=db.find(s=>s.id===id)?.ratingCount||0;
+  h+=`<span class="rating-count">${avg>0?avg.toFixed(1):''} ${cnt>0?'('+cnt+')':''}</span>`;
+  h+='</div>';
+  return h;
+}
+function hoverStars(id,n){
+  const card=document.querySelector(`.sw-card[data-id="${id}"]`)||document.getElementById('swModalBox');
+  const stars=card?card.querySelectorAll('.star'):[];
+  stars.forEach((s,i)=>{s.style.color=i<n?'#ffd700':'rgba(255,255,255,.2)';});
+}
+function unhoverStars(id,filled){
+  const card=document.querySelector(`.sw-card[data-id="${id}"]`)||document.getElementById('swModalBox');
+  const stars=card?card.querySelectorAll('.star'):[];
+  stars.forEach((s,i)=>{s.style.color=i<filled?'#ffd700':'rgba(255,255,255,.2)';});
+}
+
+// ═══════════════ VUES ═══════════════
+function getViews(){try{return JSON.parse(localStorage.getItem('vx_views')||'{}');}catch(e){return {};}}
+function trackView(id){
+  const idx=db.findIndex(s=>s.id===id);
+  if(idx<0)return;
+  db[idx].views=(db[idx].views||0)+1;
+  apiPut(db,community).catch(()=>{});
+}
+
+// ═══════════════ BADGE VÉRIFIÉ (admin) ═══════════════
+async function toggleVerified(id,e){
+  e.stopPropagation();
+  const idx=db.findIndex(s=>s.id===id);
+  if(idx<0)return;
+  db[idx].verified=!db[idx].verified;
+  await apiPut(db,community).catch(()=>{});
+  render();
+}
+
+// ═══════════════ FILTRES PLATEFORME + TRI + VUE ═══════════════
+function setPlatFilter(el,plat){
+  filterPlat=plat;
+  document.querySelectorAll('.plat-tag').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  render();
+}
+function setSortMode(val){sortMode=val;render();}
+function setViewMode(mode){
+  viewMode=mode;
+  const grid=document.getElementById('cardsGrid');
+  if(mode==='list'){grid.classList.add('list-mode');document.getElementById('viewList').classList.add('active');document.getElementById('viewGrid').classList.remove('active');}
+  else{grid.classList.remove('list-mode');document.getElementById('viewGrid').classList.add('active');document.getElementById('viewList').classList.remove('active');}
+  try{localStorage.setItem('vx_view',mode);}catch(e){}
+}
+
+// ═══════════════ SKELETON ═══════════════
+function showSkeleton(){
+  const grid=document.getElementById('cardsGrid');
+  if(grid)grid.innerHTML=Array(8).fill('<div class="sk-card"><div class="sk-img"></div><div class="sk-body"><div class="sk-line w80"></div><div class="sk-line w60"></div><div class="sk-line w40"></div></div></div>').join('');
 }
 
 // ═══════════════ RENDER COMMUNITY ═══════════════
@@ -1428,6 +1665,7 @@ async function delPostMod(id){
 
 // ═══════════════ MODAL LOGICIEL ═══════════════
 function openSWModal(id){
+  trackView(id);
   const s=db.find(x=>x.id===id);
   if(!s)return;
   const sc=(s.cat||'').replace(/[éèêëÉ]/g,'e').replace(/[^a-zA-Z0-9]/g,'');
@@ -1551,6 +1789,7 @@ const LANGS={
     cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Créatif', cat_os:'🐧 OS',
     sub_action:'⚔️ Action', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Horreur',
     sub_indie:'🎲 Indé', sub_strat:'🗺️ Stratégie', sub_adventure:'🌍 Aventure', sub_puzzle:'🧩 Puzzle', sub_nsfw:'🔞 NSFW',
+    filter_plat:'Plat.', sort_default:'📅 Récents', sort_az:'🔤 A→Z', sort_rating:'⭐ Mieux notés', sort_views:'👁 Plus vus', sort_favs:'❤️ Favoris',
     rnd_label:'// DERNIERS AJOUTS', rnd_open:'VOIR →',
     nav_soft:'Logiciels', nav_cat:'Catégories', nav_comm:'Communauté',
     hero_badge:'🟢 PLATEFORME COMMUNAUTAIRE · LOGICIELS LIBRES UNIQUEMENT',
@@ -1635,6 +1874,7 @@ const LANGS={
     cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Creative', cat_os:'🐧 OS',
     sub_action:'⚔️ Action', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Horror',
     sub_indie:'🎲 Indie', sub_strat:'🗺️ Strategy', sub_adventure:'🌍 Adventure', sub_puzzle:'🧩 Puzzle', sub_nsfw:'🔞 NSFW',
+    filter_plat:'Plat.', sort_default:'📅 Recent', sort_az:'🔤 A→Z', sort_rating:'⭐ Top rated', sort_views:'👁 Most viewed', sort_favs:'❤️ Favorites first',
     rnd_label:'// LATEST RELEASES', rnd_open:'VIEW →',
     nav_soft:'Software', nav_cat:'Categories', nav_comm:'Community',
     hero_badge:'🟢 COMMUNITY PLATFORM · FREE SOFTWARE ONLY',
@@ -1719,6 +1959,7 @@ const LANGS={
     cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Творчество', cat_os:'🐧 ОС',
     sub_action:'⚔️ Экшн', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Хоррор',
     sub_indie:'🎲 Инди', sub_strat:'🗺️ Стратегия', sub_adventure:'🌍 Приключение', sub_puzzle:'🧩 Головоломка', sub_nsfw:'🔞 NSFW',
+    filter_plat:'Плат.', sort_default:'📅 Новые', sort_az:'🔤 А→Я', sort_rating:'⭐ Лучшие', sort_views:'👁 Популярные', sort_favs:'❤️ Избранное',
     rnd_label:'// ПОСЛЕДНИЕ ДОБАВЛЕНИЯ', rnd_open:'ОТКРЫТЬ →',
     nav_soft:'Программы', nav_cat:'Категории', nav_comm:'Сообщество',
     hero_badge:'🟢 СООБЩЕСТВО · ТОЛЬКО БЕСПЛАТНОЕ ПО',
