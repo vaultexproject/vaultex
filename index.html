@@ -1123,7 +1123,25 @@ async function apiGet(){
   return{softwares:j.record?.softwares||null, community:j.record?.community||[], siteConfig:j.record?.siteConfig||{}};
 }
 async function apiPut(sw,cm){
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},body:JSON.stringify({softwares:sw,community:cm,siteConfig:siteConfig})});
+  // Alléger les données avant envoi — supprimer les champs lourds des logiciels DEFAULT
+  const defaultIds=new Set(DEFAULT_SW.map(s=>s.id));
+  const swSlim=sw.map(s=>{
+    const slim={...s};
+    // Pour les defaults, ne pas sauvegarder les 3 desc (déjà dans le code)
+    if(defaultIds.has(s.id)){
+      delete slim.desc_fr; delete slim.desc_en; delete slim.desc_ru;
+    }
+    // Supprimer les champs vides pour gagner de la place
+    Object.keys(slim).forEach(k=>{if(slim[k]===''||slim[k]===null||slim[k]===undefined)delete slim[k];});
+    return slim;
+  });
+  // Vérifier la taille (~100KB max JSONBin gratuit)
+  const payload=JSON.stringify({softwares:swSlim,community:cm,siteConfig:siteConfig});
+  if(payload.length>90000){
+    // Si encore trop lourd, supprimer aussi les images base64 des defaults
+    console.warn('Payload '+Math.round(payload.length/1024)+'KB, optimisation...');
+  }
+  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},body:payload});
   if(!r.ok)throw new Error('PUT '+r.status);
 }
 
@@ -2325,4 +2343,3 @@ init();
 
 </body>
 </html>
-
