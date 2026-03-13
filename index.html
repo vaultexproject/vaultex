@@ -1343,7 +1343,7 @@ const LANGS={
     cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Créatif', cat_os:'🐧 OS',
     sub_action:'⚔️ Action', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Horreur',
     sub_indie:'🎲 Indé', sub_strat:'🗺️ Stratégie', sub_adventure:'🌍 Aventure', sub_puzzle:'🧩 Puzzle', sub_nsfw:'🔞 NSFW',
-    rnd_label:'// LOGICIEL ALÉATOIRE', rnd_open:'VOIR →',
+    rnd_label:'// DERNIERS AJOUTS', rnd_open:'VOIR →',
     nav_soft:'Logiciels', nav_cat:'Catégories', nav_comm:'Communauté',
     hero_badge:'🟢 PLATEFORME COMMUNAUTAIRE · LOGICIELS LIBRES UNIQUEMENT',
     hero_title:'DÉCOUVREZ LES<br><span class="accent">MEILLEURS</span><br><span class="accent-red">FREEWARE</span>',
@@ -1421,7 +1421,7 @@ const LANGS={
     cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Creative', cat_os:'🐧 OS',
     sub_action:'⚔️ Action', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Horror',
     sub_indie:'🎲 Indie', sub_strat:'🗺️ Strategy', sub_adventure:'🌍 Adventure', sub_puzzle:'🧩 Puzzle', sub_nsfw:'🔞 NSFW',
-    rnd_label:'// RANDOM SOFTWARE', rnd_open:'VIEW →',
+    rnd_label:'// LATEST RELEASES', rnd_open:'VIEW →',
     nav_soft:'Software', nav_cat:'Categories', nav_comm:'Community',
     hero_badge:'🟢 COMMUNITY PLATFORM · FREE SOFTWARE ONLY',
     hero_title:'DISCOVER THE<br><span class="accent">BEST</span><br><span class="accent-red">FREEWARE</span>',
@@ -1499,7 +1499,7 @@ const LANGS={
     cat_dev:'👨‍💻 Dev', cat_creative:'🎨 Творчество', cat_os:'🐧 ОС',
     sub_action:'⚔️ Экшн', sub_fps:'🔫 FPS', sub_rpg:'🧙 RPG', sub_horror:'👻 Хоррор',
     sub_indie:'🎲 Инди', sub_strat:'🗺️ Стратегия', sub_adventure:'🌍 Приключение', sub_puzzle:'🧩 Головоломка', sub_nsfw:'🔞 NSFW',
-    rnd_label:'// СЛУЧАЙНАЯ ПРОГРАММА', rnd_open:'ОТКРЫТЬ →',
+    rnd_label:'// ПОСЛЕДНИЕ ДОБАВЛЕНИЯ', rnd_open:'ОТКРЫТЬ →',
     nav_soft:'Программы', nav_cat:'Категории', nav_comm:'Сообщество',
     hero_badge:'🟢 СООБЩЕСТВО · ТОЛЬКО БЕСПЛАТНОЕ ПО',
     hero_title:'ОТКРОЙТЕ ДЛЯ СЕБЯ<br><span class="accent">ЛУЧШИЕ</span><br><span class="accent-red">ПРОГРАММЫ</span>',
@@ -1569,18 +1569,15 @@ function setLang(lang){
 }
 
 
-// ═══════════════ RANDOMIZER ═══════════════
+// ═══════════════ DERNIERS LOGICIELS ═══════════════
 let rndQueue=[], rndIdx=0, rndTimer=null, rndProgress=null, rndDuration=6000;
 const RND_SIZE=5;
 
-function rndShuffle(arr){
-  const a=[...arr];
-  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
-  return a;
-}
 function rndBuild(){
   if(!db||!db.length)return;
-  rndQueue=rndShuffle(db).slice(0,RND_SIZE);
+  // Trier par date d'ajout décroissante (les plus récents en premier)
+  const sorted=[...db].sort((a,b)=>(b.added||0)-(a.added||0));
+  rndQueue=sorted.slice(0,RND_SIZE);
   rndIdx=0;
   rndRenderDots();
 }
@@ -1608,15 +1605,19 @@ function rndShow(animate=true){
     ph.style.display='flex';
     ph.textContent=ICONS[s.cat]||'📦';
   }
+  // Badge NEW si ajouté dans les 7 derniers jours
+  const isNew=s.added&&(Date.now()-s.added)<7*24*3600*1000;
   // Texts
   document.getElementById('rndCat').textContent=(ICONS[s.cat]||'')+' '+esc(s.cat);
   document.getElementById('rndVer').textContent=s.version?esc(s.version):'';
-  document.getElementById('rndName').textContent=esc(s.name);
+  document.getElementById('rndName').innerHTML=esc(s.name)+(isNew?' <span style="font-size:.5rem;background:var(--neon);color:#000;padding:2px 6px;border-radius:2px;letter-spacing:1px;vertical-align:middle;font-family:Orbitron,monospace;">NEW</span>':'');
   document.getElementById('rndDesc').textContent=esc(s.desc);
   document.getElementById('rndPlat').textContent=esc(s.platform||'');
-  document.getElementById('rndCounter').textContent=(rndIdx+1)+' / '+rndQueue.length;
+  // Date ajout
+  const addedStr=s.added?new Date(s.added).toLocaleDateString():'';
+  document.getElementById('rndCounter').textContent=addedStr?`${t('added')} ${addedStr}`:`${rndIdx+1} / ${rndQueue.length}`;
   document.getElementById('rndOpen').textContent=t('rnd_open')||'VOIR →';
-  document.getElementById('rndLabel').textContent=t('rnd_label')||'// LOGICIEL ALÉATOIRE';
+  document.getElementById('rndLabel').textContent=t('rnd_label')||'// DERNIERS AJOUTS';
   rndRenderDots();
   rndStartTimer();
 }
@@ -1637,7 +1638,6 @@ function rndStartTimer(){
 function rndNext(manual=true){
   clearTimeout(rndTimer); clearInterval(rndProgress);
   rndIdx=(rndIdx+1)%rndQueue.length;
-  if(rndIdx===0)rndQueue=rndShuffle(db).slice(0,RND_SIZE);
   rndShow(true);
 }
 function rndPrev(){
