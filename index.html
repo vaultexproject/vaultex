@@ -366,6 +366,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   <div class="abar-right">
     <button class="ab ab-add" onclick="openAdd()" data-i18n="admin_add">+ Ajouter</button>
     <button class="ab" style="background:rgba(255,160,0,.15);color:#ffa000;border:1px solid rgba(255,160,0,.3);" onclick="openSiteEditor()" data-i18n="admin_edit_site">✏️ Modifier le site</button>
+    <button class="ab" id="translateBtn" onclick="openTranslateModal()" style="background:rgba(120,80,255,.15);color:#a78bfa;border:1px solid rgba(120,80,255,.3);">🌐 Traduire</button>
     <button class="ab ab-del" id="delBtn" onclick="toggleDel()" data-i18n="admin_del">🗑 Supprimer</button>
     <button class="ab ab-out" onclick="adminOut()" data-i18n="admin_logout">✕ Déconnexion</button>
   </div>
@@ -527,9 +528,9 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       <div>
         <div class="post-form">
           <h3 data-i18n="form_bug">🐛 Signaler un bug</h3>
-          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="bug_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
-          <div class="fg"><label class="fl">Titre *</label><input class="fi" id="bug_title" placeholder="Ex: Page blanche sur mobile..."></div>
-          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="bug_desc" data-i18n-ph="ph_bug_desc" placeholder="Décris le bug, comment le reproduire..."></textarea></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_pseudo">Pseudo</label><input class="fi" id="bug_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_title">Titre *</label><input class="fi" id="bug_title" data-i18n-ph="ph_bug_title" placeholder="Ex: Page blanche sur mobile..."></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_desc">Description *</label><textarea class="ft" id="bug_desc" data-i18n-ph="ph_bug_desc" placeholder="Décris le bug, comment le reproduire..."></textarea></div>
           <button class="btn btn-red" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('bug')" data-i18n="btn_bug">🐛 Envoyer le rapport</button>
         </div>
         <div class="posts-list" id="posts-bug"></div>
@@ -544,10 +545,10 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       <div>
         <div class="post-form">
           <h3 data-i18n="form_game">🎮 Proposer un jeu gratuit</h3>
-          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="jeu_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
-          <div class="fg"><label class="fl">Nom du jeu *</label><input class="fi" id="jeu_title" placeholder="Ex: 0 A.D., Minetest..."></div>
-          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="jeu_desc" data-i18n-ph="ph_game_desc" placeholder="Pourquoi tu le recommandes ?"></textarea></div>
-          <div class="fg"><label class="fl">Lien (optionnel)</label><input class="fi" id="jeu_link" type="url" placeholder="https://..."></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_pseudo">Pseudo</label><input class="fi" id="jeu_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_game_name">Nom du jeu *</label><input class="fi" id="jeu_title" data-i18n-ph="ph_game_title" placeholder="Ex: 0 A.D., Minetest..."></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_desc">Description *</label><textarea class="ft" id="jeu_desc" data-i18n-ph="ph_game_desc" placeholder="Pourquoi tu le recommandes ?"></textarea></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_link">Lien (optionnel)</label><input class="fi" id="jeu_link" type="url" placeholder="https://..."></div>
           <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('jeu')" data-i18n="btn_game">🎮 Proposer</button>
         </div>
         <div class="posts-list" id="posts-jeu"></div>
@@ -562,10 +563,10 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       <div>
         <div class="post-form">
           <h3 data-i18n="form_soft">💾 Proposer un logiciel</h3>
-          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="log_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
-          <div class="fg"><label class="fl">Nom du logiciel *</label><input class="fi" id="log_title" placeholder="Ex: VLC, GIMP, Blender..."></div>
-          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="log_desc" data-i18n-ph="ph_soft_desc" placeholder="À quoi ça sert, pourquoi le recommander ?"></textarea></div>
-          <div class="fg"><label class="fl">Lien (optionnel)</label><input class="fi" id="log_link" type="url" placeholder="https://..."></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_pseudo">Pseudo</label><input class="fi" id="log_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_soft_name">Nom du logiciel *</label><input class="fi" id="log_title" data-i18n-ph="ph_soft_title" placeholder="Ex: VLC, GIMP, Blender..."></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_desc">Description *</label><textarea class="ft" id="log_desc" data-i18n-ph="ph_soft_desc" placeholder="À quoi ça sert, pourquoi le recommander ?"></textarea></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_link">Lien (optionnel)</label><input class="fi" id="log_link" type="url" placeholder="https://..."></div>
           <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('logiciel')" data-i18n="btn_soft_comm">💾 Proposer</button>
         </div>
         <div class="posts-list" id="posts-logiciel"></div>
@@ -580,9 +581,9 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       <div>
         <div class="post-form">
           <h3 data-i18n="form_sug">💡 Proposer une suggestion</h3>
-          <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="sug_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
-          <div class="fg"><label class="fl">Titre *</label><input class="fi" id="sug_title" placeholder="Ex: Ajouter un filtre par OS..."></div>
-          <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="sug_desc" data-i18n-ph="ph_sug_desc" placeholder="Explique ta suggestion en détail..."></textarea></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_pseudo">Pseudo</label><input class="fi" id="sug_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_title">Titre *</label><input class="fi" id="sug_title" data-i18n-ph="ph_sug_title" placeholder="Ex: Ajouter un filtre par OS..."></div>
+          <div class="fg"><label class="fl" data-i18n="lbl_desc">Description *</label><textarea class="ft" id="sug_desc" data-i18n-ph="ph_sug_desc" placeholder="Explique ta suggestion en détail..."></textarea></div>
           <button class="btn" style="width:100%;justify-content:center;padding:13px;border:1px solid var(--neon2);color:var(--neon2);background:rgba(255,0,170,.06);" onclick="submitPost('suggestion')" data-i18n="btn_sug">💡 Envoyer la suggestion</button>
         </div>
         <div class="posts-list" id="posts-suggestion"></div>
@@ -623,47 +624,56 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 <div class="overlay" id="addModal" onclick="oClose(event,'addModal')">
   <div class="modal">
     <button class="m-close" onclick="closeM('addModal')">✕</button>
-    <h2 id="addTitle">Ajouter un Logiciel</h2>
-    <p class="sub">Seuls les logiciels freeware / open source sont acceptés.</p>
-    <div class="fg"><label class="fl">Nom *</label><input class="fi" id="f_name" type="text" placeholder="Ex: Blender, Godot Engine..."></div>
+    <h2 id="addTitle" data-i18n="modal_add_title">Ajouter un Logiciel</h2>
+    <p class="sub" data-i18n="modal_add_sub">Seuls les logiciels freeware / open source sont acceptés.</p>
+    <div class="fg"><label class="fl" data-i18n="lbl_name">Nom *</label><input class="fi" id="f_name" type="text" data-i18n-ph="ph_name" placeholder="Ex: Blender, Godot Engine..."></div>
     <div class="f2">
-      <div class="fg"><label class="fl">Catégorie *</label>
+      <div class="fg"><label class="fl" data-i18n="lbl_cat">Catégorie *</label>
         <select class="fs" id="f_cat" onchange="onCatChange()">
-          <option value="">— Choisir —</option>
+          <option value="" data-i18n="opt_choose">— Choisir —</option>
           <option>Jeux</option><option>Vidéo</option><option>Audio</option>
           <option>Système</option><option>Dev</option><option>Créatif</option><option>OS</option>
         </select>
       </div>
-      <div class="fg"><label class="fl">Version</label><input class="fi" id="f_ver" type="text" placeholder="Ex: v3.5.0"></div>
+      <div class="fg"><label class="fl" data-i18n="lbl_ver">Version</label><input class="fi" id="f_ver" type="text" data-i18n-ph="ph_ver" placeholder="Ex: v3.5.0"></div>
     </div>
     <div class="fg" id="subcat_field" style="display:none">
-      <label class="fl">Sous-catégorie (genre)</label>
+      <label class="fl" data-i18n="lbl_subcat">Sous-catégorie (genre)</label>
       <select class="fs" id="f_sub" onchange="onSubChange()">
-        <option value="">— Aucune —</option>
+        <option value="" data-i18n="opt_none">— Aucune —</option>
         <option>Action</option><option>FPS</option><option>RPG</option>
         <option>Horreur</option><option>Indé</option><option>Stratégie</option>
         <option>Aventure</option><option>Puzzle</option><option>NSFW</option>
       </select>
     </div>
-    <div class="nsfw-warn" id="nsfwWarn">⚠️ Contenu NSFW — adultes uniquement. Freeware/open source obligatoire.</div>
-    <div class="fg"><label class="fl">Description *</label><textarea class="ft" id="f_desc" placeholder="Décris le logiciel en quelques phrases..."></textarea></div>
+    <div class="nsfw-warn" id="nsfwWarn"><span data-i18n="nsfw_warn">⚠️ Contenu NSFW — adultes uniquement. Freeware/open source obligatoire.</span></div>
+    <div class="fg"><label class="fl" data-i18n="lbl_desc">Description *</label>
+      <div style="display:flex;gap:4px;margin-bottom:4px;">
+        <button type="button" class="desc-tab active" onclick="switchDescTab('fr',this)" style="font-family:Orbitron,monospace;font-size:.5rem;padding:4px 10px;border:1px solid var(--neon);background:rgba(0,255,231,.1);color:var(--neon);cursor:pointer;border-radius:2px;">FR</button>
+        <button type="button" class="desc-tab" onclick="switchDescTab('en',this)" style="font-family:Orbitron,monospace;font-size:.5rem;padding:4px 10px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;border-radius:2px;">EN</button>
+        <button type="button" class="desc-tab" onclick="switchDescTab('ru',this)" style="font-family:Orbitron,monospace;font-size:.5rem;padding:4px 10px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;border-radius:2px;">RU</button>
+      </div>
+      <textarea class="ft" id="f_desc_fr" placeholder="Décris le logiciel en quelques phrases..."></textarea>
+      <textarea class="ft" id="f_desc_en" style="display:none" placeholder="Describe the software in a few sentences..."></textarea>
+      <textarea class="ft" id="f_desc_ru" style="display:none" placeholder="Опиши программу в нескольких предложениях..."></textarea>
+    </div>
     <div class="f2">
-      <div class="fg"><label class="fl">Plateformes</label><input class="fi" id="f_plat" type="text" placeholder="WIN · MAC · LINUX"></div>
-      <div class="fg"><label class="fl">Licence</label>
+      <div class="fg"><label class="fl" data-i18n="lbl_plat">Plateformes</label><input class="fi" id="f_plat" type="text" placeholder="WIN · MAC · LINUX"></div>
+      <div class="fg"><label class="fl" data-i18n="lbl_lic">Licence</label>
         <select class="fs" id="f_lic">
           <option>Freeware</option><option>Open Source - MIT</option>
           <option>Open Source - GPL</option><option>Creative Commons</option>
         </select>
       </div>
     </div>
-    <div class="fg"><label class="fl">Lien de téléchargement *</label><input class="fi" id="f_link" type="url" placeholder="https://..."></div>
+    <div class="fg"><label class="fl" data-i18n="lbl_dllink">Lien de téléchargement *</label><input class="fi" id="f_link" type="url" placeholder="https://..."></div>
     <div class="fg">
-      <label class="fl">Image</label>
-      <input class="fi" id="f_imgurl" type="url" placeholder="URL de l'image (https://...)" oninput="prevUrl()">
-      <div class="or">— OU UPLOAD DEPUIS TON APPAREIL —</div>
+      <label class="fl" data-i18n="lbl_img">Image</label>
+      <input class="fi" id="f_imgurl" type="url" data-i18n-ph="ph_imgurl" placeholder="URL de l'image (https://...)" oninput="prevUrl()">
+      <div class="or"><span data-i18n="lbl_or_upload">— OU UPLOAD DEPUIS TON APPAREIL —</span></div>
       <input type="file" id="f_imgfile" accept="image/*" style="display:none" onchange="prevFile()">
-      <button class="upbtn" onclick="document.getElementById('f_imgfile').click()">📁 Choisir une image</button>
-      <div class="img-wrap" id="imgWrap"><span class="img-ph">Aucune image</span></div>
+      <button class="upbtn" onclick="document.getElementById('f_imgfile').click()" data-i18n="btn_upload">📁 Choisir une image</button>
+      <div class="img-wrap" id="imgWrap"><span class="img-ph" data-i18n="no_img">Aucune image</span></div>
     </div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;margin-top:6px;" onclick="submitSW()">
       ⚡ <span id="submitTxt">Ajouter le logiciel</span>
@@ -677,7 +687,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <button class="m-close" onclick="closeM('loginModal')">✕</button>
     <h2 data-i18n="modal_login_title">Accès Admin</h2>
     <p class="sub" data-i18n="modal_login_sub">Entrez le mot de passe administrateur.</p>
-    <div class="fg"><label class="fl">Mot de passe</label><input class="fi" id="pwdIn" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPwd()"></div>
+    <div class="fg"><label class="fl" data-i18n="lbl_pwd">Mot de passe</label><input class="fi" id="pwdIn" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPwd()"></div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="checkPwd()" data-i18n="btn_login">🔑 Connexion</button>
   </div>
 </div>
@@ -689,10 +699,10 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <h2 data-i18n="modal_edit_post">✏️ Modifier le post</h2>
     <p class="sub" id="editPostSub"></p>
     <input type="hidden" id="ep_id">
-    <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="ep_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
-    <div class="fg"><label class="fl">Titre *</label><input class="fi" id="ep_title" placeholder="Titre..."></div>
-    <div class="fg"><label class="fl">Contenu *</label><textarea class="ft" id="ep_content" style="min-height:120px;" placeholder="Contenu..."></textarea></div>
-    <div class="fg"><label class="fl">Lien (optionnel)</label><input class="fi" id="ep_link" type="url" placeholder="https://..."></div>
+    <div class="fg"><label class="fl" data-i18n="lbl_pseudo">Pseudo</label><input class="fi" id="ep_author" data-i18n-ph="ph_anon" placeholder="Anonyme"></div>
+    <div class="fg"><label class="fl" data-i18n="lbl_title">Titre *</label><input class="fi" id="ep_title" data-i18n-ph="ph_title_generic" placeholder="Titre..."></div>
+    <div class="fg"><label class="fl" data-i18n="lbl_content">Contenu *</label><textarea class="ft" id="ep_content" style="min-height:120px;" data-i18n-ph="ph_content_generic" placeholder="Contenu..."></textarea></div>
+    <div class="fg"><label class="fl" data-i18n="lbl_link">Lien (optionnel)</label><input class="fi" id="ep_link" type="url" placeholder="https://..."></div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;margin-top:4px;" onclick="saveEditPost()" data-i18n="btn_save_post">💾 Enregistrer les modifications</button>
   </div>
 </div>
@@ -711,41 +721,41 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   <div class="modal" style="max-width:560px;max-height:85vh;overflow-y:auto;">
     <button class="m-close" onclick="closeM('siteEditorModal')">✕</button>
     <h2 data-i18n="admin_edit_site" data-i18n="se_title_modal">✏️ Modifier le site</h2>
-    <p class="sub">Textes affichés sur la page + liens sociaux</p>
+    <p class="sub" data-i18n="se_sub">Textes affichés sur la page + liens sociaux</p>
 
     <div class="site-edit-section">
-      <h4>🏠 Page d'accueil</h4>
-      <div class="fg"><label class="fl">Badge hero (petit texte en haut)</label><input class="fi" id="se_badge" type="text"></div>
-      <div class="fg"><label class="fl">Titre principal (HTML autorisé)</label><textarea class="ft" id="se_title" style="min-height:80px;font-size:.8rem;"></textarea></div>
-      <div class="fg"><label class="fl">Description sous le titre</label><textarea class="ft" id="se_desc" style="min-height:80px;"></textarea></div>
+      <h4 data-i18n="se_home">🏠 Accueil</h4>
+      <div class="fg"><label class="fl" data-i18n="se_badge_lbl">Badge hero (petit texte en haut)</label><input class="fi" id="se_badge" type="text"></div>
+      <div class="fg"><label class="fl" data-i18n="se_title_lbl">Titre principal (HTML autorisé)</label><textarea class="ft" id="se_title" style="min-height:80px;font-size:.8rem;"></textarea></div>
+      <div class="fg"><label class="fl" data-i18n="se_desc_lbl">Description sous le titre</label><textarea class="ft" id="se_desc" style="min-height:80px;"></textarea></div>
     </div>
 
     <div class="site-edit-section">
-      <h4>🔗 Liens sociaux</h4>
+      <h4 data-i18n="se_social">🔗 Liens sociaux</h4>
       <div class="fg">
         <label class="fl">
           <svg width="14" height="11" viewBox="0 0 71 55" fill="#5865f2" style="vertical-align:middle;margin-right:5px;"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.6.7a.2.2 0 0 0-.2.1 40.7 40.7 0 0 0-1.8 3.7 54 54 0 0 0-16.2 0A37.7 37.7 0 0 0 25.6.8a.2.2 0 0 0-.2-.1A58.4 58.4 0 0 0 10.9 4.9a.2.2 0 0 0-.1.1C1.6 18.1-.9 31 .3 43.7a.2.2 0 0 0 .1.2 58.8 58.8 0 0 0 17.7 9 .2.2 0 0 0 .2-.1 42 42 0 0 0 3.6-5.9.2.2 0 0 0-.1-.3 38.7 38.7 0 0 1-5.5-2.6.2.2 0 0 1 0-.4l1.1-.8a.2.2 0 0 1 .2 0c11.5 5.3 24 5.3 35.4 0a.2.2 0 0 1 .2 0l1.1.8a.2.2 0 0 1 0 .4 36 36 0 0 1-5.5 2.6.2.2 0 0 0-.1.3 47.2 47.2 0 0 0 3.6 5.9.2.2 0 0 0 .2.1 58.7 58.7 0 0 0 17.8-9 .2.2 0 0 0 .1-.2c1.5-15.2-2.5-28-10.5-39.6a.2.2 0 0 0-.1-.2ZM23.7 36c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2Zm23.6 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2Z"/></svg>
-          Lien Discord (laisser vide pour masquer)
+          <span data-i18n="se_discord_lbl">Lien Discord (laisser vide pour masquer)</span>
         </label>
         <input class="fi" id="se_discord" type="url" placeholder="https://discord.gg/...">
       </div>
       <div class="fg">
         <label class="fl">
           <svg width="14" height="10" viewBox="0 0 24 24" fill="#ff4444" style="vertical-align:middle;margin-right:5px;"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.2 31.2 0 0 0 0 12a31.2 31.2 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.2 31.2 0 0 0 24 12a31.2 31.2 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
-          Lien YouTube (laisser vide pour masquer)
+          <span data-i18n="se_yt_lbl">Lien YouTube (laisser vide pour masquer)</span>
         </label>
         <input class="fi" id="se_youtube" type="url" placeholder="https://youtube.com/@...">
       </div>
       <div class="fg">
         <label class="fl">
           <svg width="12" height="14" viewBox="0 0 24 24" fill="#009cde" style="vertical-align:middle;margin-right:5px;"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.291-.077.44-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.103zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg>
-          Lien PayPal / don (laisser vide pour masquer)
+          <span data-i18n="se_pp_lbl">Lien PayPal / don (laisser vide pour masquer)</span>
         </label>
         <input class="fi" id="se_paypal" type="url" placeholder="https://paypal.me/...">
       </div>
     </div>
 
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="saveSiteConfig()">💾 Enregistrer les modifications</button>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="saveSiteConfig()" data-i18n="btn_save_site">💾 Enregistrer les modifications</button>
   </div>
 </div>
 
@@ -763,65 +773,254 @@ async function hashPwd(s){const b=await crypto.subtle.digest('SHA-256',new TextE
 // ═══════════════ DONNÉES PAR DÉFAUT ═══════════════
 const DEFAULT_SW=[
   // VIDÉO
-  {id:'s001',name:'VLC Media Player',cat:'Vidéo',subcat:'',version:'v3.0.20',desc:'Le lecteur multimédia universel. Lit pratiquement tous les formats vidéo et audio sans codec supplémentaire.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.videolan.org/vlc/',img:'https://www.videolan.org/images/vlcHD.png',added:1700000001},
-  {id:'s002',name:'OBS Studio',cat:'Vidéo',subcat:'',version:'v30.2',desc:'Logiciel de streaming et enregistrement vidéo professionnels. Scènes, sources, filtres — indispensable pour tout créateur de contenu.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://obsproject.com/',img:'https://obsproject.com/assets/images/obs-logo-icon.png',added:1700000002},
-  {id:'s003',name:'DaVinci Resolve',cat:'Vidéo',subcat:'',version:'v19',desc:'Suite de montage vidéo professionnelle utilisée à Hollywood. Étalonnage, effets, montage — version gratuite extrêmement puissante.',platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://www.blackmagicdesign.com/products/davinciresolve',img:'https://www.blackmagicdesign.com/images/products/davinciresolve/hero/hero-davinci-resolve-19-lg.jpg',added:1700000003},
-  {id:'s004',name:'Kdenlive',cat:'Vidéo',subcat:'',version:'v24.08',desc:'Éditeur vidéo open source complet. Timeline multi-piste, effets, transitions — parfait pour le montage quotidien.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://kdenlive.org/',img:'https://kdenlive.org/wp-content/uploads/2022/12/kdenlive_logo_small-1.png',added:1700000004},
-  {id:'s005',name:'Handbrake',cat:'Vidéo',subcat:'',version:'v1.8',desc:"Convertisseur vidéo universel. Encode, compresse et convertit n\'importe quel format vers MP4, MKV, WebM...",platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://handbrake.fr/',img:'https://handbrake.fr/img/logo.png',added:1700000005},
-  {id:'s006',name:'Shotcut',cat:'Vidéo',subcat:'',version:'v24.09',desc:'Éditeur vidéo simple et puissant. Interface claire, supporte des centaines de formats, idéal pour débuter.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://shotcut.org/',img:'https://www.shotcut.org/assets/img/banner.jpg',added:1700000006},
+  {id:'s001',name:'VLC Media Player',cat:'Vidéo',subcat:'',version:'v3.0.20',
+   desc_fr:'Le lecteur multimédia universel. Lit pratiquement tous les formats vidéo et audio sans codec supplémentaire.',
+   desc_en:'The universal media player. Plays virtually every video and audio format without extra codecs.',
+   desc_ru:'Универсальный медиаплеер. Воспроизводит практически любые форматы видео и аудио без дополнительных кодеков.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.videolan.org/vlc/',img:'https://www.videolan.org/images/vlcHD.png',added:1700000001},
+  {id:'s002',name:'OBS Studio',cat:'Vidéo',subcat:'',version:'v30.2',
+   desc_fr:'Logiciel de streaming et enregistrement vidéo professionnels. Scènes, sources, filtres — indispensable pour tout créateur de contenu.',
+   desc_en:'Professional video streaming and recording software. Scenes, sources, filters — essential for every content creator.',
+   desc_ru:'Профессиональный стриминг и запись видео. Сцены, источники, фильтры — незаменим для каждого контент-мейкера.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://obsproject.com/',img:'https://obsproject.com/assets/images/obs-logo-icon.png',added:1700000002},
+  {id:'s003',name:'DaVinci Resolve',cat:'Vidéo',subcat:'',version:'v19',
+   desc_fr:'Suite de montage vidéo professionnelle utilisée à Hollywood. Étalonnage, effets, montage — version gratuite extrêmement puissante.',
+   desc_en:'Professional video editing suite used in Hollywood. Color grading, effects, editing — the free version is extremely powerful.',
+   desc_ru:'Профессиональный видеоредактор уровня Голливуда. Цветокоррекция, эффекты, монтаж — бесплатная версия невероятно мощная.',
+   platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://www.blackmagicdesign.com/products/davinciresolve',img:'https://www.blackmagicdesign.com/images/products/davinciresolve/hero/hero-davinci-resolve-19-lg.jpg',added:1700000003},
+  {id:'s004',name:'Kdenlive',cat:'Vidéo',subcat:'',version:'v24.08',
+   desc_fr:'Éditeur vidéo open source complet. Timeline multi-piste, effets, transitions — parfait pour le montage quotidien.',
+   desc_en:'Full-featured open source video editor. Multi-track timeline, effects, transitions — perfect for everyday editing.',
+   desc_ru:'Полнофункциональный видеоредактор с открытым кодом. Многодорожечная шкала, эффекты, переходы — идеален для ежедневного монтажа.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://kdenlive.org/',img:'https://kdenlive.org/wp-content/uploads/2022/12/kdenlive_logo_small-1.png',added:1700000004},
+  {id:'s005',name:'Handbrake',cat:'Vidéo',subcat:'',version:'v1.8',
+   desc_fr:"Convertisseur vidéo universel. Encode, compresse et convertit n'importe quel format vers MP4, MKV, WebM...",
+   desc_en:'Universal video converter. Encode, compress and convert any format to MP4, MKV, WebM...',
+   desc_ru:'Универсальный конвертер видео. Кодирует, сжимает и конвертирует любые форматы в MP4, MKV, WebM...',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://handbrake.fr/',img:'https://handbrake.fr/img/logo.png',added:1700000005},
+  {id:'s006',name:'Shotcut',cat:'Vidéo',subcat:'',version:'v24.09',
+   desc_fr:'Éditeur vidéo simple et puissant. Interface claire, supporte des centaines de formats, idéal pour débuter.',
+   desc_en:'Simple yet powerful video editor. Clean interface, supports hundreds of formats, ideal for beginners.',
+   desc_ru:'Простой и мощный видеоредактор. Понятный интерфейс, поддержка сотен форматов, идеален для начинающих.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://shotcut.org/',img:'https://www.shotcut.org/assets/img/banner.jpg',added:1700000006},
   // AUDIO
-  {id:'s010',name:'Audacity',cat:'Audio',subcat:'',version:'v3.6',desc:'Éditeur audio open source de référence. Enregistrement multi-piste, effets, nettoyage audio — indispensable.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.audacityteam.org/',img:'https://www.audacityteam.org/wp-content/uploads/2022/01/audacity-logo.png',added:1700000010},
-  {id:'s011',name:'LMMS',cat:'Audio',subcat:'',version:'v1.2.2',desc:'Studio de musique complet gratuit. Séquenceur, synthétiseurs, samples — crée tes beats et musiques facilement.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://lmms.io/',img:'https://lmms.io/img/lmms_logo.svg',added:1700000011},
-  {id:'s012',name:'Ardour',cat:'Audio',subcat:'',version:'v8.6',desc:'DAW professionnel open source. Enregistrement, mixage, mastering — utilisé par des ingénieurs du son pros.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://ardour.org/',img:'https://ardour.org/images/ardour_logo_compact.png',added:1700000012},
-  {id:'s013',name:'VoiceMeeter',cat:'Audio',subcat:'',version:'v3.0',desc:'Mixeur audio virtuel pour Windows. Gère toutes tes entrées/sorties audio, parfait pour le streaming et le gaming.',platform:'WIN',license:'Freeware',link:'https://vb-audio.com/Voicemeeter/',img:'https://vb-audio.com/Voicemeeter/img/voicemeeter_potato_logo.png',added:1700000013},
-  {id:'s014',name:'Reaper',cat:'Audio',subcat:'',version:'v7.x',desc:'DAW professionnel léger et ultra-performant. Période d\'évaluation illimitée, moins de 20 Mo, supporte tout.',platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://www.reaper.fm/',img:'https://www.reaper.fm/img/reaper-logo.png',added:1700000014},
+  {id:'s010',name:'Audacity',cat:'Audio',subcat:'',version:'v3.6',
+   desc_fr:'Éditeur audio open source de référence. Enregistrement multi-piste, effets, nettoyage audio — indispensable.',
+   desc_en:'The reference open source audio editor. Multi-track recording, effects, audio cleanup — a must-have.',
+   desc_ru:'Эталонный аудиоредактор с открытым кодом. Многодорожечная запись, эффекты, очистка звука — незаменим.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.audacityteam.org/',img:'https://www.audacityteam.org/wp-content/uploads/2022/01/audacity-logo.png',added:1700000010},
+  {id:'s011',name:'LMMS',cat:'Audio',subcat:'',version:'v1.2.2',
+   desc_fr:'Studio de musique complet gratuit. Séquenceur, synthétiseurs, samples — crée tes beats et musiques facilement.',
+   desc_en:'Complete free music studio. Sequencer, synthesizers, samples — create your beats and music easily.',
+   desc_ru:'Полноценная бесплатная музыкальная студия. Секвенсор, синтезаторы, сэмплы — создавай биты и музыку легко.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://lmms.io/',img:'https://lmms.io/img/lmms_logo.svg',added:1700000011},
+  {id:'s012',name:'Ardour',cat:'Audio',subcat:'',version:'v8.6',
+   desc_fr:'DAW professionnel open source. Enregistrement, mixage, mastering — utilisé par des ingénieurs du son pros.',
+   desc_en:'Professional open source DAW. Recording, mixing, mastering — used by professional sound engineers.',
+   desc_ru:'Профессиональная DAW с открытым кодом. Запись, сведение, мастеринг — используется профессиональными звукорежиссёрами.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://ardour.org/',img:'https://ardour.org/images/ardour_logo_compact.png',added:1700000012},
+  {id:'s013',name:'VoiceMeeter',cat:'Audio',subcat:'',version:'v3.0',
+   desc_fr:'Mixeur audio virtuel pour Windows. Gère toutes tes entrées/sorties audio, parfait pour le streaming et le gaming.',
+   desc_en:'Virtual audio mixer for Windows. Manages all your audio inputs/outputs, perfect for streaming and gaming.',
+   desc_ru:'Виртуальный аудиомикшер для Windows. Управляет всеми входами/выходами, идеален для стриминга и гейминга.',
+   platform:'WIN',license:'Freeware',link:'https://vb-audio.com/Voicemeeter/',img:'https://vb-audio.com/Voicemeeter/img/voicemeeter_potato_logo.png',added:1700000013},
+  {id:'s014',name:'Reaper',cat:'Audio',subcat:'',version:'v7.x',
+   desc_fr:"DAW professionnel léger et ultra-performant. Période d'évaluation illimitée, moins de 20 Mo, supporte tout.",
+   desc_en:'Lightweight and ultra-performant professional DAW. Unlimited evaluation period, under 20 MB, supports everything.',
+   desc_ru:'Лёгкая и производительная профессиональная DAW. Неограниченный пробный период, менее 20 МБ, поддерживает всё.',
+   platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://www.reaper.fm/',img:'https://www.reaper.fm/img/reaper-logo.png',added:1700000014},
   // CRÉATIF
-  {id:'s020',name:'GIMP',cat:'Créatif',subcat:'',version:'v2.10',desc:"Alternative gratuite à Photoshop. Retouche photo, création graphique, manipulation avancée d\'images.",platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.gimp.org/',img:'https://www.gimp.org/images/frontpage/wilber-big.png',added:1700000020},
-  {id:'s021',name:'Blender',cat:'Créatif',subcat:'',version:'v4.2',desc:'Suite de création 3D complète. Modélisation, animation, rendu, VFX — utilisé par des studios professionnels du monde entier.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.blender.org/',img:'https://www.blender.org/wp-content/uploads/2020/07/blender_logo_socket.png',added:1700000021},
-  {id:'s022',name:'Inkscape',cat:'Créatif',subcat:'',version:'v1.3',desc:'Éditeur de graphiques vectoriels open source. Alternative à Illustrator, parfait pour logos, affiches, illustrations.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://inkscape.org/',img:'https://media.inkscape.org/static/images/inkscape-logo.svg',added:1700000022},
-  {id:'s023',name:'Krita',cat:'Créatif',subcat:'',version:'v5.2',desc:'Logiciel de peinture numérique professionnel. Conçu pour les artistes — brosses, calques, animation 2D intégrée.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://krita.org/',img:'https://krita.org/wp-content/uploads/2021/02/krita-logo-2021.png',added:1700000023},
-  {id:'s024',name:'Canva',cat:'Créatif',subcat:'',version:'Web',desc:'Outil de design en ligne ultra-intuitif. Templates pro pour réseaux sociaux, présentations, affiches — version gratuite très généreuse.',platform:'WEB',license:'Freeware',link:'https://www.canva.com/',img:'https://static.canva.com/web/images/8439b51bb7a19f6e65ce1064bc37c908.png',added:1700000024},
+  {id:'s020',name:'GIMP',cat:'Créatif',subcat:'',version:'v2.10',
+   desc_fr:"Alternative gratuite à Photoshop. Retouche photo, création graphique, manipulation avancée d'images.",
+   desc_en:'Free alternative to Photoshop. Photo retouching, graphic design, advanced image manipulation.',
+   desc_ru:'Бесплатная альтернатива Photoshop. Ретушь фото, графический дизайн, продвинутая работа с изображениями.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.gimp.org/',img:'https://www.gimp.org/images/frontpage/wilber-big.png',added:1700000020},
+  {id:'s021',name:'Blender',cat:'Créatif',subcat:'',version:'v4.2',
+   desc_fr:'Suite de création 3D complète. Modélisation, animation, rendu, VFX — utilisé par des studios professionnels du monde entier.',
+   desc_en:'Complete 3D creation suite. Modeling, animation, rendering, VFX — used by professional studios worldwide.',
+   desc_ru:'Полный 3D-редактор. Моделирование, анимация, рендер, VFX — используется профессиональными студиями по всему миру.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.blender.org/',img:'https://www.blender.org/wp-content/uploads/2020/07/blender_logo_socket.png',added:1700000021},
+  {id:'s022',name:'Inkscape',cat:'Créatif',subcat:'',version:'v1.3',
+   desc_fr:'Éditeur de graphiques vectoriels open source. Alternative à Illustrator, parfait pour logos, affiches, illustrations.',
+   desc_en:'Open source vector graphics editor. Alternative to Illustrator, perfect for logos, posters, illustrations.',
+   desc_ru:'Редактор векторной графики с открытым кодом. Альтернатива Illustrator, идеален для логотипов, плакатов, иллюстраций.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://inkscape.org/',img:'https://media.inkscape.org/static/images/inkscape-logo.svg',added:1700000022},
+  {id:'s023',name:'Krita',cat:'Créatif',subcat:'',version:'v5.2',
+   desc_fr:'Logiciel de peinture numérique professionnel. Conçu pour les artistes — brosses, calques, animation 2D intégrée.',
+   desc_en:'Professional digital painting software. Designed for artists — brushes, layers, built-in 2D animation.',
+   desc_ru:'Профессиональная программа для цифровой живописи. Создана для художников — кисти, слои, встроенная 2D-анимация.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://krita.org/',img:'https://krita.org/wp-content/uploads/2021/02/krita-logo-2021.png',added:1700000023},
+  {id:'s024',name:'Canva',cat:'Créatif',subcat:'',version:'Web',
+   desc_fr:'Outil de design en ligne ultra-intuitif. Templates pro pour réseaux sociaux, présentations, affiches — version gratuite très généreuse.',
+   desc_en:'Ultra-intuitive online design tool. Pro templates for social media, presentations, posters — very generous free version.',
+   desc_ru:'Сверхинтуитивный онлайн-дизайнер. Профессиональные шаблоны для соцсетей, презентаций, плакатов — очень щедрая бесплатная версия.',
+   platform:'WEB',license:'Freeware',link:'https://www.canva.com/',img:'https://static.canva.com/web/images/8439b51bb7a19f6e65ce1064bc37c908.png',added:1700000024},
   // DEV
-  {id:'s030',name:'Visual Studio Code',cat:'Dev',subcat:'',version:'v1.94',desc:"L'éditeur de code le plus populaire au monde. Extensions, IntelliSense, Git intégré — supporte tous les langages.",platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://code.visualstudio.com/',img:'https://code.visualstudio.com/assets/images/code-stable.png',added:1700000030},
-  {id:'s031',name:'Godot Engine',cat:'Dev',subcat:'',version:'v4.3',desc:'Moteur de jeu 2D/3D open source. Simple à prendre en main, GDScript intuitif, exporte sur toutes les plateformes.',platform:'WIN · MAC · LINUX',license:'Open Source - MIT',link:'https://godotengine.org/',img:'https://godotengine.org/assets/press/icon_color.png',added:1700000031},
-  {id:'s032',name:'Git',cat:'Dev',subcat:'',version:'v2.46',desc:"Système de contrôle de version incontournable. Gère l\'historique de ton code, branches, collaborations d\'équipe.",platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://git-scm.com/',img:'https://git-scm.com/images/logo@2x.png',added:1700000032},
-  {id:'s033',name:'XAMPP',cat:'Dev',subcat:'',version:'v8.2',desc:'Environnement de développement web local. Apache, MySQL, PHP installés en un clic — parfait pour tester des sites.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://www.apachefriends.org/',img:'https://www.apachefriends.org/images/xampp-logo.svg',added:1700000033},
-  {id:'s034',name:'Postman',cat:'Dev',subcat:'',version:'v11',desc:'Outil de test et développement d\'APIs. Interface claire pour tester tes requêtes HTTP, REST, GraphQL.',platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://www.postman.com/',img:'https://www.postman.com/assets/logos/postman-logo-orange-stacked.svg',added:1700000034},
-  {id:'s035',name:'Python',cat:'Dev',subcat:'',version:'v3.12',desc:'Le langage de programmation le plus polyvalent. IA, web, scripts, automatisation — incontournable pour tout développeur.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://www.python.org/',img:'https://www.python.org/static/community_logos/python-logo-generic.svg',added:1700000035},
+  {id:'s030',name:'Visual Studio Code',cat:'Dev',subcat:'',version:'v1.94',
+   desc_fr:"L'éditeur de code le plus populaire au monde. Extensions, IntelliSense, Git intégré — supporte tous les langages.",
+   desc_en:"The world's most popular code editor. Extensions, IntelliSense, built-in Git — supports every language.",
+   desc_ru:'Самый популярный редактор кода в мире. Расширения, IntelliSense, встроенный Git — поддерживает все языки.',
+   platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://code.visualstudio.com/',img:'https://code.visualstudio.com/assets/images/code-stable.png',added:1700000030},
+  {id:'s031',name:'Godot Engine',cat:'Dev',subcat:'',version:'v4.3',
+   desc_fr:'Moteur de jeu 2D/3D open source. Simple à prendre en main, GDScript intuitif, exporte sur toutes les plateformes.',
+   desc_en:'Open source 2D/3D game engine. Easy to pick up, intuitive GDScript, exports to all platforms.',
+   desc_ru:'Игровой движок 2D/3D с открытым кодом. Простой в освоении, интуитивный GDScript, экспорт на все платформы.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - MIT',link:'https://godotengine.org/',img:'https://godotengine.org/assets/press/icon_color.png',added:1700000031},
+  {id:'s032',name:'Git',cat:'Dev',subcat:'',version:'v2.46',
+   desc_fr:"Système de contrôle de version incontournable. Gère l'historique de ton code, branches, collaborations d'équipe.",
+   desc_en:'Essential version control system. Manages your code history, branches, and team collaboration.',
+   desc_ru:'Незаменимая система контроля версий. Управляет историей кода, ветками и командной работой.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://git-scm.com/',img:'https://git-scm.com/images/logo@2x.png',added:1700000032},
+  {id:'s033',name:'XAMPP',cat:'Dev',subcat:'',version:'v8.2',
+   desc_fr:'Environnement de développement web local. Apache, MySQL, PHP installés en un clic — parfait pour tester des sites.',
+   desc_en:'Local web development environment. Apache, MySQL, PHP installed in one click — perfect for testing websites.',
+   desc_ru:'Локальная среда веб-разработки. Apache, MySQL, PHP — установка в один клик, идеально для тестирования сайтов.',
+   platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://www.apachefriends.org/',img:'https://www.apachefriends.org/images/xampp-logo.svg',added:1700000033},
+  {id:'s034',name:'Postman',cat:'Dev',subcat:'',version:'v11',
+   desc_fr:"Outil de test et développement d'APIs. Interface claire pour tester tes requêtes HTTP, REST, GraphQL.",
+   desc_en:'API testing and development tool. Clean interface to test your HTTP, REST, and GraphQL requests.',
+   desc_ru:'Инструмент для тестирования и разработки API. Удобный интерфейс для HTTP, REST и GraphQL запросов.',
+   platform:'WIN · MAC · LINUX',license:'Freeware',link:'https://www.postman.com/',img:'https://www.postman.com/assets/logos/postman-logo-orange-stacked.svg',added:1700000034},
+  {id:'s035',name:'Python',cat:'Dev',subcat:'',version:'v3.12',
+   desc_fr:'Le langage de programmation le plus polyvalent. IA, web, scripts, automatisation — incontournable pour tout développeur.',
+   desc_en:'The most versatile programming language. AI, web, scripts, automation — essential for every developer.',
+   desc_ru:'Самый универсальный язык программирования. ИИ, веб, скрипты, автоматизация — незаменим для каждого разработчика.',
+   platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://www.python.org/',img:'https://www.python.org/static/community_logos/python-logo-generic.svg',added:1700000035},
   // SYSTÈME
-  {id:'s040',name:'7-Zip',cat:'Système',subcat:'',version:'v24.08',desc:'Archiveur open source ultra-performant. Supporte ZIP, RAR, 7z, TAR et bien plus. Taux de compression imbattable.',platform:'WIN · LINUX',license:'Open Source - LGPL',link:'https://www.7-zip.org/',img:'https://www.7-zip.org/7ziplogo.png',added:1700000040},
-  {id:'s041',name:'Everything',cat:'Système',subcat:'',version:'v1.4',desc:"Moteur de recherche de fichiers ultra-rapide pour Windows. Trouve n\'importe quel fichier en moins d\'une seconde.",platform:'WIN',license:'Freeware',link:'https://www.voidtools.com/',img:'https://www.voidtools.com/Everything.png',added:1700000041},
-  {id:'s042',name:'CrystalDiskInfo',cat:'Système',subcat:'',version:'v9.3',desc:'Surveille la santé de tes disques durs et SSD. Affiche la température, les erreurs et prédit les pannes.',platform:'WIN',license:'Open Source',link:'https://crystalmark.info/en/software/crystaldiskinfo/',img:'https://crystalmark.info/wp-content/uploads/2018/01/CrystalDiskInfo8_icon.png',added:1700000042},
-  {id:'s043',name:'HWMonitor',cat:'Système',subcat:'',version:'v1.54',desc:'Moniteur de températures et voltages en temps réel. CPU, GPU, disques — surveille tout ton hardware.',platform:'WIN',license:'Freeware',link:'https://www.cpuid.com/softwares/hwmonitor.html',img:'https://www.cpuid.com/img/softwares/large/hwmonitor-pro-v1.png',added:1700000043},
-  {id:'s044',name:'Rufus',cat:'Système',subcat:'',version:'v4.5',desc:'Crée des clés USB bootables en quelques secondes. Indispensable pour installer Windows, Linux ou tout OS.',platform:'WIN',license:'Open Source - GPL',link:'https://rufus.ie/',img:'https://rufus.ie/pics/rufus-128.png',added:1700000044},
-  {id:'s045',name:'Ventoy',cat:'Système',subcat:'',version:'v1.0.99',desc:'Crée une clé USB multi-boot. Mets plusieurs ISOs dessus et choisis lequel démarrer — ultra pratique.',platform:'WIN · LINUX',license:'Open Source - GPL',link:'https://www.ventoy.net/',img:'https://www.ventoy.net/static/img/ventoy.png',added:1700000045},
-  {id:'s046',name:'WinDirStat',cat:'Système',subcat:'',version:'v2.1',desc:'Visualise l\'utilisation de ton disque dur. Affiche quels dossiers et fichiers prennent le plus de place.',platform:'WIN',license:'Open Source - GPL',link:'https://windirstat.net/',img:'https://windirstat.net/wds_logo_256.png',added:1700000046},
-  {id:'s047',name:'Autoruns',cat:'Système',subcat:'',version:'v14.11',desc:'Gère tout ce qui démarre avec Windows. Désactive les programmes au démarrage pour booster les performances.',platform:'WIN',license:'Freeware',link:'https://learn.microsoft.com/sysinternals/downloads/autoruns',img:'https://learn.microsoft.com/en-us/sysinternals/downloads/media/autoruns/autoruns-v14.png',added:1700000047},
+  {id:'s040',name:'7-Zip',cat:'Système',subcat:'',version:'v24.08',
+   desc_fr:'Archiveur open source ultra-performant. Supporte ZIP, RAR, 7z, TAR et bien plus. Taux de compression imbattable.',
+   desc_en:'Ultra-performant open source archiver. Supports ZIP, RAR, 7z, TAR and much more. Unbeatable compression ratio.',
+   desc_ru:'Сверхпроизводительный архиватор с открытым кодом. Поддерживает ZIP, RAR, 7z, TAR и многое другое. Непревзойдённое сжатие.',
+   platform:'WIN · LINUX',license:'Open Source - LGPL',link:'https://www.7-zip.org/',img:'https://www.7-zip.org/7ziplogo.png',added:1700000040},
+  {id:'s041',name:'Everything',cat:'Système',subcat:'',version:'v1.4',
+   desc_fr:"Moteur de recherche de fichiers ultra-rapide pour Windows. Trouve n'importe quel fichier en moins d'une seconde.",
+   desc_en:'Ultra-fast file search engine for Windows. Finds any file in under a second.',
+   desc_ru:'Молниеносный поиск файлов для Windows. Находит любой файл менее чем за секунду.',
+   platform:'WIN',license:'Freeware',link:'https://www.voidtools.com/',img:'https://www.voidtools.com/Everything.png',added:1700000041},
+  {id:'s042',name:'CrystalDiskInfo',cat:'Système',subcat:'',version:'v9.3',
+   desc_fr:'Surveille la santé de tes disques durs et SSD. Affiche la température, les erreurs et prédit les pannes.',
+   desc_en:'Monitors the health of your HDDs and SSDs. Shows temperature, errors and predicts failures.',
+   desc_ru:'Мониторинг здоровья жёстких дисков и SSD. Показывает температуру, ошибки и предсказывает сбои.',
+   platform:'WIN',license:'Open Source',link:'https://crystalmark.info/en/software/crystaldiskinfo/',img:'https://crystalmark.info/wp-content/uploads/2018/01/CrystalDiskInfo8_icon.png',added:1700000042},
+  {id:'s043',name:'HWMonitor',cat:'Système',subcat:'',version:'v1.54',
+   desc_fr:'Moniteur de températures et voltages en temps réel. CPU, GPU, disques — surveille tout ton hardware.',
+   desc_en:'Real-time temperature and voltage monitor. CPU, GPU, drives — monitor all your hardware.',
+   desc_ru:'Монитор температур и напряжений в реальном времени. ЦПУ, ГПУ, диски — контроль всего железа.',
+   platform:'WIN',license:'Freeware',link:'https://www.cpuid.com/softwares/hwmonitor.html',img:'https://www.cpuid.com/img/softwares/large/hwmonitor-pro-v1.png',added:1700000043},
+  {id:'s044',name:'Rufus',cat:'Système',subcat:'',version:'v4.5',
+   desc_fr:'Crée des clés USB bootables en quelques secondes. Indispensable pour installer Windows, Linux ou tout OS.',
+   desc_en:'Creates bootable USB drives in seconds. Essential for installing Windows, Linux or any OS.',
+   desc_ru:'Создаёт загрузочные USB-флешки за секунды. Незаменим для установки Windows, Linux или любой ОС.',
+   platform:'WIN',license:'Open Source - GPL',link:'https://rufus.ie/',img:'https://rufus.ie/pics/rufus-128.png',added:1700000044},
+  {id:'s045',name:'Ventoy',cat:'Système',subcat:'',version:'v1.0.99',
+   desc_fr:'Crée une clé USB multi-boot. Mets plusieurs ISOs dessus et choisis lequel démarrer — ultra pratique.',
+   desc_en:'Creates a multi-boot USB drive. Put multiple ISOs on it and choose which one to boot — ultra convenient.',
+   desc_ru:'Мультизагрузочная USB-флешка. Помести несколько ISO-файлов и выбирай, с какого загружаться — очень удобно.',
+   platform:'WIN · LINUX',license:'Open Source - GPL',link:'https://www.ventoy.net/',img:'https://www.ventoy.net/static/img/ventoy.png',added:1700000045},
+  {id:'s046',name:'WinDirStat',cat:'Système',subcat:'',version:'v2.1',
+   desc_fr:"Visualise l'utilisation de ton disque dur. Affiche quels dossiers et fichiers prennent le plus de place.",
+   desc_en:'Visualizes your hard drive usage. Shows which folders and files take up the most space.',
+   desc_ru:'Визуализация использования жёсткого диска. Показывает, какие папки и файлы занимают больше всего места.',
+   platform:'WIN',license:'Open Source - GPL',link:'https://windirstat.net/',img:'https://windirstat.net/wds_logo_256.png',added:1700000046},
+  {id:'s047',name:'Autoruns',cat:'Système',subcat:'',version:'v14.11',
+   desc_fr:'Gère tout ce qui démarre avec Windows. Désactive les programmes au démarrage pour booster les performances.',
+   desc_en:'Manages everything that starts with Windows. Disable startup programs to boost performance.',
+   desc_ru:'Управляет всем, что запускается с Windows. Отключай программы из автозагрузки для повышения производительности.',
+   platform:'WIN',license:'Freeware',link:'https://learn.microsoft.com/sysinternals/downloads/autoruns',img:'https://learn.microsoft.com/en-us/sysinternals/downloads/media/autoruns/autoruns-v14.png',added:1700000047},
   // OS
-  {id:'s050',name:'Ubuntu',cat:'OS',subcat:'',version:'v24.04 LTS',desc:'La distribution Linux la plus populaire. Interface intuitive, énorme communauté, parfaite pour débuter sous Linux.',platform:'LINUX',license:'Open Source',link:'https://ubuntu.com/download',img:'https://assets.ubuntu.com/v1/8114528b-picto-ubuntu.png',added:1700000050},
-  {id:'s051',name:'Linux Mint',cat:'OS',subcat:'',version:'v22',desc:'Distribution Linux idéale pour les débutants venant de Windows. Légère, stable, familière — installation facile.',platform:'LINUX',license:'Open Source',link:'https://linuxmint.com/',img:'https://linuxmint.com/web/img/screenshots/mint22.png',added:1700000051},
-  {id:'s052',name:'Debian',cat:'OS',subcat:'',version:'v12',desc:'La distribution Linux de référence. Stable, sécurisée, base de nombreuses autres distros. Parfaite pour serveurs.',platform:'LINUX',license:'Open Source',link:'https://www.debian.org/',img:'https://www.debian.org/logos/openlogo-nd-100.png',added:1700000052},
-  {id:'s053',name:'Arch Linux',cat:'OS',subcat:'',version:'Rolling',desc:'Distribution Linux minimaliste et personnalisable. Pour utilisateurs avancés — tu construis ton système de zéro.',platform:'LINUX',license:'Open Source',link:'https://archlinux.org/',img:'https://archlinux.org/static/logos/archlinux-logo-dark-90dpi.ebdee92a15b3.png',added:1700000053},
-  {id:'s054',name:'Fedora',cat:'OS',subcat:'',version:'v40',desc:'Distribution Linux moderne sponsorisée par Red Hat. Toujours à jour, sécurisée, excellente pour les développeurs.',platform:'LINUX',license:'Open Source',link:'https://fedoraproject.org/',img:'https://fedoraproject.org/assets/images/fedora-logo.png',added:1700000054},
-  {id:'s055',name:'Pop!_OS',cat:'OS',subcat:'',version:'v22.04',desc:'Distribution Linux optimisée pour les créatifs et gamers. Par System76, excellente prise en charge des GPU NVIDIA.',platform:'LINUX',license:'Open Source',link:'https://pop.system76.com/',img:'https://pop.system76.com/img/pop-logo.svg',added:1700000055},
-  {id:'s056',name:'Kali Linux',cat:'OS',subcat:'',version:'v2024.3',desc:'Distribution Linux spécialisée en cybersécurité. Outils de pentesting, forensics et sécurité réseau préinstallés.',platform:'LINUX',license:'Open Source',link:'https://www.kali.org/',img:'https://www.kali.org/images/kali-dragon-icon.svg',added:1700000056},
-  {id:'s057',name:'Tails OS',cat:'OS',subcat:'',version:'v6.8',desc:'OS axé sur la confidentialité et l\'anonymat. Tourne depuis une clé USB, ne laisse aucune trace sur la machine.',platform:'LINUX',license:'Open Source',link:'https://tails.boum.org/',img:'https://tails.boum.org/contribute/how/promote/material/logo/tails-logo.svg',added:1700000057},
+  {id:'s050',name:'Ubuntu',cat:'OS',subcat:'',version:'v24.04 LTS',
+   desc_fr:'La distribution Linux la plus populaire. Interface intuitive, énorme communauté, parfaite pour débuter sous Linux.',
+   desc_en:'The most popular Linux distribution. Intuitive interface, huge community, perfect for getting started with Linux.',
+   desc_ru:'Самый популярный дистрибутив Linux. Интуитивный интерфейс, огромное сообщество, идеален для начала работы с Linux.',
+   platform:'LINUX',license:'Open Source',link:'https://ubuntu.com/download',img:'https://assets.ubuntu.com/v1/8114528b-picto-ubuntu.png',added:1700000050},
+  {id:'s051',name:'Linux Mint',cat:'OS',subcat:'',version:'v22',
+   desc_fr:"Distribution Linux idéale pour les débutants venant de Windows. Interface familière, stable et légère.",
+   desc_en:'Ideal Linux distribution for Windows users. Familiar interface, stable and lightweight.',
+   desc_ru:'Идеальный дистрибутив Linux для пользователей Windows. Знакомый интерфейс, стабильный и лёгкий.',
+   platform:'LINUX',license:'Open Source',link:'https://linuxmint.com/download.php',img:'https://linuxmint.com/web/img/logo.svg',added:1700000051},
+  {id:'s052',name:'Debian',cat:'OS',subcat:'',version:'v12',
+   desc_fr:"La base de la majorité des distributions Linux. Ultra-stable, sécurisée, référence dans le monde open source.",
+   desc_en:'The base of most Linux distributions. Ultra-stable, secure, a reference in the open source world.',
+   desc_ru:'Основа большинства дистрибутивов Linux. Сверхстабильная, безопасная, эталон в мире открытого ПО.',
+   platform:'LINUX',license:'Open Source',link:'https://www.debian.org/distrib/',img:'https://www.debian.org/logos/openlogo.svg',added:1700000052},
+  {id:'s053',name:'Arch Linux',cat:'OS',subcat:'',version:'rolling',
+   desc_fr:"Distribution Linux minimaliste pour utilisateurs avancés. Installe uniquement ce dont tu as besoin, contrôle total.",
+   desc_en:'Minimalist Linux distribution for advanced users. Install only what you need, total control.',
+   desc_ru:'Минималистичный дистрибутив Linux для опытных пользователей. Устанавливай только нужное, полный контроль.',
+   platform:'LINUX',license:'Open Source',link:'https://archlinux.org/download/',img:'https://archlinux.org/static/logos/archlinux-logo-dark-90dpi.ebdee92a15b3.png',added:1700000053},
+  {id:'s054',name:'Fedora',cat:'OS',subcat:'',version:'v41',
+   desc_fr:"Distribution Linux sponsorisée par Red Hat. Toujours à la pointe des dernières technologies open source.",
+   desc_en:'Linux distribution sponsored by Red Hat. Always at the cutting edge of the latest open source technologies.',
+   desc_ru:'Дистрибутив Linux при поддержке Red Hat. Всегда на острие последних технологий с открытым кодом.',
+   platform:'LINUX',license:'Open Source',link:'https://fedoraproject.org/workstation/download',img:'https://fedoraproject.org/assets/images/logos/fedora-blue.png',added:1700000054},
+  {id:'s055',name:"Pop!_OS",cat:'OS',subcat:'',version:'v22.04',
+   desc_fr:"Distribution Linux optimisée pour le gaming et les créatifs. Drivers NVIDIA intégrés, interface soignée.",
+   desc_en:'Linux distribution optimized for gaming and creatives. Built-in NVIDIA drivers, polished interface.',
+   desc_ru:'Дистрибутив Linux, оптимизированный для гейминга и творчества. Встроенные драйверы NVIDIA, отличный интерфейс.',
+   platform:'LINUX',license:'Open Source',link:'https://pop.system76.com/',img:'https://pop.system76.com/assets/pop-os/icon.png',added:1700000055},
+  {id:'s056',name:'Kali Linux',cat:'OS',subcat:'',version:'v2024.3',
+   desc_fr:"Distribution Linux spécialisée en cybersécurité. Plus de 600 outils de pentest et d'analyse de sécurité.",
+   desc_en:'Linux distribution specialized in cybersecurity. Over 600 pentest and security analysis tools.',
+   desc_ru:'Дистрибутив Linux для кибербезопасности. Более 600 инструментов для пентеста и анализа безопасности.',
+   platform:'LINUX',license:'Open Source',link:'https://www.kali.org/get-kali/',img:'https://www.kali.org/images/kali-dragon-icon.svg',added:1700000056},
+  {id:'s057',name:'Tails OS',cat:'OS',subcat:'',version:'v6.8',
+   desc_fr:"OS axé sur la confidentialité et l'anonymat. Tourne depuis une clé USB, ne laisse aucune trace sur la machine.",
+   desc_en:'OS focused on privacy and anonymity. Runs from a USB stick, leaves no trace on the machine.',
+   desc_ru:'ОС, ориентированная на конфиденциальность и анонимность. Работает с USB-флешки, не оставляет следов на компьютере.',
+   platform:'LINUX',license:'Open Source',link:'https://tails.boum.org/',img:'https://tails.boum.org/contribute/how/promote/material/logo/tails-logo.svg',added:1700000057},
   // JEUX
-  {id:'s060',name:'0 A.D.',cat:'Jeux',subcat:'Stratégie',version:'v0.0.27',desc:'Jeu de stratégie temps réel open source. Civilisations antiques, batailles épiques — qualité AAA gratuite.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://play0ad.com/',img:'https://play0ad.com/wp-content/uploads/2023/12/logo-0ad-0.0.26.png',added:1700000060},
-  {id:'s061',name:'SuperTuxKart',cat:'Jeux',subcat:'Action',version:'v1.4',desc:'Jeu de kart open source avec plus de 80 pistes et personnages. Multijoueur en ligne inclus.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://supertuxkart.net/',img:'https://supertuxkart.net/images/thumb/3/34/Supertuxkart-logo-2019.png/240px-Supertuxkart-logo-2019.png',added:1700000061},
-  {id:'s062',name:'Freedoom',cat:'Jeux',subcat:'FPS',version:'v0.13',desc:'Version libre et open source de Doom. Compatible avec tous les mods et wads Doom originaux.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://freedoom.github.io/',img:'https://freedoom.github.io/img/freedoom-phase1-cover.png',added:1700000062},
-  {id:'s063',name:'Wesnoth',cat:'Jeux',subcat:'Stratégie',version:'v1.18',desc:'Jeu de stratégie au tour par tour fantasy. Des dizaines de campagnes, multijoueur, éditeur de maps intégré.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.wesnoth.org/',img:'https://www.wesnoth.org/images/logo.png',added:1700000063},
-  {id:'s064',name:'OpenRA',cat:'Jeux',subcat:'Stratégie',version:'release-20231010',desc:'Moteur open source pour Command & Conquer. Red Alert, Tiberian Dawn et Dune 2000 gratuits et en ligne.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.openra.net/',img:'https://www.openra.net/images/openra-ra-logo.svg',added:1700000064},
-  {id:'s065',name:'Minetest',cat:'Jeux',subcat:'Aventure',version:'v5.9',desc:'Alternative open source à Minecraft. Monde infiniment personnalisable avec des milliers de mods communautaires.',platform:'WIN · MAC · LINUX',license:'Open Source - LGPL',link:'https://www.minetest.net/',img:'https://www.minetest.net/media/minetest-logo.png',added:1700000065},
-  {id:'s066',name:'Xonotic',cat:'Jeux',subcat:'FPS',version:'v0.8.6',desc:'FPS multijoueur open source ultra-rapide. Inspiré de Quake, mouvements fluides, arènes dynamiques.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://xonotic.org/',img:'https://xonotic.org/m/uploads/2012/03/Xonotic_Logo.png',added:1700000066},
-  {id:'s067',name:'Veloren',cat:'Jeux',subcat:'RPG',version:'v0.17',desc:'RPG open world voxel en ligne. Exploration, craft, combat — développé entièrement par la communauté.',platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://veloren.net/',img:'https://veloren.net/logo.png',added:1700000067},
-  {id:'s068',name:'Teeworlds',cat:'Jeux',subcat:'Action',version:'v0.7.5',desc:'Jeu de tir 2D multijoueur rapide et fun. Graphismes cartoon, gameplay nerveux, 100% gratuit et en ligne.',platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://www.teeworlds.com/',img:'https://www.teeworlds.com/images/teeworlds_logo.png',added:1700000068},
+  {id:'s060',name:'0 A.D.',cat:'Jeux',subcat:'Stratégie',version:'v0.0.27',
+   desc_fr:'Jeu de stratégie temps réel open source. Civilisations antiques, batailles épiques — qualité AAA gratuite.',
+   desc_en:'Open source real-time strategy game. Ancient civilizations, epic battles — free AAA quality.',
+   desc_ru:'Стратегия в реальном времени с открытым кодом. Древние цивилизации, эпические битвы — качество AAA бесплатно.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://play0ad.com/',img:'https://play0ad.com/wp-content/uploads/2023/12/logo-0ad-0.0.26.png',added:1700000060},
+  {id:'s061',name:'SuperTuxKart',cat:'Jeux',subcat:'Action',version:'v1.4',
+   desc_fr:'Jeu de kart open source avec plus de 80 pistes et personnages. Multijoueur en ligne inclus.',
+   desc_en:'Open source kart game with over 80 tracks and characters. Online multiplayer included.',
+   desc_ru:'Картинг с открытым кодом. Более 80 трасс и персонажей. Онлайн-мультиплеер в комплекте.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://supertuxkart.net/',img:'https://supertuxkart.net/images/thumb/3/34/Supertuxkart-logo-2019.png/240px-Supertuxkart-logo-2019.png',added:1700000061},
+  {id:'s062',name:'Freedoom',cat:'Jeux',subcat:'FPS',version:'v0.13',
+   desc_fr:'Version libre et open source de Doom. Compatible avec tous les mods et wads Doom originaux.',
+   desc_en:'Free and open source version of Doom. Compatible with all original Doom mods and WADs.',
+   desc_ru:'Свободная версия Doom с открытым кодом. Совместима со всеми оригинальными модами и WAD-файлами.',
+   platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://freedoom.github.io/',img:'https://freedoom.github.io/img/freedoom-phase1-cover.png',added:1700000062},
+  {id:'s063',name:'Wesnoth',cat:'Jeux',subcat:'Stratégie',version:'v1.18',
+   desc_fr:'Jeu de stratégie au tour par tour fantasy. Des dizaines de campagnes, multijoueur, éditeur de maps intégré.',
+   desc_en:'Fantasy turn-based strategy game. Dozens of campaigns, multiplayer, built-in map editor.',
+   desc_ru:'Фэнтезийная пошаговая стратегия. Десятки кампаний, мультиплеер, встроенный редактор карт.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.wesnoth.org/',img:'https://www.wesnoth.org/images/logo.png',added:1700000063},
+  {id:'s064',name:'OpenRA',cat:'Jeux',subcat:'Stratégie',version:'release-20231010',
+   desc_fr:'Moteur open source pour Command & Conquer. Red Alert, Tiberian Dawn et Dune 2000 gratuits et en ligne.',
+   desc_en:'Open source engine for Command & Conquer. Red Alert, Tiberian Dawn and Dune 2000 free and online.',
+   desc_ru:'Движок с открытым кодом для Command & Conquer. Red Alert, Tiberian Dawn и Dune 2000 — бесплатно и онлайн.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://www.openra.net/',img:'https://www.openra.net/images/openra-ra-logo.svg',added:1700000064},
+  {id:'s065',name:'Minetest',cat:'Jeux',subcat:'Aventure',version:'v5.9',
+   desc_fr:'Alternative open source à Minecraft. Monde infiniment personnalisable avec des milliers de mods communautaires.',
+   desc_en:'Open source alternative to Minecraft. Infinitely customizable world with thousands of community mods.',
+   desc_ru:'Альтернатива Minecraft с открытым кодом. Безгранично настраиваемый мир с тысячами пользовательских модов.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - LGPL',link:'https://www.minetest.net/',img:'https://www.minetest.net/media/minetest-logo.png',added:1700000065},
+  {id:'s066',name:'Xonotic',cat:'Jeux',subcat:'FPS',version:'v0.8.6',
+   desc_fr:'FPS multijoueur open source ultra-rapide. Inspiré de Quake, mouvements fluides, arènes dynamiques.',
+   desc_en:'Ultra-fast open source multiplayer FPS. Inspired by Quake, smooth movement, dynamic arenas.',
+   desc_ru:'Сверхбыстрый мультиплеерный FPS с открытым кодом. Вдохновлён Quake, плавное движение, динамичные арены.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://xonotic.org/',img:'https://xonotic.org/m/uploads/2012/03/Xonotic_Logo.png',added:1700000066},
+  {id:'s067',name:'Veloren',cat:'Jeux',subcat:'RPG',version:'v0.17',
+   desc_fr:'RPG open world voxel en ligne. Exploration, craft, combat — développé entièrement par la communauté.',
+   desc_en:'Online open world voxel RPG. Exploration, crafting, combat — developed entirely by the community.',
+   desc_ru:'Онлайн-RPG в открытом мире с воксельной графикой. Исследование, крафт, бой — разработан целиком сообществом.',
+   platform:'WIN · MAC · LINUX',license:'Open Source - GPL',link:'https://veloren.net/',img:'https://veloren.net/logo.png',added:1700000067},
+  {id:'s068',name:'Teeworlds',cat:'Jeux',subcat:'Action',version:'v0.7.5',
+   desc_fr:'Jeu de tir 2D multijoueur rapide et fun. Graphismes cartoon, gameplay nerveux, 100% gratuit et en ligne.',
+   desc_en:'Fast and fun 2D multiplayer shooter. Cartoon graphics, responsive gameplay, 100% free and online.',
+   desc_ru:'Быстрый и весёлый 2D мультиплеерный шутер. Мультяшная графика, динамичный геймплей, 100% бесплатно и онлайн.',
+   platform:'WIN · MAC · LINUX',license:'Open Source',link:'https://www.teeworlds.com/',img:'https://www.teeworlds.com/images/teeworlds_logo.png',added:1700000068},
 ];
 
 
 // ═══════════════ STATE ═══════════════
 let db=[],community=[],siteConfig={},filterCat='all',filterSub='all',filterQ='',isAdmin=false,delMode=false,editId=null,b64img=null;
 const ICONS={Jeux:'🎮',Vidéo:'🎬',Audio:'🎵',Système:'🖥️',Dev:'👨‍💻',Créatif:'🎨',OS:'🐧'};
+function getDesc(s){return s['desc_'+currentLang]||s.desc_fr||s.desc||'';}
 const POST_LABELS={bug:'🐛 Bug',jeu:'🎮 Jeu gratuit',logiciel:'💾 Logiciel',suggestion:'💡 Suggestion'};
 
 // ═══════════════ NAV ═══════════════
@@ -890,7 +1089,7 @@ function render(){
   let list=db.slice();
   if(filterCat!=='all')list=list.filter(s=>s.cat===filterCat);
   if(filterCat==='Jeux'&&filterSub!=='all')list=list.filter(s=>s.subcat===filterSub);
-  if(filterQ){const q=filterQ.toLowerCase();list=list.filter(s=>s.name.toLowerCase().includes(q)||s.desc.toLowerCase().includes(q)||(s.subcat||'').toLowerCase().includes(q));}
+  if(filterQ){const q=filterQ.toLowerCase();list=list.filter(s=>s.name.toLowerCase().includes(q)||getDesc(s).toLowerCase().includes(q)||(s.subcat||'').toLowerCase().includes(q));}
 
   document.getElementById('heroTotal').innerHTML=db.length+'<span></span>';
   document.getElementById('heroComm').innerHTML=community.length+'<span></span>';
@@ -910,7 +1109,7 @@ function render(){
     const sc=(s.cat||'').replace(/[éèêëÉ]/g,'e').replace(/[^a-zA-Z0-9]/g,'');
     const imgHtml=s.img?`<img class="sw-img" src="${esc(s.img)}" alt="${esc(s.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="sw-img-ph" style="display:none">${ICONS[s.cat]||'📦'}</div>`:`<div class="sw-img-ph">${ICONS[s.cat]||'📦'}</div>`;
     const subHtml=s.subcat?`<span class="sub-tag ${s.subcat==='NSFW'?'nsfw':s.subcat==='Horreur'?'horreur':''}">${s.subcat}</span>`:'';
-    return `<div class="sw-card" data-id="${s.id}">${imgHtml}<button class="del-btn" onclick="delCard('${s.id}',event)">✕</button><div class="sw-body"><div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${subHtml}${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}</div><div class="sw-name">${esc(s.name)}</div><div class="sw-desc">${esc(s.desc)}</div><div class="sw-foot"><span class="sw-plat">${esc(s.platform||'')}</span><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${t('btn_dl')}</a></div></div></div>`;
+    return `<div class="sw-card" data-id="${s.id}">${imgHtml}<button class="del-btn" onclick="delCard('${s.id}',event)">✕</button><div class="sw-body"><div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${subHtml}${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}</div><div class="sw-name">${esc(s.name)}</div><div class="sw-desc">${esc(getDesc(s))}</div><div class="sw-foot"><span class="sw-plat">${esc(s.platform||'')}</span><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${t('btn_dl')}</a></div></div></div>`;
   }).join('');
   grid.querySelectorAll('.sw-card').forEach(c=>c.addEventListener('click',function(e){
     if(e.target.closest('.del-btn,.sw-dl'))return;
@@ -1106,7 +1305,10 @@ function openEdit(id){
   document.getElementById('f_name').value=s.name;
   document.getElementById('f_cat').value=s.cat;
   document.getElementById('f_ver').value=s.version||'';
-  document.getElementById('f_desc').value=s.desc;
+  document.getElementById('f_desc_fr').value=s.desc_fr||s.desc||'';
+  document.getElementById('f_desc_en').value=s.desc_en||'';
+  document.getElementById('f_desc_ru').value=s.desc_ru||'';
+  switchDescTab(currentLang,document.querySelector('.desc-tab'));
   document.getElementById('f_plat').value=s.platform||'';
   document.getElementById('f_lic').value=s.license||'Freeware';
   document.getElementById('f_link').value=s.link||'';
@@ -1130,7 +1332,7 @@ function prevFile(){const file=document.getElementById('f_imgfile').files[0];if(
 async function submitSW(){
   const name=document.getElementById('f_name').value.trim();
   const cat=document.getElementById('f_cat').value;
-  const desc=document.getElementById('f_desc').value.trim();
+  const desc=document.getElementById('f_desc_fr').value.trim()||document.getElementById('f_desc_en').value.trim();
   const link=document.getElementById('f_link').value.trim();
   if(!name||!cat||!desc||!link){notify('❌ Remplis les champs obligatoires (*)',true);return;}
   const img=b64img||document.getElementById('f_imgurl').value.trim();
@@ -1246,7 +1448,7 @@ function openSWModal(id){
         <span style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted);">${t('added')} ${addedDate}</span>
       </div>
       <div class="sw-modal-title">${esc(s.name)}</div>
-      <div class="sw-modal-desc">${esc(s.desc)}</div>
+      <div class="sw-modal-desc">${esc(getDesc(s))}</div>
       <div class="sw-modal-info">
         <div class="sw-modal-info-item"><div class="sw-modal-info-label">${t('platform')}</div><div class="sw-modal-info-val">${esc(s.platform||'—')}</div></div>
         <div class="sw-modal-info-item"><div class="sw-modal-info-label">${t('license')}</div><div class="sw-modal-info-val">${esc(s.license||'—')}</div></div>
@@ -1278,6 +1480,12 @@ function closeSWModalDirect(){
 const LANGS={
   fr:{
     // Forms community
+    lbl_name:'Nom *', lbl_dllink:'Lien de téléchargement *',
+    lbl_game_name:'Nom du jeu *', lbl_soft_name:'Nom du logiciel *',
+    lbl_or_upload:'— OU UPLOAD DEPUIS TON APPAREIL —',
+    nsfw_warn:'⚠️ Contenu NSFW — adultes uniquement. Freeware/open source obligatoire.',
+    ph_sug_title:'Ex: Ajouter un filtre par OS...',
+    ph_title_generic:'Titre...', ph_content_generic:'Contenu...',
     lbl_pseudo:'Pseudo', lbl_title:'Titre *', lbl_desc:'Description *', lbl_link:'Lien (optionnel)',
     ph_anon:'Anonyme', ph_bug_title:'Ex: Page blanche sur mobile...', ph_bug_desc:'Décris le bug, comment le reproduire...',
     ph_game_title:'Ex: 0 A.D., Minetest...', ph_game_desc:'Pourquoi tu le recommandes ?',
@@ -1320,9 +1528,9 @@ const LANGS={
     se_home:'🏠 Accueil', se_badge_lbl:'Badge hero (texte en haut)',
     se_title_lbl:'Titre principal (HTML autorisé)', se_desc_lbl:'Description sous le titre',
     se_social:'🔗 Liens sociaux',
-    se_discord_lbl:'Lien Discord (laisser vide pour masquer)',
-    se_yt_lbl:'Lien YouTube (laisser vide pour masquer)',
-    se_pp_lbl:'Lien PayPal / don (laisser vide pour masquer)',
+    se_discord_lbl:'<span data-i18n="se_discord_lbl">Lien Discord (laisser vide pour masquer)</span>',
+    se_yt_lbl:'<span data-i18n="se_yt_lbl">Lien YouTube (laisser vide pour masquer)</span>',
+    se_pp_lbl:'<span data-i18n="se_pp_lbl">Lien PayPal / don (laisser vide pour masquer)</span>',
     btn_save_site:'💾 Enregistrer les modifications',
     // Notifications
     notif_admin_on:'✅ Mode admin activé !', notif_logout:'Déconnecté',
@@ -1368,6 +1576,12 @@ const LANGS={
     total_posts:'Total posts',
   },
   en:{
+    lbl_name:'Name *', lbl_dllink:'Download link *',
+    lbl_game_name:'Game name *', lbl_soft_name:'Software name *',
+    lbl_or_upload:'— OR UPLOAD FROM YOUR DEVICE —',
+    nsfw_warn:'⚠️ NSFW content — adults only. Freeware/open source required.',
+    ph_sug_title:'Ex: Add an OS filter...',
+    ph_title_generic:'Title...', ph_content_generic:'Content...',
     lbl_pseudo:'Username', lbl_title:'Title *', lbl_desc:'Description *', lbl_link:'Link (optional)',
     ph_anon:'Anonymous', ph_bug_title:'Ex: Blank page on mobile...', ph_bug_desc:'Describe the bug, how to reproduce it...',
     ph_game_title:'Ex: 0 A.D., Minetest...', ph_game_desc:'Why do you recommend it?',
@@ -1446,6 +1660,12 @@ const LANGS={
     total_posts:'Total posts',
   },
   ru:{
+    lbl_name:'Название *', lbl_dllink:'Ссылка для скачивания *',
+    lbl_game_name:'Название игры *', lbl_soft_name:'Название программы *',
+    lbl_or_upload:'— ИЛИ ЗАГРУЗИ С УСТРОЙСТВА —',
+    nsfw_warn:'⚠️ Контент NSFW — только для взрослых. Только бесплатное/открытое ПО.',
+    ph_sug_title:'Напр.: Добавить фильтр по ОС...',
+    ph_title_generic:'Заголовок...', ph_content_generic:'Содержание...',
     lbl_pseudo:'Имя', lbl_title:'Заголовок *', lbl_desc:'Описание *', lbl_link:'Ссылка (необязательно)',
     ph_anon:'Аноним', ph_bug_title:'Напр.: Пустая страница на телефоне...', ph_bug_desc:'Опиши баг, как его воспроизвести...',
     ph_game_title:'Напр.: 0 A.D., Minetest...', ph_game_desc:'Почему ты рекомендуешь?',
@@ -1551,6 +1771,21 @@ function setLang(lang){
     const val=t(key);
     if(val)el.placeholder=val;
   });
+  // Update <option data-i18n> elements
+  document.querySelectorAll('option[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    const val=t(key);
+    if(val)el.textContent=val;
+  });
+  // Update form label dynamically in openAdd modal
+  const addTitleEl=document.getElementById('addTitle');
+  if(addTitleEl&&!editId)addTitleEl.textContent=t('modal_add_title');
+  // Update form placeholders set via data-i18n-ph
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key=el.getAttribute('data-i18n-ph');
+    const val=t(key);
+    if(val)el.placeholder=val;
+  });
   // Update form labels dynamically
   const formLabels={
     'bug_author':['ph_anon'],'jeu_author':['ph_anon'],'log_author':['ph_anon'],'sug_author':['ph_anon'],
@@ -1611,7 +1846,7 @@ function rndShow(animate=true){
   document.getElementById('rndCat').textContent=(ICONS[s.cat]||'')+' '+esc(s.cat);
   document.getElementById('rndVer').textContent=s.version?esc(s.version):'';
   document.getElementById('rndName').innerHTML=esc(s.name)+(isNew?' <span style="font-size:.5rem;background:var(--neon);color:#000;padding:2px 6px;border-radius:2px;letter-spacing:1px;vertical-align:middle;font-family:Orbitron,monospace;">NEW</span>':'');
-  document.getElementById('rndDesc').textContent=esc(s.desc);
+  document.getElementById('rndDesc').textContent=esc(getDesc(s));
   document.getElementById('rndPlat').textContent=esc(s.platform||'');
   // Date ajout
   const addedStr=s.added?new Date(s.added).toLocaleDateString():'';
@@ -1653,6 +1888,103 @@ function rndInit(){
   if(!db||!db.length)return;
   rndBuild();
   rndShow(false);
+}
+
+function switchDescTab(lang, btn){
+  ['fr','en','ru'].forEach(l=>{
+    const el=document.getElementById('f_desc_'+l);
+    if(el)el.style.display=l===lang?'block':'none';
+  });
+  document.querySelectorAll('.desc-tab').forEach(b=>{
+    b.style.background='transparent';b.style.color='var(--muted)';b.style.borderColor='var(--border)';
+  });
+  if(btn){btn.style.background='rgba(0,255,231,.1)';btn.style.color='var(--neon)';btn.style.borderColor='var(--neon)';}
+}
+
+
+// ═══════════════ TRADUCTION AUTO ═══════════════
+function openTranslateModal(){
+  const missing=db.filter(s=>!s.desc_en||!s.desc_ru||s.desc_en===s.desc_fr||s.desc_ru===s.desc_fr);
+  const status=document.getElementById('translateStatus');
+  if(!missing.length){
+    status.innerHTML='<span style="color:var(--neon)">✅ Toutes les descriptions sont déjà traduites !</span>';
+  } else {
+    status.innerHTML=`<span style="color:#a78bfa">${missing.length} logiciel(s) ont des descriptions à traduire.</span><br><span style="color:var(--muted);font-size:.65rem;">Consomme des tokens API à chaque utilisation.</span>`;
+  }
+  document.getElementById('translateProgress').style.display='none';
+  document.getElementById('translateStartBtn').disabled=false;
+  document.getElementById('translateStartBtn').textContent='⚡ Lancer la traduction';
+  document.getElementById('translateModal').classList.add('open');
+}
+
+async function translateDesc(name, descFr){
+  const prompt=`Tu es un traducteur. Traduis cette description de logiciel du français vers l'anglais ET vers le russe. Réponds UNIQUEMENT en JSON avec exactement ce format: {"en":"...","ru":"..."}. Description: ${descFr}`;
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:400,
+      messages:[{role:'user',content:prompt}]
+    })
+  });
+  const data=await r.json();
+  const text=data.content?.[0]?.text||'{}';
+  try{
+    const clean=text.replace(/```json|```/g,'').trim();
+    return JSON.parse(clean);
+  }catch(e){return null;}
+}
+
+async function startTranslation(){
+  const missing=db.filter(s=>!s.desc_en||!s.desc_ru||s.desc_en===s.desc_fr||s.desc_ru===s.desc_fr);
+  if(!missing.length){notify('✅ Rien à traduire !');closeM('translateModal');return;}
+  
+  const btn=document.getElementById('translateStartBtn');
+  const status=document.getElementById('translateStatus');
+  const progress=document.getElementById('translateProgress');
+  const bar=document.getElementById('translateBar');
+  const pct=document.getElementById('translatePct');
+  
+  btn.disabled=true;
+  btn.textContent='⏳ Traduction en cours...';
+  progress.style.display='block';
+  
+  let done=0;
+  const total=missing.length;
+  
+  for(const s of missing){
+    status.innerHTML+=`<span style="color:var(--muted)">⏳ ${s.name}...</span><br>`;
+    status.scrollTop=status.scrollHeight;
+    try{
+      const translated=await translateDesc(s.name, s.desc_fr||s.desc||'');
+      if(translated){
+        const idx=db.findIndex(x=>x.id===s.id);
+        if(idx>=0){
+          if(!db[idx].desc_en||db[idx].desc_en===db[idx].desc_fr) db[idx].desc_en=translated.en||db[idx].desc_fr;
+          if(!db[idx].desc_ru||db[idx].desc_ru===db[idx].desc_fr) db[idx].desc_ru=translated.ru||db[idx].desc_fr;
+        }
+        status.innerHTML=status.innerHTML.replace(`⏳ ${s.name}...`,'✅ '+s.name);
+      } else {
+        status.innerHTML=status.innerHTML.replace(`⏳ ${s.name}...`,'⚠️ '+s.name+' (erreur parsing)');
+      }
+    }catch(e){
+      status.innerHTML=status.innerHTML.replace(`⏳ ${s.name}...`,'❌ '+s.name+' (erreur réseau)');
+    }
+    done++;
+    const p=Math.round((done/total)*100);
+    bar.style.width=p+'%';
+    pct.textContent=p+'%';
+    await new Promise(res=>setTimeout(res,300));
+  }
+  
+  // Sauvegarder dans JSONBin
+  status.innerHTML+='<br><span style="color:#a78bfa">⏳ Sauvegarde dans JSONBin...</span>';
+  await apiSave();
+  status.innerHTML=status.innerHTML.replace('⏳ Sauvegarde dans JSONBin...','✅ Sauvegarde OK !');
+  btn.textContent='✅ Terminé !';
+  render();
+  notify('✅ Descriptions traduites et sauvegardées !');
 }
 
 // ═══════════════ SITE CONFIG ═══════════════
@@ -1724,5 +2056,23 @@ function editSiteText(field){
 // ═══════════════ INIT ═══════════════
 init();
 </script>
+
+<!-- MODAL TRADUCTION DESCRIPTIONS -->
+<div class="overlay" id="translateModal" onclick="oClose(event,'translateModal')">
+  <div class="modal" style="max-width:560px;max-height:85vh;overflow-y:auto;">
+    <button class="m-close" onclick="closeM('translateModal')">✕</button>
+    <h2>🌐 Traduire les descriptions</h2>
+    <p class="sub">Traduit automatiquement les descriptions manquantes (EN/RU) via l'IA pour les logiciels ajoutés manuellement.</p>
+    <div id="translateStatus" style="margin:16px 0;padding:12px;background:rgba(0,255,231,.05);border:1px solid rgba(0,255,231,.12);border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted);min-height:48px;line-height:1.8;"></div>
+    <div id="translateProgress" style="display:none;margin-bottom:12px;">
+      <div style="width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;">
+        <div id="translateBar" style="height:100%;background:linear-gradient(90deg,#a78bfa,#7c3aed);width:0%;transition:width .4s;"></div>
+      </div>
+      <div id="translatePct" style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);text-align:right;margin-top:4px;">0%</div>
+    </div>
+    <button class="btn btn-primary" id="translateStartBtn" style="width:100%;justify-content:center;padding:13px;" onclick="startTranslation()">⚡ Lancer la traduction</button>
+  </div>
+</div>
+
 </body>
 </html>
