@@ -3,7 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAULTEX — Freeware & Open Source Hub</title>
+<title>VAULTEX — Freeware & Open Source Hub | Logiciels Gratuits</title>
+
+<!-- SEO -->
+<meta name="description" content="VAULTEX est une plateforme communautaire dédiée aux logiciels gratuits et open source — jeux indépendants, utilitaires, outils créatifs, OS. 100% légal, 100% libre.">
+<meta name="keywords" content="freeware, open source, logiciels gratuits, jeux gratuits, utilitaires, linux, windows, mac, communauté, téléchargement gratuit">
+<meta name="author" content="VAULTEX Community">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://vaultexproject.github.io/vaultex/">
+
+<!-- Open Graph (Facebook, Discord, WhatsApp) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vaultexproject.github.io/vaultex/">
+<meta property="og:title" content="VAULTEX — Freeware & Open Source Hub">
+<meta property="og:description" content="Plateforme communautaire dédiée aux logiciels gratuits et open source — jeux indé, utilitaires, outils créatifs. 100% légal, 100% libre.">
+<meta property="og:image" content="https://vaultexproject.github.io/vaultex/og-image.png">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="VAULTEX">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://vaultexproject.github.io/vaultex/">
+<meta name="twitter:title" content="VAULTEX — Freeware & Open Source Hub">
+<meta name="twitter:description" content="Plateforme communautaire dédiée aux logiciels gratuits et open source. 100% légal, 100% libre.">
+<meta name="twitter:image" content="https://vaultexproject.github.io/vaultex/og-image.png">
+
+<!-- Données structurées Google (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "VAULTEX",
+  "url": "https://vaultexproject.github.io/vaultex/",
+  "description": "Plateforme communautaire dédiée aux logiciels gratuits et open source",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://vaultexproject.github.io/vaultex/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- Google Search Console -->
+<meta name="google-site-verification" content="Eni2ANhALy6p4UilBgrlQRdFnhR_na4nynz55P-I1wI" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔒</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{--red:#ff2040;--neon:#00ffe7;--neon2:#ff00aa;--bg:#070a0f;--bg2:#0d1117;--bg3:#111820;--card:#0f1923;--border:rgba(0,255,231,.15);--text:#c8d8e8;--muted:#4a6070;--white:#e8f4ff;}
@@ -320,15 +363,16 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 .lang-btn.active{background:rgba(0,255,231,.12);border-color:var(--neon);color:var(--neon);}
 
 /* ═══ RANDOMIZER ═══ */
-.hero{justify-content:space-between;gap:60px;align-items:center;}
-.hero-content{flex:0 0 36%;max-width:36%;}
-.rnd-widget{position:relative;z-index:2;flex:0 0 60%;max-width:60%;min-width:0;}
+.hero{justify-content:space-between;gap:50px;align-items:center;}
+.hero-content{flex:0 0 35%;max-width:35%;min-width:280px;}
+.rnd-widget{position:relative;z-index:2;flex:0 0 58%;max-width:58%;min-width:0;}
+@media(max-width:1200px){.hero-content{flex:0 0 42%;max-width:42%;}.rnd-widget{flex:0 0 54%;max-width:54%;}}
 .rnd-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .rnd-label{font-family:'Orbitron',monospace;font-size:.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
 .rnd-counter{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--neon);opacity:.6;}
 .rnd-card{background:rgba(0,255,231,.04);border:1px solid rgba(0,255,231,.12);border-radius:4px;overflow:hidden;cursor:pointer;transition:all .3s cubic-bezier(.23,1,.32,1);position:relative;}
 .rnd-card:hover{border-color:rgba(0,255,231,.4);background:rgba(0,255,231,.08);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,255,231,.1);}
-.rnd-img{width:100%;height:300px;object-fit:cover;display:block;}
+.rnd-img{width:100%;height:300px;object-fit:cover;object-position:center top;display:block;}
 .rnd-img-ph{width:100%;height:300px;display:flex;align-items:center;justify-content:center;font-size:5rem;background:rgba(0,255,231,.03);}
 .rnd-body{padding:22px 24px;}
 .rnd-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
