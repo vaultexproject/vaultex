@@ -838,10 +838,9 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 
 <script>
 // ═══════════════ CONFIG SÉCURISÉE ═══════════════
-const _a=atob('JDJhJDEwJER5cWkxSFJ5di5zRi81dVRlZzhMb3VvSG5LYk9jTVU3a3VHSlZ4OWp6d2g3YkZ0US51NGwy');
-const _b=atob('JDJhJDEwJElBbkJqQWpSMUFNN1oyT0JXRUY3S2VReGhXLmVGMjg5NDVYOE5wS2VIVU1DSHVObktBYmND');
-const _c=atob('NjliMDZlOGY4NDY4MmIzNTYyODY2ZWRh');
-const API_KEY=_a, MASTER_KEY=_b, BIN_ID=_c;
+const SB_URL='https://skrurhqjslbwhgpyrxmo.supabase.co';
+const SB_KEY='sb_publishable_Yfp53b_iA-Y2Zlu3CHPM7w_ZJuxecMh';
+const SB_HEADERS={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
 const ADMIN_HASH='269e598ac2673af73c400335080abf55dd2368b920a1c48b406459f136b88388';
 async function hashPwd(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 
@@ -1117,32 +1116,27 @@ function gotoSection(sel){setTimeout(()=>{const el=document.querySelector(sel);i
 
 // ═══════════════ API ═══════════════
 async function apiGet(){
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{headers:{'X-Master-Key':MASTER_KEY}});
+  const r=await fetch(`${SB_URL}/rest/v1/vaultex_data?select=key,value`,{headers:SB_HEADERS});
   if(!r.ok)throw new Error('GET '+r.status);
-  const j=await r.json();
-  return{softwares:j.record?.softwares||null, community:j.record?.community||[], siteConfig:j.record?.siteConfig||{}};
+  const rows=await r.json();
+  const map={};
+  rows.forEach(row=>map[row.key]=row.value);
+  return{softwares:map.softwares||null, community:map.community||[], siteConfig:map.siteConfig||{}};
+}
+async function apiUpsert(key, value){
+  const r=await fetch(`${SB_URL}/rest/v1/vaultex_data`,{
+    method:'POST',
+    headers:{...SB_HEADERS,'Prefer':'resolution=merge-duplicates'},
+    body:JSON.stringify({key,value})
+  });
+  if(!r.ok)throw new Error('PUT '+r.status);
 }
 async function apiPut(sw,cm){
-  // Alléger les données avant envoi — supprimer les champs lourds des logiciels DEFAULT
-  const defaultIds=new Set(DEFAULT_SW.map(s=>s.id));
-  const swSlim=sw.map(s=>{
-    const slim={...s};
-    // Pour les defaults, ne pas sauvegarder les 3 desc (déjà dans le code)
-    if(defaultIds.has(s.id)){
-      delete slim.desc_fr; delete slim.desc_en; delete slim.desc_ru;
-    }
-    // Supprimer les champs vides pour gagner de la place
-    Object.keys(slim).forEach(k=>{if(slim[k]===''||slim[k]===null||slim[k]===undefined)delete slim[k];});
-    return slim;
-  });
-  // Vérifier la taille (~100KB max JSONBin gratuit)
-  const payload=JSON.stringify({softwares:swSlim,community:cm,siteConfig:siteConfig});
-  if(payload.length>90000){
-    // Si encore trop lourd, supprimer aussi les images base64 des defaults
-    console.warn('Payload '+Math.round(payload.length/1024)+'KB, optimisation...');
-  }
-  const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{method:'PUT',headers:{'X-Master-Key':MASTER_KEY,'Content-Type':'application/json'},body:payload});
-  if(!r.ok)throw new Error('PUT '+r.status);
+  await Promise.all([
+    apiUpsert('softwares', sw),
+    apiUpsert('community', cm),
+    apiUpsert('siteConfig', siteConfig)
+  ]);
 }
 
 // ═══════════════ INIT ═══════════════
