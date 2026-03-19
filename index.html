@@ -58,7 +58,18 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;fo
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4;}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:1;}
 /* ADMIN BAR */
+.admin-bar{position:fixed;top:0;left:0;right:0;z-index:110;height:44px;padding:0 40px;display:none;align-items:center;justify-content:space-between;background:rgba(20,12,0,.96);border-bottom:1px solid rgba(255,160,0,.3);backdrop-filter:blur(10px);}
+.admin-bar.visible{display:flex;}
+.admin-badge{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:#ffa000;letter-spacing:2px;display:flex;align-items:center;gap:8px;}
 .admin-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:#ffa000;animation:pulse 2s infinite;}
+.abar-right{display:flex;gap:8px;}
+.ab{padding:5px 14px;font-family:'Orbitron',monospace;font-size:.58rem;letter-spacing:1px;font-weight:700;cursor:pointer;border-radius:2px;border:none;text-transform:uppercase;transition:all .2s;}
+.ab-add{background:rgba(0,255,231,.15);color:var(--neon);border:1px solid rgba(0,255,231,.3);}
+.ab-add:hover{background:rgba(0,255,231,.25);}
+.ab-del{background:rgba(255,32,64,.1);color:var(--red);border:1px solid rgba(255,32,64,.2);}
+.ab-del:hover,.ab-del.on{background:rgba(255,32,64,.25);color:#fff;}
+.ab-out{background:rgba(80,80,80,.2);color:var(--muted);border:1px solid rgba(255,255,255,.1);}
+.ab-out:hover{background:rgba(80,80,80,.4);color:var(--white);}
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,10,15,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:top .3s;}
 .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.4rem;letter-spacing:4px;color:var(--white);text-decoration:none;cursor:pointer;}
@@ -160,7 +171,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .sw-plat{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:1px;}
 .sw-dl{font-family:'Orbitron',monospace;font-size:.6rem;background:var(--neon);color:var(--bg);padding:7px 14px;border-radius:2px;text-decoration:none;transition:all .2s;font-weight:700;letter-spacing:1px;display:inline-flex;align-items:center;gap:6px;}
 .sw-dl:hover{background:#00ffd0;box-shadow:0 0 20px rgba(0,255,231,.4);}
+.del-btn{position:absolute;top:8px;right:8px;background:rgba(255,32,64,.85);color:#fff;border:none;width:30px;height:30px;font-size:.9rem;cursor:pointer;border-radius:2px;display:none;align-items:center;justify-content:center;z-index:10;}
 .del-btn:hover{background:var(--red);}
+.del-mode .sw-card .del-btn{display:flex;}
+.admin-mode .sw-card{cursor:pointer;}
 .empty{text-align:center;padding:80px 40px;color:var(--muted);}
 .empty-icon{font-size:4rem;margin-bottom:16px;opacity:.25;}
 .empty h3{font-family:'Orbitron',monospace;font-size:1rem;color:var(--text);margin-bottom:8px;}
@@ -212,6 +226,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .post-link:hover{border-color:var(--neon);}
 .del-post-btn{position:absolute;top:10px;right:10px;background:rgba(255,32,64,.85);color:#fff;border:none;width:26px;height:26px;font-size:.8rem;cursor:pointer;border-radius:2px;display:none;align-items:center;justify-content:center;}
 .del-post-btn:hover{background:var(--red);}
+.admin-mode .del-post-btn{display:flex;}
 .side-box{background:var(--card);border:1px solid var(--border);padding:24px;margin-bottom:16px;}
 .side-box h4{font-family:'Orbitron',monospace;font-size:.62rem;letter-spacing:2px;color:var(--neon);margin-bottom:18px;text-transform:uppercase;}
 .side-stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:.82rem;}
@@ -271,6 +286,9 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 .social-paypal{background:rgba(0,112,186,.12);color:#009cde;border-color:rgba(0,112,186,.25);}
 .social-paypal:hover{background:rgba(0,112,186,.25);box-shadow:0 0 16px rgba(0,112,186,.2);}
 .editable-text{transition:outline .2s;}
+.admin-mode .editable-text{outline:1px dashed rgba(255,160,0,.4);cursor:pointer;position:relative;}
+.admin-mode .editable-text:hover{outline:2px solid rgba(255,160,0,.7);background:rgba(255,160,0,.04);}
+.admin-mode .editable-text:hover::after{content:'✏️';position:absolute;top:-10px;right:0;font-size:.7rem;background:#ffa000;color:#000;padding:1px 5px;border-radius:2px;font-family:sans-serif;}
 .site-edit-section{margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:20px;}
 .site-edit-section:last-child{border-bottom:none;margin-bottom:0;}
 .site-edit-section h4{font-family:'Orbitron',monospace;font-size:.6rem;letter-spacing:2px;color:var(--neon);margin-bottom:14px;text-transform:uppercase;}
@@ -388,7 +406,10 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   .notif{bottom:16px;right:16px;left:16px;max-width:none;}
 
   /* Admin bar mobile */
-    
+  .admin-bar{padding:0 12px;height:40px;}
+  .abar-right{gap:4px;}
+  .ab{padding:4px 8px;font-size:.52rem;}
+
   /* SW modal mobile */
   .sw-modal-box{margin:8px;max-height:95vh;}
   .sw-modal-img{height:180px;}
@@ -617,12 +638,32 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 }
 
 /* ── Modal utilisateurs ── */
+.user-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,.02);border:1px solid var(--border);margin-bottom:8px;transition:border-color .2s;}
+.user-item:hover{border-color:rgba(255,32,64,.3);}
+.user-avatar-sm{width:36px;height:36px;border-radius:50%;background:rgba(0,255,231,.1);border:1px solid rgba(0,255,231,.2);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:.75rem;color:var(--neon);flex-shrink:0;}
+.user-info{flex:1;min-width:0;}
+.user-name{font-family:'Orbitron',monospace;font-size:.72rem;color:var(--fg);}
+.user-meta{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:2px;}
+.user-del-btn{padding:5px 12px;background:rgba(255,32,64,.1);border:1px solid rgba(255,32,64,.2);color:var(--red);font-family:'Orbitron',monospace;font-size:.52rem;letter-spacing:1px;cursor:pointer;border-radius:2px;transition:all .2s;flex-shrink:0;}
+.user-del-btn:hover{background:rgba(255,32,64,.3);}
 </style>
 </head>
 <body>
 
 <div id="loadingOverlay"><div class="spinner"></div><div class="loading-txt" data-i18n="loading">CHARGEMENT...</div></div>
 
+<!-- ADMIN BAR -->
+<div class="admin-bar" id="adminBar">
+  <div class="admin-badge" data-i18n="admin_active">⚙ MODE ADMIN ACTIF</div>
+  <div class="abar-right">
+    <button class="ab ab-add" onclick="openAdd()" data-i18n="admin_add">+ Ajouter</button>
+    <button class="ab" style="background:rgba(255,160,0,.15);color:#ffa000;border:1px solid rgba(255,160,0,.3);" onclick="openSiteEditor()" data-i18n="admin_edit_site">✏️ Modifier le site</button>
+    <button class="ab" id="translateBtn" onclick="openTranslateModal()" style="background:rgba(120,80,255,.15);color:#a78bfa;border:1px solid rgba(120,80,255,.3);">🌐 Traduire</button>
+    <button class="ab" onclick="openUsersModal()" style="background:rgba(0,255,100,.1);color:#00ff64;border:1px solid rgba(0,255,100,.25);">👥 Utilisateurs</button>
+    <button class="ab ab-del" id="delBtn" onclick="toggleDel()" data-i18n="admin_del">🗑 Supprimer</button>
+    <button class="ab ab-out" onclick="adminOut()" data-i18n="admin_logout">✕ Déconnexion</button>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav id="mainNav">
@@ -653,6 +694,8 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       <button class="lang-btn" onclick="setLang('ru')">RU</button>
     </div>
     <a href="#" id="authNavBtn" class="auth-nav-btn" onclick="handleAuthNav(event)" style="border-color:rgba(0,255,231,.4);background:rgba(0,255,231,.1);"><span class="auth-avatar-ph" id="navAvatarPh">👤</span><span id="navUsername">Connexion</span></a>
+    <a href="#" class="btn btn-outline" id="adminNavBtn" onclick="handleAdmin(event)" data-i18n="btn_admin">⚙ Admin</a>
+    <a href="#" class="btn btn-primary" id="addBtn" onclick="handleAdd(event)" data-i18n="btn_submit">+ Soumettre</a>
   </div>
 </nav>
 
@@ -833,7 +876,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
     <button class="ctab" onclick="switchCommTab(this,'jeux')" data-i18n="tab_games">🎮 Jeux gratuits</button>
     <button class="ctab" onclick="switchCommTab(this,'logiciels')" data-i18n="tab_soft">💾 Logiciels</button>
     <button class="ctab" onclick="switchCommTab(this,'suggestions')" data-i18n="tab_suggest">💡 Suggestions</button>
-    
+    <button class="ctab" id="adminCommTab" onclick="switchCommTab(this,'admin')" style="display:none;color:#ffa000;" data-i18n="tab_mod">⚙ Modération</button>
   </div>
 
   <!-- TAB BUGS -->
@@ -935,6 +978,77 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   <p class="nc" data-i18n="foot_tagline">FREEWARE · OPEN SOURCE · LEGAL</p>
 </div>
 
+<!-- MODAL AJOUTER LOGICIEL (admin only) -->
+<div class="overlay" id="addModal" onclick="oClose(event,'addModal')">
+  <div class="modal">
+    <button class="m-close" onclick="closeM('addModal')">✕</button>
+    <h2 id="addTitle" data-i18n="modal_add_title">Ajouter un Logiciel</h2>
+    <p class="sub" data-i18n="modal_add_sub">Seuls les logiciels freeware / open source sont acceptés.</p>
+    <div class="fg"><label class="fl" data-i18n="lbl_name">Nom *</label><input class="fi" id="f_name" type="text" data-i18n-ph="ph_name" placeholder="Ex: Blender, Godot Engine..."></div>
+    <div class="f2">
+      <div class="fg"><label class="fl" data-i18n="lbl_cat">Catégorie *</label>
+        <select class="fs" id="f_cat" onchange="onCatChange()">
+          <option value="" data-i18n="opt_choose">— Choisir —</option>
+          <option>Jeux</option><option>Vidéo</option><option>Audio</option>
+          <option>Système</option><option>Dev</option><option>Créatif</option><option>OS</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl" data-i18n="lbl_ver">Version</label><input class="fi" id="f_ver" type="text" data-i18n-ph="ph_ver" placeholder="Ex: v3.5.0"></div>
+    </div>
+    <div class="fg" id="subcat_field" style="display:none">
+      <label class="fl" data-i18n="lbl_subcat">Sous-catégorie (genre)</label>
+      <select class="fs" id="f_sub" onchange="onSubChange()">
+        <option value="" data-i18n="opt_none">— Aucune —</option>
+        <option>Action</option><option>FPS</option><option>RPG</option>
+        <option>Horreur</option><option>Indé</option><option>Stratégie</option>
+        <option>Aventure</option><option>Puzzle</option><option>NSFW</option>
+      </select>
+    </div>
+    <div class="nsfw-warn" id="nsfwWarn"><span data-i18n="nsfw_warn">⚠️ Contenu NSFW — adultes uniquement. Freeware/open source obligatoire.</span></div>
+    <div class="fg"><label class="fl" data-i18n="lbl_desc">Description *</label>
+      <div style="display:flex;gap:4px;margin-bottom:4px;">
+        <button type="button" class="desc-tab active" onclick="switchDescTab('fr',this)" style="font-family:Orbitron,monospace;font-size:.5rem;padding:4px 10px;border:1px solid var(--neon);background:rgba(0,255,231,.1);color:var(--neon);cursor:pointer;border-radius:2px;">FR</button>
+        <button type="button" class="desc-tab" onclick="switchDescTab('en',this)" style="font-family:Orbitron,monospace;font-size:.5rem;padding:4px 10px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;border-radius:2px;">EN</button>
+        <button type="button" class="desc-tab" onclick="switchDescTab('ru',this)" style="font-family:Orbitron,monospace;font-size:.5rem;padding:4px 10px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;border-radius:2px;">RU</button>
+      </div>
+      <textarea class="ft" id="f_desc_fr" placeholder="Décris le logiciel en quelques phrases..."></textarea>
+      <textarea class="ft" id="f_desc_en" style="display:none" placeholder="Describe the software in a few sentences..."></textarea>
+      <textarea class="ft" id="f_desc_ru" style="display:none" placeholder="Опиши программу в нескольких предложениях..."></textarea>
+    </div>
+    <div class="f2">
+      <div class="fg"><label class="fl" data-i18n="lbl_plat">Plateformes</label><input class="fi" id="f_plat" type="text" placeholder="WIN · MAC · LINUX"></div>
+      <div class="fg"><label class="fl" data-i18n="lbl_lic">Licence</label>
+        <select class="fs" id="f_lic">
+          <option>Freeware</option><option>Open Source - MIT</option>
+          <option>Open Source - GPL</option><option>Creative Commons</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label class="fl" data-i18n="lbl_dllink">Lien de téléchargement *</label><input class="fi" id="f_link" type="url" placeholder="https://..."></div>
+    <div class="fg">
+      <label class="fl" data-i18n="lbl_img">Image</label>
+      <input class="fi" id="f_imgurl" type="url" data-i18n-ph="ph_imgurl" placeholder="URL de l'image (https://...)" oninput="prevUrl()">
+      <div class="or"><span data-i18n="lbl_or_upload">— OU UPLOAD DEPUIS TON APPAREIL —</span></div>
+      <input type="file" id="f_imgfile" accept="image/*" style="display:none" onchange="prevFile()">
+      <button class="upbtn" onclick="document.getElementById('f_imgfile').click()" data-i18n="btn_upload">📁 Choisir une image</button>
+      <div class="img-wrap" id="imgWrap"><span class="img-ph" data-i18n="no_img">Aucune image</span></div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;margin-top:6px;" onclick="submitSW()">
+      ⚡ <span id="submitTxt">Ajouter le logiciel</span>
+    </button>
+  </div>
+</div>
+
+<!-- MODAL LOGIN -->
+<div class="overlay" id="loginModal" onclick="oClose(event,'loginModal')">
+  <div class="modal" style="max-width:380px;">
+    <button class="m-close" onclick="closeM('loginModal')">✕</button>
+    <h2 data-i18n="modal_login_title">Accès Admin</h2>
+    <p class="sub" data-i18n="modal_login_sub">Entrez le mot de passe administrateur.</p>
+    <div class="fg"><label class="fl" data-i18n="lbl_pwd">Mot de passe</label><input class="fi" id="pwdIn" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPwd()"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="checkPwd()" data-i18n="btn_login">🔑 Connexion</button>
+  </div>
+</div>
 
 <!-- MODAL EDIT POST -->
 <div class="overlay" id="editPostModal" onclick="oClose(event,'editPostModal')">
@@ -960,11 +1074,58 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   </div>
 </div>
 
+<!-- MODAL ÉDITION DU SITE -->
+<div class="overlay" id="siteEditorModal" onclick="oClose(event,'siteEditorModal')">
+  <div class="modal" style="max-width:560px;max-height:85vh;overflow-y:auto;">
+    <button class="m-close" onclick="closeM('siteEditorModal')">✕</button>
+    <h2 data-i18n="admin_edit_site" data-i18n="se_title_modal">✏️ Modifier le site</h2>
+    <p class="sub" data-i18n="se_sub">Textes affichés sur la page + liens sociaux</p>
+
+    <div class="site-edit-section">
+      <h4 data-i18n="se_home">🏠 Accueil</h4>
+      <div class="fg"><label class="fl" data-i18n="se_badge_lbl">Badge hero (petit texte en haut)</label><input class="fi" id="se_badge" type="text"></div>
+      <div class="fg"><label class="fl" data-i18n="se_title_lbl">Titre principal (HTML autorisé)</label><textarea class="ft" id="se_title" style="min-height:80px;font-size:.8rem;"></textarea></div>
+      <div class="fg"><label class="fl" data-i18n="se_desc_lbl">Description sous le titre</label><textarea class="ft" id="se_desc" style="min-height:80px;"></textarea></div>
+    </div>
+
+    <div class="site-edit-section">
+      <h4 data-i18n="se_social">🔗 Liens sociaux</h4>
+      <div class="fg">
+        <label class="fl">
+          <svg width="14" height="11" viewBox="0 0 71 55" fill="#5865f2" style="vertical-align:middle;margin-right:5px;"><path d="M60.1 4.9A58.5 58.5 0 0 0 45.6.7a.2.2 0 0 0-.2.1 40.7 40.7 0 0 0-1.8 3.7 54 54 0 0 0-16.2 0A37.7 37.7 0 0 0 25.6.8a.2.2 0 0 0-.2-.1A58.4 58.4 0 0 0 10.9 4.9a.2.2 0 0 0-.1.1C1.6 18.1-.9 31 .3 43.7a.2.2 0 0 0 .1.2 58.8 58.8 0 0 0 17.7 9 .2.2 0 0 0 .2-.1 42 42 0 0 0 3.6-5.9.2.2 0 0 0-.1-.3 38.7 38.7 0 0 1-5.5-2.6.2.2 0 0 1 0-.4l1.1-.8a.2.2 0 0 1 .2 0c11.5 5.3 24 5.3 35.4 0a.2.2 0 0 1 .2 0l1.1.8a.2.2 0 0 1 0 .4 36 36 0 0 1-5.5 2.6.2.2 0 0 0-.1.3 47.2 47.2 0 0 0 3.6 5.9.2.2 0 0 0 .2.1 58.7 58.7 0 0 0 17.8-9 .2.2 0 0 0 .1-.2c1.5-15.2-2.5-28-10.5-39.6a.2.2 0 0 0-.1-.2ZM23.7 36c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2Zm23.6 0c-3.5 0-6.4-3.2-6.4-7.2s2.8-7.2 6.4-7.2c3.6 0 6.5 3.3 6.4 7.2 0 4-2.8 7.2-6.4 7.2Z"/></svg>
+          <span data-i18n="se_discord_lbl">Lien Discord (laisser vide pour masquer)</span>
+        </label>
+        <input class="fi" id="se_discord" type="url" placeholder="https://discord.gg/...">
+      </div>
+      <div class="fg">
+        <label class="fl">
+          <svg width="14" height="10" viewBox="0 0 24 24" fill="#ff4444" style="vertical-align:middle;margin-right:5px;"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.2 31.2 0 0 0 0 12a31.2 31.2 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.2 31.2 0 0 0 24 12a31.2 31.2 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg>
+          <span data-i18n="se_yt_lbl">Lien YouTube (laisser vide pour masquer)</span>
+        </label>
+        <input class="fi" id="se_youtube" type="url" placeholder="https://youtube.com/@...">
+      </div>
+      <div class="fg">
+        <label class="fl">
+          <svg width="12" height="14" viewBox="0 0 24 24" fill="#009cde" style="vertical-align:middle;margin-right:5px;"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.291-.077.44-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.103zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/></svg>
+          <span data-i18n="se_pp_lbl">Lien PayPal / don (laisser vide pour masquer)</span>
+        </label>
+        <input class="fi" id="se_paypal" type="url" placeholder="https://paypal.me/...">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="saveSiteConfig()" data-i18n="btn_save_site">💾 Enregistrer les modifications</button>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
 <script>
 // ═══════════════ CONFIG SÉCURISÉE ═══════════════
 const SB_URL='https://skrurhqjslbwhgpyrxmo.supabase.co';
 const SB_KEY='sb_publishable_Yfp53b_iA-Y2Zlu3CHPM7w_ZJuxecMh';
 const SB_HEADERS={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
+const ADMIN_HASH='269e598ac2673af73c400335080abf55dd2368b920a1c48b406459f136b88388';
+async function hashPwd(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 
 // ═══════════════ DONNÉES PAR DÉFAUT ═══════════════
 const DEFAULT_SW=[
@@ -1214,7 +1375,7 @@ const DEFAULT_SW=[
 
 
 // ═══════════════ STATE ═══════════════
-let db=[],community=[],siteConfig={},filterCat='all',filterSub='all',filterQ='',filterPlat='all',sortMode='default',viewMode='grid',showFavs=false;
+let db=[],community=[],siteConfig={},filterCat='all',filterSub='all',filterQ='',filterPlat='all',sortMode='default',viewMode='grid',showFavs=false,isAdmin=false,delMode=false,editId=null,b64img=null;
 const ICONS={Jeux:'🎮',Vidéo:'🎬',Audio:'🎵',Système:'🖥️',Dev:'👨‍💻',Créatif:'🎨',OS:'🐧'};
 function getDesc(s){return s['desc_'+currentLang]||s.desc_fr||s.desc||'';}
 const POST_LABELS={bug:'🐛 Bug',jeu:'🎮 Jeu gratuit',logiciel:'💾 Logiciel',suggestion:'💡 Suggestion'};
@@ -1355,13 +1516,14 @@ function render(){
     const avg=getAvgRating(s);
     const userRating=getUserRating(s.id);
     const verifiedBadge=s.verified?`<span class="badge-verified">✔ VÉRIFIÉ</span>`:'';
-    const adminVerifyBtn='';
+    const adminVerifyBtn=isAdmin?`<button class="fav-btn" style="right:44px;color:${s.verified?'#00ff64':'rgba(255,255,255,.3)'}" onclick="toggleVerified('${s.id}',event)" title="Vérifier">✔</button>`:'';
     const viewsHtml=s.views?`<span class="view-count">👁 ${s.views}</span>`:'';
-    return `<div class="sw-card" data-id="${s.id}">${imgHtml}${adminVerifyBtn}<button class="fav-btn ${favActive}" onclick="toggleFav('${s.id}',event)" title="Favori">❤️</button><div class="sw-body"><div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${subHtml}${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}${verifiedBadge}</div><div class="sw-name">${esc(s.name)}</div><div class="sw-desc">${esc(getDesc(s))}</div>${starHtml(s.id,avg,userRating)}<div class="sw-foot"><span style="display:flex;align-items:center;gap:8px">${viewsHtml}<span class="sw-plat">${esc(s.platform||'')}</span></span><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${t('btn_dl')}</a></div></div></div>`;
+    return `<div class="sw-card" data-id="${s.id}">${imgHtml}<button class="del-btn" onclick="delCard('${s.id}',event)">✕</button>${adminVerifyBtn}<button class="fav-btn ${favActive}" onclick="toggleFav('${s.id}',event)" title="Favori">❤️</button><div class="sw-body"><div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${subHtml}${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}${verifiedBadge}</div><div class="sw-name">${esc(s.name)}</div><div class="sw-desc">${esc(getDesc(s))}</div>${starHtml(s.id,avg,userRating)}<div class="sw-foot"><span style="display:flex;align-items:center;gap:8px">${viewsHtml}<span class="sw-plat">${esc(s.platform||'')}</span></span><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${t('btn_dl')}</a></div></div></div>`;
   }).join('');
   grid.querySelectorAll('.sw-card').forEach(c=>c.addEventListener('click',function(e){
-    if(e.target.closest('.fav-btn,.sw-dl'))return;
-    openSWModal(this.dataset.id);
+    if(e.target.closest('.del-btn,.sw-dl'))return;
+    if(isAdmin&&!delMode){openEdit(this.dataset.id);}
+    else if(!delMode){openSWModal(this.dataset.id);}
   }));
 }
 
@@ -1472,6 +1634,14 @@ function trackView(id){
 }
 
 // ═══════════════ BADGE VÉRIFIÉ (admin) ═══════════════
+async function toggleVerified(id,e){
+  e.stopPropagation();
+  const idx=db.findIndex(s=>s.id===id);
+  if(idx<0)return;
+  db[idx].verified=!db[idx].verified;
+  await apiPut(db,community).catch(()=>{});
+  render();
+}
 
 // ═══════════════ FILTRES PLATEFORME + TRI + VUE ═══════════════
 function setPlatFilter(el,plat){
@@ -1604,7 +1774,8 @@ async function submitPost(type){
 }
 
 async function delPost(id,e){
-  e.stopPropagation();  if(!confirm('Supprimer ce post ?'))return;
+  e.stopPropagation();if(!isAdmin)return;
+  if(!confirm('Supprimer ce post ?'))return;
   community=community.filter(p=>p.id!==id);
   try{await apiPut(db,community);notify(t('notif_post_deleted'));}catch(err){notify('❌ '+err.message,true);}
   renderCommunity();renderSide();
@@ -1633,10 +1804,107 @@ function setSubFilter(el,sub){
 function catClick(cat){const el=document.querySelector(`.stag[data-cat="${cat}"]`);setFilter(el,cat);gotoSection('#logiciels');}
 
 // ═══════════════ ADMIN ═══════════════
+function handleAdmin(e){e.preventDefault();if(isAdmin){notify('Déjà connecté');return;}document.getElementById('pwdIn').value='';openM('loginModal');}
+function handleAdd(e){e.preventDefault();if(!isAdmin){notify('❌ Connexion admin requise',true);return;}openAdd();}
 
-async 
+async function checkPwd(){
+  const h=await hashPwd(document.getElementById('pwdIn').value);
+  if(h===ADMIN_HASH){
+    isAdmin=true;closeM('loginModal');
+    document.getElementById('adminBar').classList.add('visible');
+    document.getElementById('mainNav').style.top='44px';
+    document.body.classList.add('admin-mode');
+    document.getElementById('adminNavBtn').textContent='✅ Admin';
+    document.getElementById('addBtn').classList.add('visible');
+    document.getElementById('adminCommTab').style.display='block';
+    notify(t('notif_admin_on'));render();renderCommunity();
+  }else{notify(t('err_pwd'),true);document.getElementById('pwdIn').value='';}
+}
+function adminOut(){
+  isAdmin=false;delMode=false;
+  document.getElementById('adminBar').classList.remove('visible');
+  document.getElementById('mainNav').style.top='';
+  document.body.classList.remove('admin-mode','del-mode');
+  document.getElementById('adminNavBtn').textContent='⚙ Admin';
+  document.getElementById('addBtn').classList.remove('visible');
+  document.getElementById('adminCommTab').style.display='none';
+  document.getElementById('delBtn').classList.remove('on');
+  notify(t('notif_logout'));render();renderCommunity();
+}
+function toggleDel(){
+  delMode=!delMode;
+  document.body.classList.toggle('del-mode',delMode);
+  const b=document.getElementById('delBtn');
+  b.classList.toggle('on',delMode);
+  b.textContent=delMode?'✕ Annuler':'🗑 Supprimer';
+  notify(delMode?'⚠️ Clique ✕ pour supprimer':'Mode suppression désactivé');
+}
+async function delCard(id,e){
+  e.stopPropagation();if(!isAdmin)return;
+  if(!confirm('Supprimer ce logiciel ?'))return;
+  db=db.filter(s=>s.id!==id);
+  notify('⏳ Suppression...');
+  try{await apiPut(db,community);notify(t('notif_deleted'));}catch(err){notify('❌ '+err.message,true);}
+  render();
+}
 
 // ═══════════════ MODAL LOGICIEL ═══════════════
+function onCatChange(){const cat=document.getElementById('f_cat').value;document.getElementById('subcat_field').style.display=cat==='Jeux'?'block':'none';onSubChange();}
+function onSubChange(){const sub=document.getElementById('f_sub').value;document.getElementById('nsfwWarn').style.display=sub==='NSFW'?'block':'none';}
+function openAdd(){if(!isAdmin){notify('❌ Connexion admin requise',true);return;}editId=null;b64img=null;document.getElementById('addTitle').textContent=t('modal_add_title');document.getElementById('submitTxt').textContent=t('btn_add_sw');clearF();openM('addModal');}
+function openEdit(id){
+  const s=db.find(x=>x.id===id);if(!s)return;
+  editId=id;b64img=null;
+  document.getElementById('addTitle').textContent=t('modal_edit_title')+s.name;
+  document.getElementById('submitTxt').textContent=t('modal_save');
+  document.getElementById('f_name').value=s.name;
+  document.getElementById('f_cat').value=s.cat;
+  document.getElementById('f_ver').value=s.version||'';
+  document.getElementById('f_desc_fr').value=s.desc_fr||s.desc||'';
+  document.getElementById('f_desc_en').value=s.desc_en||'';
+  document.getElementById('f_desc_ru').value=s.desc_ru||'';
+  switchDescTab(currentLang,document.querySelector('.desc-tab'));
+  document.getElementById('f_plat').value=s.platform||'';
+  document.getElementById('f_lic').value=s.license||'Freeware';
+  document.getElementById('f_link').value=s.link||'';
+  document.getElementById('f_sub').value=s.subcat||'';
+  onCatChange();
+  const isB64=s.img&&s.img.startsWith('data:');
+  document.getElementById('f_imgurl').value=(!isB64&&s.img)?s.img:'';
+  if(isB64)b64img=s.img;
+  document.getElementById('imgWrap').innerHTML=s.img?`<img src="${esc(s.img)}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%">`:t('no_img');
+  openM('addModal');
+}
+function clearF(){
+  ['f_name','f_ver','f_plat','f_link','f_imgurl','f_desc_fr','f_desc_en','f_desc_ru'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('f_cat').value='';document.getElementById('f_lic').value='Freeware';
+  document.getElementById('f_sub').value='';document.getElementById('subcat_field').style.display='none';document.getElementById('nsfwWarn').style.display='none';
+  document.getElementById('imgWrap').innerHTML=t('no_img');
+  document.getElementById('f_imgfile').value='';
+  switchDescTab('fr',document.querySelector('.desc-tab'));
+}
+function prevUrl(){b64img=null;const url=document.getElementById('f_imgurl').value.trim();document.getElementById('imgWrap').innerHTML=url?`<img src="${esc(url)}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%" onerror="this.parentElement.innerHTML='<span class=\\'img-ph\\'>Image inaccessible</span>'">`:t('no_img');}
+function prevFile(){const file=document.getElementById('f_imgfile').files[0];if(!file)return;if(file.size>1.5*1024*1024){notify('❌ Image trop lourde (max 1.5 Mo)',true);return;}const r=new FileReader();r.onload=e=>{b64img=e.target.result;document.getElementById('f_imgurl').value='';document.getElementById('imgWrap').innerHTML=`<img src="${e.target.result}" style="max-width:100%;max-height:140px;object-fit:cover;width:100%">`;};r.readAsDataURL(file);}
+async function submitSW(){
+  const name=document.getElementById('f_name').value.trim();
+  const cat=document.getElementById('f_cat').value;
+  const desc_fr=document.getElementById('f_desc_fr').value.trim();
+  const desc_en=document.getElementById('f_desc_en').value.trim();
+  const desc_ru=document.getElementById('f_desc_ru').value.trim();
+  const desc=desc_fr||desc_en||desc_ru;
+  const link=document.getElementById('f_link').value.trim();
+  if(!name||!cat||!desc||!link){notify('❌ Remplis les champs obligatoires (*)',true);return;}
+  const img=b64img||document.getElementById('f_imgurl').value.trim();
+  const version=document.getElementById('f_ver').value.trim();
+  const platform=document.getElementById('f_plat').value.trim();
+  const license=document.getElementById('f_lic').value;
+  const subcat=cat==='Jeux'?document.getElementById('f_sub').value:'';
+  if(editId){const i=db.findIndex(s=>s.id===editId);if(i>-1)db[i]={...db[i],name,cat,desc,desc_fr:desc_fr||desc,desc_en:desc_en||desc,desc_ru:desc_ru||desc,link,img,version,platform,license,subcat};}
+  else db.unshift({id:'s'+Date.now(),name,cat,desc,desc_fr:desc_fr||desc,desc_en:desc_en||desc,desc_ru:desc_ru||desc,link,img,version,platform,license,subcat,added:Date.now()});
+  notify(t('notif_saving'));
+  try{await apiPut(db,community);notify(t(editId?'notif_edited':'notif_added'));closeM('addModal');render();}
+  catch(err){notify('❌ '+err.message,true);}
+}
 
 // ═══════════════ HELPERS ═══════════════
 function openM(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden';}
@@ -1646,6 +1914,76 @@ let nt;
 function notify(msg,err=false){const el=document.getElementById('notif');el.textContent=msg;el.className='notif'+(err?' err':'');void el.offsetWidth;el.classList.add('show');clearTimeout(nt);nt=setTimeout(()=>el.classList.remove('show'),3400);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
+// ═══════════════ MODÉRATION ═══════════════
+let modFilter='all';
+function setModFilter(el,type){
+  modFilter=type;
+  document.querySelectorAll('[data-mf]').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderModeration();
+}
+function renderModeration(){
+  if(!isAdmin)return;
+  const el=document.getElementById('mod-list');
+  if(!el)return;
+  let posts=community.slice().sort((a,b)=>b.date-a.date);
+  if(modFilter!=='all')posts=posts.filter(p=>p.type===modFilter);
+  if(!posts.length){el.innerHTML=`<div class="mod-empty"><div style="font-size:3rem;opacity:.2;margin-bottom:12px;">📭</div><p>Aucun post à modérer</p></div>`;return;}
+  el.innerHTML=posts.map(p=>`
+    <div class="mod-card type-${p.type}">
+      <div class="mod-card-head">
+        <div>
+          <span class="post-type pt-${p.type}">${POST_LABELS[p.type]||p.type}</span>
+          <div class="post-title" style="margin-top:8px;">${esc(p.title)}</div>
+        </div>
+        <div class="mod-actions">
+          <button class="mod-btn mod-btn-edit" onclick="openEditPost('${p.id}')">${t('btn_mod_edit')}</button>
+          <button class="mod-btn mod-btn-del" onclick="delPostMod('${p.id}')" data-i18n="admin_del">🗑 Supprimer</button>
+        </div>
+      </div>
+      <div class="post-body">${esc(p.content)}</div>
+      ${p.link?`<a class="post-link" href="${esc(p.link)}" target="_blank" rel="noopener">🔗 ${esc(p.link.substring(0,50))}</a>`:''}
+      <div class="mod-meta">
+        <span>Par <b style="color:var(--neon)">${esc(p.author||'Anonyme')}</b></span>
+        <span>${new Date(p.date).toLocaleString('fr-FR')}</span>
+        <span style="color:var(--muted)">ID: ${p.id}</span>
+      </div>
+    </div>
+  `).join('');
+}
+function openEditPost(id){
+  const p=community.find(x=>x.id===id);if(!p)return;
+  document.getElementById('ep_id').value=p.id;
+  document.getElementById('ep_author').value=p.author||'';
+  document.getElementById('ep_title').value=p.title;
+  document.getElementById('ep_content').value=p.content;
+  document.getElementById('ep_link').value=p.link||'';
+  document.getElementById('editPostSub').textContent=POST_LABELS[p.type]+' — Modification en cours';
+  openM('editPostModal');
+}
+async function saveEditPost(){
+  const id=document.getElementById('ep_id').value;
+  const title=document.getElementById('ep_title').value.trim();
+  const content=document.getElementById('ep_content').value.trim();
+  if(!title||!content){notify(t('err_fields2'),true);return;}
+  const i=community.findIndex(p=>p.id===id);
+  if(i<0)return;
+  community[i]={...community[i],title,content,author:document.getElementById('ep_author').value.trim()||'Anonyme',link:document.getElementById('ep_link').value.trim(),edited:Date.now()};
+  notify(t('notif_saving'));
+  try{
+    await apiPut(db,community);
+    notify(t('notif_post_edited'));
+    closeM('editPostModal');
+    renderCommunity();renderSide();renderModeration();
+  }catch(e){notify('❌ '+e.message,true);}
+}
+async function delPostMod(id){
+  if(!confirm(t('confirm_del_post')))return;
+  community=community.filter(p=>p.id!==id);
+  try{await apiPut(db,community);notify(t('notif_post_deleted'));}catch(err){notify('❌ '+err.message,true);}
+  renderCommunity();renderSide();renderModeration();
+  document.getElementById('heroComm').innerHTML=community.length+'<span></span>';
+}
 
 // ═══════════════ MODAL LOGICIEL ═══════════════
 function openSWModal(id){
@@ -1784,9 +2122,11 @@ const LANGS={
     search_ph:'Rechercher un logiciel, un jeu, un utilitaire...',
     filter_cat:'Cat.', filter_genre:'Genre', all:'Tous',
     section_soft:'// LOGICIELS & JEUX', section_cat:'// CATÉGORIES',
-    btn_dl:'⬇ TÉLÉCHARGER',
+    btn_dl:'⬇ TÉLÉCHARGER', btn_admin:'⚙ Admin', btn_submit:'+ Soumettre',
     tab_bugs:'🐛 Bugs', tab_games:'🎮 Jeux gratuits', tab_soft:'💾 Logiciels',
     tab_suggest:'💡 Suggestions', tab_mod:'⚙ Modération',
+    admin_active:'⚙ MODE ADMIN ACTIF', admin_add:'+ Ajouter',
+    admin_edit_site:'✏️ Modifier le site', admin_del:'🗑 Supprimer', admin_logout:'✕ Déconnexion',
     footer_desc:'Plateforme communautaire — logiciels gratuits &amp; open source uniquement.',
     footer_copy:'© 2025 <span class="nc">VAULTEX</span> — Freeware &amp; Open Source uniquement',
     empty_title:'Aucun résultat', empty_sub:'Ce que vous cherchez n\'est pas encore disponible.', empty_comm:'Signalez-le dans la communauté !', empty_btn:'💬 Signaler dans la communauté',
@@ -1867,9 +2207,11 @@ const LANGS={
     search_ph:'Search for software, a game, a utility...',
     filter_cat:'Cat.', filter_genre:'Genre', all:'All',
     section_soft:'// SOFTWARE & GAMES', section_cat:'// CATEGORIES',
-    btn_dl:'⬇ DOWNLOAD',
+    btn_dl:'⬇ DOWNLOAD', btn_admin:'⚙ Admin', btn_submit:'+ Submit',
     tab_bugs:'🐛 Bugs', tab_games:'🎮 Free games', tab_soft:'💾 Software',
     tab_suggest:'💡 Suggestions', tab_mod:'⚙ Moderation',
+    admin_active:'⚙ ADMIN MODE ACTIVE', admin_add:'+ Add',
+    admin_edit_site:'✏️ Edit site', admin_del:'🗑 Delete', admin_logout:'✕ Logout',
     footer_desc:'Community platform — free &amp; open source software only.',
     footer_copy:'© 2025 <span class="nc">VAULTEX</span> — Freeware &amp; Open Source only',
     empty_title:'No results', empty_sub:'What you are looking for is not available yet.', empty_comm:'Report it in the community!', empty_btn:'💬 Report in the community',
@@ -1950,9 +2292,11 @@ const LANGS={
     search_ph:'Поиск программы, игры, утилиты...',
     filter_cat:'Кат.', filter_genre:'Жанр', all:'Все',
     section_soft:'// ПРОГРАММЫ И ИГРЫ', section_cat:'// КАТЕГОРИИ',
-    btn_dl:'⬇ СКАЧАТЬ',
+    btn_dl:'⬇ СКАЧАТЬ', btn_admin:'⚙ Админ', btn_submit:'+ Добавить',
     tab_bugs:'🐛 Баги', tab_games:'🎮 Бесплатные игры', tab_soft:'💾 Программы',
     tab_suggest:'💡 Предложения', tab_mod:'⚙ Модерация',
+    admin_active:'⚙ РЕЖИМ АДМИНИСТРАТОРА', admin_add:'+ Добавить',
+    admin_edit_site:'✏️ Редактировать сайт', admin_del:'🗑 Удалить', admin_logout:'✕ Выйти',
     footer_desc:'Сообщество — только бесплатное и открытое ПО.',
     footer_copy:'© 2025 <span class="nc">VAULTEX</span> — Только бесплатное ПО',
     empty_title:'Нет результатов', empty_sub:'То, что вы ищете, пока недоступно.', empty_comm:'Сообщите об этом в сообществе!', empty_btn:'💬 Сообщить в сообществе',
@@ -1997,6 +2341,7 @@ function setLang(lang){
     const val=t(key);
     if(val)el.textContent=val;
   });
+  // Update form label dynamically in openAdd modal
   const addTitleEl=document.getElementById('addTitle');
   if(addTitleEl&&!editId)addTitleEl.textContent=t('modal_add_title');
   // Update form placeholders set via data-i18n-ph
@@ -2013,6 +2358,8 @@ function setLang(lang){
   // Update admin bar texts
   const addBtn2=document.getElementById('addBtn');
   if(addBtn2)addBtn2.textContent=t('btn_submit');
+  const adminBtn=document.getElementById('adminNavBtn');
+  if(adminBtn&&!isAdmin)adminBtn.textContent=t('btn_admin');
   // Re-render dynamic content
   render();
   renderCommunity();
@@ -2107,7 +2454,102 @@ function rndInit(){
   rndShow(false);
 }
 
+function switchDescTab(lang, btn){
+  ['fr','en','ru'].forEach(l=>{
+    const el=document.getElementById('f_desc_'+l);
+    if(el)el.style.display=l===lang?'block':'none';
+  });
+  document.querySelectorAll('.desc-tab').forEach(b=>{
+    b.style.background='transparent';b.style.color='var(--muted)';b.style.borderColor='var(--border)';
+  });
+  if(btn){btn.style.background='rgba(0,255,231,.1)';btn.style.color='var(--neon)';btn.style.borderColor='var(--neon)';}
+}
 
+
+// ═══════════════ TRADUCTION AUTO ═══════════════
+function openTranslateModal(){
+  const missing=db.filter(s=>!s.desc_en||!s.desc_ru||s.desc_en===s.desc_fr||s.desc_ru===s.desc_fr);
+  const status=document.getElementById('translateStatus');
+  if(!missing.length){
+    status.innerHTML='<span style="color:var(--neon)">✅ Toutes les descriptions sont déjà traduites !</span>';
+  } else {
+    status.innerHTML=`<span style="color:#a78bfa">${missing.length} logiciel(s) ont des descriptions à traduire.</span><br><span style="color:var(--muted);font-size:.65rem;">Consomme des tokens API à chaque utilisation.</span>`;
+  }
+  document.getElementById('translateProgress').style.display='none';
+  document.getElementById('translateStartBtn').disabled=false;
+  document.getElementById('translateStartBtn').textContent='⚡ Lancer la traduction';
+  document.getElementById('translateModal').classList.add('open');
+}
+
+async function translateDesc(name, descFr){
+  const prompt=`Tu es un traducteur. Traduis cette description de logiciel du français vers l'anglais ET vers le russe. Réponds UNIQUEMENT en JSON avec exactement ce format: {"en":"...","ru":"..."}. Description: ${descFr}`;
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:400,
+      messages:[{role:'user',content:prompt}]
+    })
+  });
+  const data=await r.json();
+  const text=data.content?.[0]?.text||'{}';
+  try{
+    const clean=text.replace(/```json|```/g,'').trim();
+    return JSON.parse(clean);
+  }catch(e){return null;}
+}
+
+async function startTranslation(){
+  const missing=db.filter(s=>!s.desc_en||!s.desc_ru||s.desc_en===s.desc_fr||s.desc_ru===s.desc_fr);
+  if(!missing.length){notify('✅ Rien à traduire !');closeM('translateModal');return;}
+  
+  const btn=document.getElementById('translateStartBtn');
+  const status=document.getElementById('translateStatus');
+  const progress=document.getElementById('translateProgress');
+  const bar=document.getElementById('translateBar');
+  const pct=document.getElementById('translatePct');
+  
+  btn.disabled=true;
+  btn.textContent='⏳ Traduction en cours...';
+  progress.style.display='block';
+  
+  let done=0;
+  const total=missing.length;
+  
+  for(const s of missing){
+    status.innerHTML+=`<span style="color:var(--muted)">⏳ ${s.name}...</span><br>`;
+    status.scrollTop=status.scrollHeight;
+    try{
+      const translated=await translateDesc(s.name, s.desc_fr||s.desc||'');
+      if(translated){
+        const idx=db.findIndex(x=>x.id===s.id);
+        if(idx>=0){
+          if(!db[idx].desc_en||db[idx].desc_en===db[idx].desc_fr) db[idx].desc_en=translated.en||db[idx].desc_fr;
+          if(!db[idx].desc_ru||db[idx].desc_ru===db[idx].desc_fr) db[idx].desc_ru=translated.ru||db[idx].desc_fr;
+        }
+        status.innerHTML=status.innerHTML.replace(`⏳ ${s.name}...`,'✅ '+s.name);
+      } else {
+        status.innerHTML=status.innerHTML.replace(`⏳ ${s.name}...`,'⚠️ '+s.name+' (erreur parsing)');
+      }
+    }catch(e){
+      status.innerHTML=status.innerHTML.replace(`⏳ ${s.name}...`,'❌ '+s.name+' (erreur réseau)');
+    }
+    done++;
+    const p=Math.round((done/total)*100);
+    bar.style.width=p+'%';
+    pct.textContent=p+'%';
+    await new Promise(res=>setTimeout(res,300));
+  }
+  
+  // Sauvegarder dans JSONBin
+  status.innerHTML+='<br><span style="color:#a78bfa">⏳ Sauvegarde dans JSONBin...</span>';
+  await apiSave();
+  status.innerHTML=status.innerHTML.replace('⏳ Sauvegarde dans JSONBin...','✅ Sauvegarde OK !');
+  btn.textContent='✅ Terminé !';
+  render();
+  notify('✅ Descriptions traduites et sauvegardées !');
+}
 
 
 // ═══════════════ AUTH SUPABASE ═══════════════
@@ -2471,6 +2913,67 @@ function addComment(swId){
 }
 
 
+// ═══════════════ GESTION UTILISATEURS (ADMIN) ═══════════════
+let allUsers = [];
+
+async function openUsersModal(){
+  openM('usersModal');
+  document.getElementById('userSearch').value='';
+  document.getElementById('usersList').innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-family:Share Tech Mono,monospace;font-size:.75rem;">⏳ Chargement des profils...</div>';
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/profiles?select=id,username,created_at&order=created_at.desc`,{headers:SB_HEADERS});
+    if(!r.ok)throw new Error('Erreur '+r.status);
+    allUsers=await r.json();
+    renderUsersList(allUsers);
+  }catch(e){
+    document.getElementById('usersList').innerHTML=`<div style="color:var(--red);font-family:Share Tech Mono,monospace;font-size:.75rem;padding:16px;">❌ ${e.message}</div>`;
+  }
+}
+
+function renderUsersList(users){
+  const el=document.getElementById('usersList');
+  if(!users.length){el.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-family:Share Tech Mono,monospace;font-size:.75rem;">Aucun utilisateur trouvé.</div>';return;}
+  el.innerHTML=users.map(u=>{
+    const since=new Date(u.created_at).toLocaleDateString();
+    const postCount=community.filter(p=>p.userId===u.id).length;
+    const letter=u.username.charAt(0).toUpperCase();
+    const isSelf=currentUser&&u.id===currentUser.id;
+    return `<div class="user-item">
+      <div class="user-avatar-sm">${letter}</div>
+      <div class="user-info">
+        <div class="user-name">${esc(u.username)}${isSelf?' <span style="font-size:.5rem;color:var(--muted)">(vous)</span>':''}</div>
+        <div class="user-meta">Membre depuis ${since} · ${postCount} post${postCount>1?'s':''}</div>
+      </div>
+      ${!isSelf?`<button class="user-del-btn" onclick="confirmDeleteUser('${u.id}','${esc(u.username)}')">🗑 Supprimer</button>`:'<span style="font-size:.55rem;color:var(--muted);font-family:Share Tech Mono,monospace;">(vous)</span>'}
+    </div>`;
+  }).join('');
+}
+
+function filterUsers(q){
+  const filtered=q?allUsers.filter(u=>u.username.toLowerCase().includes(q.toLowerCase())):allUsers;
+  renderUsersList(filtered);
+}
+
+async function confirmDeleteUser(uid, username){
+  if(!confirm(`Supprimer le compte "${username}" et tous ses posts ?\nCette action est irréversible.`))return;
+  try{
+    notify('⏳ Suppression...');
+    // Supprimer les posts de cet utilisateur
+    const before=community.length;
+    community=community.filter(p=>p.userId!==uid);
+    if(community.length!==before)await apiPut(db,community);
+    // Supprimer le profil
+    const rp=await fetch(`${SB_URL}/rest/v1/profiles?id=eq.${uid}`,{method:'DELETE',headers:SB_HEADERS});
+    if(!rp.ok)throw new Error('Erreur suppression profil '+rp.status);
+    // Supprimer le compte auth (nécessite service_role — on notifie juste)
+    allUsers=allUsers.filter(u=>u.id!==uid);
+    renderUsersList(allUsers);
+    notify('✅ Profil et posts de '+username+' supprimés');
+    renderCommunity();
+  }catch(e){
+    notify('❌ '+e.message,true);
+  }
+}
 
 // ═══════════════ SITE CONFIG ═══════════════
 function applySiteConfig(){
@@ -2496,7 +2999,41 @@ function applySiteConfig(){
   if(yt){yt.href=cfg.youtubeUrl||'#';yt.style.display=cfg.youtubeUrl?'inline-flex':'none';}
   if(pp){pp.href=cfg.paypalUrl||'#';pp.style.display=cfg.paypalUrl?'inline-flex':'none';}
 }
-function editSiteText(field){  openSiteEditor();
+function openSiteEditor(){
+  if(!isAdmin)return;
+  const cfg=siteConfig;
+  // Récupérer le texte actuel du DOM
+  const badge=document.getElementById('heroBadge');
+  const title=document.getElementById('heroTitle');
+  const desc=document.getElementById('heroDesc');
+  document.getElementById('se_badge').value=cfg.heroBadge||(badge?badge.textContent.replace('🟢 ',''):'');
+  document.getElementById('se_title').value=cfg.heroTitle||(title?title.innerHTML:'');
+  document.getElementById('se_desc').value=cfg.heroDesc||(desc?desc.textContent:'');
+  document.getElementById('se_discord').value=cfg.discordUrl||'';
+  document.getElementById('se_youtube').value=cfg.youtubeUrl||'';
+  document.getElementById('se_paypal').value=cfg.paypalUrl||'';
+  openM('siteEditorModal');
+}
+async function saveSiteConfig(){
+  siteConfig={
+    heroBadge:document.getElementById('se_badge').value.trim(),
+    heroTitle:document.getElementById('se_title').value.trim(),
+    heroDesc:document.getElementById('se_desc').value.trim(),
+    discordUrl:document.getElementById('se_discord').value.trim(),
+    youtubeUrl:document.getElementById('se_youtube').value.trim(),
+    paypalUrl:document.getElementById('se_paypal').value.trim(),
+  };
+  applySiteConfig();
+  notify(t('notif_saving'));
+  try{
+    await apiPut(db,community);
+    notify(t('notif_saved'));
+    closeM('siteEditorModal');
+  }catch(e){notify('❌ '+e.message,true);}
+}
+function editSiteText(field){
+  if(!isAdmin)return;
+  openSiteEditor();
   setTimeout(()=>{
     const map={heroBadge:'se_badge',heroTitle:'se_title',heroDesc:'se_desc'};
     const el=document.getElementById(map[field]);
@@ -2507,6 +3044,24 @@ function editSiteText(field){  openSiteEditor();
 // ═══════════════ INIT ═══════════════
 init();
 </script>
+
+<!-- MODAL TRADUCTION DESCRIPTIONS -->
+<div class="overlay" id="translateModal" onclick="oClose(event,'translateModal')">
+  <div class="modal" style="max-width:560px;max-height:85vh;overflow-y:auto;">
+    <button class="m-close" onclick="closeM('translateModal')">✕</button>
+    <h2>🌐 Traduire les descriptions</h2>
+    <p class="sub">Traduit automatiquement les descriptions manquantes (EN/RU) via l'IA pour les logiciels ajoutés manuellement.</p>
+    <div id="translateStatus" style="margin:16px 0;padding:12px;background:rgba(0,255,231,.05);border:1px solid rgba(0,255,231,.12);border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted);min-height:48px;line-height:1.8;"></div>
+    <div id="translateProgress" style="display:none;margin-bottom:12px;">
+      <div style="width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;">
+        <div id="translateBar" style="height:100%;background:linear-gradient(90deg,#a78bfa,#7c3aed);width:0%;transition:width .4s;"></div>
+      </div>
+      <div id="translatePct" style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);text-align:right;margin-top:4px;">0%</div>
+    </div>
+    <button class="btn btn-primary" id="translateStartBtn" style="width:100%;justify-content:center;padding:13px;" onclick="startTranslation()">⚡ Lancer la traduction</button>
+  </div>
+</div>
+
 
 <!-- MODAL AUTH -->
 <div class="overlay" id="authModal" onclick="oClose(event,'authModal')">
@@ -2566,6 +3121,18 @@ init();
 </div>
 
 
+<!-- MODAL UTILISATEURS (ADMIN) -->
+<div class="overlay" id="usersModal" onclick="oClose(event,'usersModal')">
+  <div class="modal" style="max-width:560px;max-height:85vh;overflow-y:auto;">
+    <button class="m-close" onclick="closeM('usersModal')">✕</button>
+    <h2>👥 Gestion des utilisateurs</h2>
+    <p class="sub" style="margin-bottom:20px;">Supprimer un compte supprime aussi tous ses posts.</p>
+    <div style="margin-bottom:16px;">
+      <input class="fi" id="userSearch" type="text" placeholder="Rechercher un pseudo..." oninput="filterUsers(this.value)" style="width:100%">
+    </div>
+    <div id="usersList"><div style="text-align:center;padding:30px;color:var(--muted);font-family:Share Tech Mono,monospace;font-size:.75rem;">⏳ Chargement...</div></div>
+  </div>
+</div>
 
 </body>
 </html>
