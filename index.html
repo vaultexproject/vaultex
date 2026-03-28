@@ -58,7 +58,16 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;fo
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4;}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;z-index:1;}
 /* ADMIN BAR */
+.admin-badge{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:#ffa000;letter-spacing:2px;display:flex;align-items:center;gap:8px;}
 .admin-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:#ffa000;animation:pulse 2s infinite;}
+.abar-right{display:flex;gap:8px;}
+.ab{padding:5px 14px;font-family:'Orbitron',monospace;font-size:.58rem;letter-spacing:1px;font-weight:700;cursor:pointer;border-radius:2px;border:none;text-transform:uppercase;transition:all .2s;}
+.ab-add{background:rgba(0,255,231,.15);color:var(--neon);border:1px solid rgba(0,255,231,.3);}
+.ab-add:hover{background:rgba(0,255,231,.25);}
+.ab-del{background:rgba(255,32,64,.1);color:var(--red);border:1px solid rgba(255,32,64,.2);}
+.ab-del:hover,.ab-del.on{background:rgba(255,32,64,.25);color:#fff;}
+.ab-out{background:rgba(80,80,80,.2);color:var(--muted);border:1px solid rgba(255,255,255,.1);}
+.ab-out:hover{background:rgba(80,80,80,.4);color:var(--white);}
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,10,15,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:top .3s;}
 .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.4rem;letter-spacing:4px;color:var(--white);text-decoration:none;cursor:pointer;}
@@ -160,7 +169,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .sw-plat{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:1px;}
 .sw-dl{font-family:'Orbitron',monospace;font-size:.6rem;background:var(--neon);color:var(--bg);padding:7px 14px;border-radius:2px;text-decoration:none;transition:all .2s;font-weight:700;letter-spacing:1px;display:inline-flex;align-items:center;gap:6px;}
 .sw-dl:hover{background:#00ffd0;box-shadow:0 0 20px rgba(0,255,231,.4);}
+.del-btn{position:absolute;top:8px;right:8px;background:rgba(255,32,64,.85);color:#fff;border:none;width:30px;height:30px;font-size:.9rem;cursor:pointer;border-radius:2px;display:none;align-items:center;justify-content:center;z-index:10;}
 .del-btn:hover{background:var(--red);}
+.del-mode .sw-card .del-btn{display:flex;}
+.admin-mode .sw-card{cursor:pointer;}
 .empty{text-align:center;padding:80px 40px;color:var(--muted);}
 .empty-icon{font-size:4rem;margin-bottom:16px;opacity:.25;}
 .empty h3{font-family:'Orbitron',monospace;font-size:1rem;color:var(--text);margin-bottom:8px;}
@@ -212,6 +224,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .post-link:hover{border-color:var(--neon);}
 .del-post-btn{position:absolute;top:10px;right:10px;background:rgba(255,32,64,.85);color:#fff;border:none;width:26px;height:26px;font-size:.8rem;cursor:pointer;border-radius:2px;display:none;align-items:center;justify-content:center;}
 .del-post-btn:hover{background:var(--red);}
+.admin-mode .del-post-btn{display:flex;}
 .side-box{background:var(--card);border:1px solid var(--border);padding:24px;margin-bottom:16px;}
 .side-box h4{font-family:'Orbitron',monospace;font-size:.62rem;letter-spacing:2px;color:var(--neon);margin-bottom:18px;text-transform:uppercase;}
 .side-stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:.82rem;}
@@ -271,6 +284,9 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 .social-paypal{background:rgba(0,112,186,.12);color:#009cde;border-color:rgba(0,112,186,.25);}
 .social-paypal:hover{background:rgba(0,112,186,.25);box-shadow:0 0 16px rgba(0,112,186,.2);}
 .editable-text{transition:outline .2s;}
+.admin-mode .editable-text{outline:1px dashed rgba(255,160,0,.4);cursor:pointer;position:relative;}
+.admin-mode .editable-text:hover{outline:2px solid rgba(255,160,0,.7);background:rgba(255,160,0,.04);}
+.admin-mode .editable-text:hover::after{content:'✏️';position:absolute;top:-10px;right:0;font-size:.7rem;background:#ffa000;color:#000;padding:1px 5px;border-radius:2px;font-family:sans-serif;}
 .site-edit-section{margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:20px;}
 .site-edit-section:last-child{border-bottom:none;margin-bottom:0;}
 .site-edit-section h4{font-family:'Orbitron',monospace;font-size:.6rem;letter-spacing:2px;color:var(--neon);margin-bottom:14px;text-transform:uppercase;}
@@ -388,7 +404,9 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   .notif{bottom:16px;right:16px;left:16px;max-width:none;}
 
   /* Admin bar mobile */
-    
+  .abar-right{gap:4px;}
+  .ab{padding:4px 8px;font-size:.52rem;}
+
   /* SW modal mobile */
   .sw-modal-box{margin:8px;max-height:95vh;}
   .sw-modal-img{height:180px;}
@@ -615,8 +633,6 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
 @media(max-width:400px){
   .stats-grid{grid-template-columns:repeat(2,1fr);}
 }
-
-/* ── Modal utilisateurs ── */
 </style>
 </head>
 <body>
@@ -652,7 +668,7 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
       <button class="lang-btn" onclick="setLang('en')">EN</button>
       <button class="lang-btn" onclick="setLang('ru')">RU</button>
     </div>
-    <a href="#" id="authNavBtn" class="auth-nav-btn" onclick="handleAuthNav(event)" style="border-color:rgba(0,255,231,.4);background:rgba(0,255,231,.1);"><span class="auth-avatar-ph" id="navAvatarPh">👤</span><span id="navUsername">Connexion</span></a>
+    <a href="#" id="authNavBtn" class="auth-nav-btn" onclick="handleAuthNav(event)"><span class="auth-avatar-ph" id="navAvatarPh">👤</span><span id="navUsername">Connexion</span></a>
   </div>
 </nav>
 
@@ -863,7 +879,6 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
           <div class="fg"><label class="fl" data-i18n="lbl_game_name">Nom du jeu *</label><input class="fi" id="jeu_title" data-i18n-ph="ph_game_title" placeholder="Ex: 0 A.D., Minetest..."></div>
           <div class="fg"><label class="fl" data-i18n="lbl_desc">Description *</label><textarea class="ft" id="jeu_desc" data-i18n-ph="ph_game_desc" placeholder="Pourquoi tu le recommandes ?"></textarea></div>
           <div class="fg"><label class="fl" data-i18n="lbl_link">Lien (optionnel)</label><input class="fi" id="jeu_link" type="url" placeholder="https://..."></div>
-          <div class="fg"><label class="fl">📧 Email (pour être notifié quand ajouté)</label><input class="fi" id="jeu_email" type="email" placeholder="ton@email.com (optionnel)"></div>
           <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('jeu')" data-i18n="btn_game">🎮 Proposer</button>
         </div>
         <div class="posts-list" id="posts-jeu"></div>
@@ -882,7 +897,6 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
           <div class="fg"><label class="fl" data-i18n="lbl_soft_name">Nom du logiciel *</label><input class="fi" id="log_title" data-i18n-ph="ph_soft_title" placeholder="Ex: VLC, GIMP, Blender..."></div>
           <div class="fg"><label class="fl" data-i18n="lbl_desc">Description *</label><textarea class="ft" id="log_desc" data-i18n-ph="ph_soft_desc" placeholder="À quoi ça sert, pourquoi le recommander ?"></textarea></div>
           <div class="fg"><label class="fl" data-i18n="lbl_link">Lien (optionnel)</label><input class="fi" id="log_link" type="url" placeholder="https://..."></div>
-          <div class="fg"><label class="fl">📧 Email (pour être notifié quand ajouté)</label><input class="fi" id="log_email" type="email" placeholder="ton@email.com (optionnel)"></div>
           <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="submitPost('logiciel')" data-i18n="btn_soft_comm">💾 Proposer</button>
         </div>
         <div class="posts-list" id="posts-logiciel"></div>
@@ -937,6 +951,16 @@ footer{padding:60px 80px 40px;border-top:1px solid var(--border);display:grid;gr
   <p class="nc" data-i18n="foot_tagline">FREEWARE · OPEN SOURCE · LEGAL</p>
 </div>
 
+<!-- MODAL LOGIN -->
+<div class="overlay" id="loginModal" onclick="oClose(event,'loginModal')">
+  <div class="modal" style="max-width:380px;">
+    <button class="m-close" onclick="closeM('loginModal')">✕</button>
+    <h2 data-i18n="modal_login_title">Accès Admin</h2>
+    <p class="sub" data-i18n="modal_login_sub">Entrez le mot de passe administrateur.</p>
+    <div class="fg"><label class="fl" data-i18n="lbl_pwd">Mot de passe</label><input class="fi" id="pwdIn" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;" onclick="doLogin()" data-i18n="btn_login">🔑 Connexion</button>
+  </div>
+</div>
 
 <!-- MODAL EDIT POST -->
 <div class="overlay" id="editPostModal" onclick="oClose(event,'editPostModal')">
@@ -1222,13 +1246,6 @@ function getDesc(s){return s['desc_'+currentLang]||s.desc_fr||s.desc||'';}
 const POST_LABELS={bug:'🐛 Bug',jeu:'🎮 Jeu gratuit',logiciel:'💾 Logiciel',suggestion:'💡 Suggestion'};
 
 // ═══════════════ NAV ═══════════════
-function prefillCommunityForms(){
-  if(!currentProfile)return;
-  ['bug_author','jeu_author','log_author','sug_author'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el&&!el.value)el.value=currentProfile.username;
-  });
-}
 function showPage(name){
   showFavs=false;
   document.getElementById('favBackBtn').style.display='none';
@@ -1240,7 +1257,7 @@ function showPage(name){
   const m={home:'nl-logiciels',community:'nl-comm'};
   if(m[name])document.getElementById(m[name]).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
-  if(name==='community'){renderCommunity();renderSide();setTimeout(prefillCommunityForms,100);}
+  if(name==='community'){renderCommunity();renderSide();}
   if(name==='stats'){renderStats();}
   if(name==='home'){render();}
   if(name==='stats'){renderStats();}
@@ -1249,20 +1266,12 @@ function gotoSection(sel){setTimeout(()=>{const el=document.querySelector(sel);i
 
 // ═══════════════ API ═══════════════
 async function apiGet(){
-  const controller=new AbortController();
-  const timeout=setTimeout(()=>controller.abort(),5000); // 5 secondes max
-  try{
-    const r=await fetch(`${SB_URL}/rest/v1/vaultex_data?select=key,value`,{headers:SB_HEADERS,signal:controller.signal});
-    clearTimeout(timeout);
-    if(!r.ok)throw new Error('GET '+r.status);
-    const rows=await r.json();
-    const map={};
-    rows.forEach(row=>map[row.key]=row.value);
-    return{softwares:map.softwares||null, community:map.community||[], siteConfig:map.siteConfig||{}};
-  }catch(e){
-    clearTimeout(timeout);
-    throw e;
-  }
+  const r=await fetch(`${SB_URL}/rest/v1/vaultex_data?select=key,value`,{headers:SB_HEADERS});
+  if(!r.ok)throw new Error('GET '+r.status);
+  const rows=await r.json();
+  const map={};
+  rows.forEach(row=>map[row.key]=row.value);
+  return{softwares:map.softwares||null, community:map.community||[], siteConfig:map.siteConfig||{}};
 }
 async function apiUpsert(key, value){
   const r=await fetch(`${SB_URL}/rest/v1/vaultex_data`,{
@@ -1283,9 +1292,6 @@ async function apiPut(sw,cm){
 // ═══════════════ INIT ═══════════════
 async function init(){
   showSkeleton();
-  // Afficher les données par défaut immédiatement en attendant Supabase
-  db=DEFAULT_SW.slice();
-  render();
   try{
     const data=await apiGet();
     community=data.community||[];
@@ -1597,22 +1603,18 @@ async function submitPost(type){
       if(el&&!el.value)el.value=currentProfile.username;
     });
   }
-  const emailMap={jeu:'jeu_email',logiciel:'log_email'};
-  const notifEmail=emailMap[type]?document.getElementById(emailMap[type])?.value.trim():'';
   const m={bug:['bug_author','bug_title','bug_desc',null],jeu:['jeu_author','jeu_title','jeu_desc','jeu_link'],logiciel:['log_author','log_title','log_desc','log_link'],suggestion:['sug_author','sug_title','sug_desc',null]};
   const[aId,tId,dId,lId]=m[type];
   const title=document.getElementById(tId).value.trim();
   const content=document.getElementById(dId).value.trim();
   if(!title||!content){notify(t('err_fields'),true);return;}
-  const author=document.getElementById(aId).value.trim()||(currentProfile?.username)||'Anonyme';
-  const post={id:'p'+Date.now(),type,title,content,author,userId:currentUser?.id||null,link:lId?document.getElementById(lId).value.trim():'',notifEmail:notifEmail||null,date:Date.now(),likes:0,dislikes:0};
+  const post={id:'p'+Date.now(),type,title,content,author:document.getElementById(aId).value.trim()||'Anonyme',link:lId?document.getElementById(lId).value.trim():'',date:Date.now()};
   community.unshift(post);
   notify('⏳ Publication...');
   try{
     await apiPut(db,community);
     notify('✅ Post publié !');
     [aId,tId,dId].forEach(id=>{document.getElementById(id).value='';});
-    if(emailMap[type]&&document.getElementById(emailMap[type]))document.getElementById(emailMap[type]).value='';
     if(lId)document.getElementById(lId).value='';
     renderCommunity();renderSide();
     document.getElementById('heroComm').innerHTML=community.length+'<span></span>';
@@ -1620,7 +1622,7 @@ async function submitPost(type){
 }
 
 async function delPost(id,e){
-  e.stopPropagation();  if(!confirm('Supprimer ce post ?'))return;
+  if(!confirm('Supprimer ce post ?'))return;
   community=community.filter(p=>p.id!==id);
   try{await apiPut(db,community);notify(t('notif_post_deleted'));}catch(err){notify('❌ '+err.message,true);}
   renderCommunity();renderSide();
@@ -1796,9 +1798,11 @@ const LANGS={
     search_ph:'Rechercher un logiciel, un jeu, un utilitaire...',
     filter_cat:'Cat.', filter_genre:'Genre', all:'Tous',
     section_soft:'// LOGICIELS & JEUX', section_cat:'// CATÉGORIES',
-    btn_dl:'⬇ TÉLÉCHARGER',
+    btn_dl:'⬇ TÉLÉCHARGER', btn_admin:'⚙ Admin', btn_submit:'+ Soumettre',
     tab_bugs:'🐛 Bugs', tab_games:'🎮 Jeux gratuits', tab_soft:'💾 Logiciels',
     tab_suggest:'💡 Suggestions', tab_mod:'⚙ Modération',
+    admin_active:'⚙ MODE ADMIN ACTIF', admin_add:'+ Ajouter',
+    admin_edit_site:'✏️ Modifier le site', admin_del:'🗑 Supprimer', admin_logout:'✕ Déconnexion',
     footer_desc:'Plateforme communautaire — logiciels gratuits &amp; open source uniquement.',
     footer_copy:'© 2025 <span class="nc">VAULTEX</span> — Freeware &amp; Open Source uniquement',
     empty_title:'Aucun résultat', empty_sub:'Ce que vous cherchez n\'est pas encore disponible.', empty_comm:'Signalez-le dans la communauté !', empty_btn:'💬 Signaler dans la communauté',
@@ -1879,9 +1883,11 @@ const LANGS={
     search_ph:'Search for software, a game, a utility...',
     filter_cat:'Cat.', filter_genre:'Genre', all:'All',
     section_soft:'// SOFTWARE & GAMES', section_cat:'// CATEGORIES',
-    btn_dl:'⬇ DOWNLOAD',
+    btn_dl:'⬇ DOWNLOAD', btn_admin:'⚙ Admin', btn_submit:'+ Submit',
     tab_bugs:'🐛 Bugs', tab_games:'🎮 Free games', tab_soft:'💾 Software',
     tab_suggest:'💡 Suggestions', tab_mod:'⚙ Moderation',
+    admin_active:'⚙ ADMIN MODE ACTIVE', admin_add:'+ Add',
+    admin_edit_site:'✏️ Edit site', admin_del:'🗑 Delete', admin_logout:'✕ Logout',
     footer_desc:'Community platform — free &amp; open source software only.',
     footer_copy:'© 2025 <span class="nc">VAULTEX</span> — Freeware &amp; Open Source only',
     empty_title:'No results', empty_sub:'What you are looking for is not available yet.', empty_comm:'Report it in the community!', empty_btn:'💬 Report in the community',
@@ -1962,9 +1968,11 @@ const LANGS={
     search_ph:'Поиск программы, игры, утилиты...',
     filter_cat:'Кат.', filter_genre:'Жанр', all:'Все',
     section_soft:'// ПРОГРАММЫ И ИГРЫ', section_cat:'// КАТЕГОРИИ',
-    btn_dl:'⬇ СКАЧАТЬ',
+    btn_dl:'⬇ СКАЧАТЬ', btn_admin:'⚙ Админ', btn_submit:'+ Добавить',
     tab_bugs:'🐛 Баги', tab_games:'🎮 Бесплатные игры', tab_soft:'💾 Программы',
     tab_suggest:'💡 Предложения', tab_mod:'⚙ Модерация',
+    admin_active:'⚙ РЕЖИМ АДМИНИСТРАТОРА', admin_add:'+ Добавить',
+    admin_edit_site:'✏️ Редактировать сайт', admin_del:'🗑 Удалить', admin_logout:'✕ Выйти',
     footer_desc:'Сообщество — только бесплатное и открытое ПО.',
     footer_copy:'© 2025 <span class="nc">VAULTEX</span> — Только бесплатное ПО',
     empty_title:'Нет результатов', empty_sub:'То, что вы ищете, пока недоступно.', empty_comm:'Сообщите об этом в сообществе!', empty_btn:'💬 Сообщить в сообществе',
@@ -2009,8 +2017,6 @@ function setLang(lang){
     const val=t(key);
     if(val)el.textContent=val;
   });
-  const addTitleEl=document.getElementById('addTitle');
-  if(addTitleEl&&!editId)addTitleEl.textContent=t('modal_add_title');
   // Update form placeholders set via data-i18n-ph
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
     const key=el.getAttribute('data-i18n-ph');
@@ -2145,37 +2151,25 @@ async function sbAuthPost(path, body){
 // Inscription
 async function doRegister(){
   const username=document.getElementById('reg_username').value.trim();
+  const email=document.getElementById('reg_email').value.trim();
   const pwd=document.getElementById('reg_pwd').value;
-  if(!username||!pwd){notify('❌ Remplis tous les champs',true);return;}
-  if(username.length<3){notify('❌ Pseudo trop court (min 3 caractères)',true);return;}
-  if(pwd.length<6){notify('❌ Mot de passe trop court (min 6 caractères)',true);return;}
-  // Email factice basé sur le pseudo
-  const h=username.split('').reduce((a,b)=>((a<<5)-a)+b.charCodeAt(0),0);const fakeEmail='vx'+Math.abs(h)+'@example.com';
-  const btn=document.querySelector('#auth-register .btn-primary');
-  if(btn){btn.disabled=true;btn.textContent='⏳ Création...';}
+  if(!username||!email||!pwd){notify('❌ Remplis tous les champs',true);return;}
+  if(pwd.length<6){notify('❌ Mot de passe trop court (min 6)',true);return;}
   try{
-    const data=await sbAuthPost('/signup',{email:fakeEmail,password:pwd,data:{username}});
+    notify('⏳ Création du compte...');
+    const data=await sbAuthPost('/signup',{email,password:pwd,data:{username}});
     if(data.user){
+      // Créer le profil
       await createProfile(data.user.id, username, data.session?.access_token);
       if(data.session){
         saveSession(data.session);
         currentUser=data.user;
         await loadProfile();
-        closeM('authModal');
-        notify('✅ Bienvenue '+username+' !');
-        updateAuthNav();
-        render();
       }
+      closeM('authModal');
+      notify('✅ Compte créé ! Vérifie ton email pour confirmer.');
     }
-  }catch(e){
-    if(e.message.includes('already registered')||e.message.includes('User already registered')){
-      notify('❌ Ce pseudo est déjà pris, choisis-en un autre',true);
-    } else {
-      notify('❌ '+e.message,true);
-    }
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent='✨ Créer mon compte';}
-  }
+  }catch(e){notify('❌ '+e.message,true);}
 }
 
 async function createProfile(uid, username, token){
@@ -2189,26 +2183,19 @@ async function createProfile(uid, username, token){
 
 // Connexion
 async function doLogin(){
-  const username=document.getElementById('login_username').value.trim();
+  const email=document.getElementById('login_email').value.trim();
   const pwd=document.getElementById('login_pwd').value;
-  if(!username||!pwd){notify('❌ Remplis tous les champs',true);return;}
-  const h=username.split('').reduce((a,b)=>((a<<5)-a)+b.charCodeAt(0),0);const fakeEmail='vx'+Math.abs(h)+'@example.com';
-  const btn=document.querySelector('#auth-login .btn-primary');
-  if(btn){btn.disabled=true;btn.textContent='⏳ Connexion...';}
+  if(!email||!pwd){notify('❌ Remplis tous les champs',true);return;}
   try{
-    const data=await sbAuthPost('/token?grant_type=password',{email:fakeEmail,password:pwd});
+    notify('⏳ Connexion...');
+    const data=await sbAuthPost('/token?grant_type=password',{email,password:pwd});
     saveSession(data);
     currentUser=data.user;
     await loadProfile();
     closeM('authModal');
-    notify('✅ Connecté en tant que '+(currentProfile?.username||username));
+    notify('✅ Connecté en tant que '+( currentProfile?.username||email));
     updateAuthNav();
-    render();
-  }catch(e){
-    notify('❌ Pseudo ou mot de passe incorrect',true);
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent='🔑 Se connecter';}
-  }
+  }catch(e){notify('❌ '+e.message,true);}
 }
 
 // Déconnexion
@@ -2330,6 +2317,11 @@ async function saveProfile(){
   }catch(e){notify('❌ '+e.message,true);}
 }
 
+function showForgotPwd(){
+  const email=document.getElementById('login_email').value.trim();
+  if(!email){notify("❌ Entre ton email d'abord",true);return;}
+  sbAuthPost('/recover',{email}).then(()=>notify('📧 Email de reset envoyé !')).catch(e=>notify('❌ '+e.message,true));
+}
 
 function switchAuthTab(tab, btn){
   document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));
@@ -2482,8 +2474,6 @@ function addComment(swId){
   notify('✅ Commentaire ajouté !');
 }
 
-
-
 // ═══════════════ SITE CONFIG ═══════════════
 function applySiteConfig(){
   const cfg=siteConfig;
@@ -2508,7 +2498,8 @@ function applySiteConfig(){
   if(yt){yt.href=cfg.youtubeUrl||'#';yt.style.display=cfg.youtubeUrl?'inline-flex':'none';}
   if(pp){pp.href=cfg.paypalUrl||'#';pp.style.display=cfg.paypalUrl?'inline-flex':'none';}
 }
-function editSiteText(field){  openSiteEditor();
+function editSiteText(field){
+  openSiteEditor();
   setTimeout(()=>{
     const map={heroBadge:'se_badge',heroTitle:'se_title',heroDesc:'se_desc'};
     const el=document.getElementById(map[field]);
@@ -2520,6 +2511,24 @@ function editSiteText(field){  openSiteEditor();
 init();
 </script>
 
+<!-- MODAL TRADUCTION DESCRIPTIONS -->
+<div class="overlay" id="translateModal" onclick="oClose(event,'translateModal')">
+  <div class="modal" style="max-width:560px;max-height:85vh;overflow-y:auto;">
+    <button class="m-close" onclick="closeM('translateModal')">✕</button>
+    <h2>🌐 Traduire les descriptions</h2>
+    <p class="sub">Traduit automatiquement les descriptions manquantes (EN/RU) via l'IA pour les logiciels ajoutés manuellement.</p>
+    <div id="translateStatus" style="margin:16px 0;padding:12px;background:rgba(0,255,231,.05);border:1px solid rgba(0,255,231,.12);border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted);min-height:48px;line-height:1.8;"></div>
+    <div id="translateProgress" style="display:none;margin-bottom:12px;">
+      <div style="width:100%;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;">
+        <div id="translateBar" style="height:100%;background:linear-gradient(90deg,#a78bfa,#7c3aed);width:0%;transition:width .4s;"></div>
+      </div>
+      <div id="translatePct" style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);text-align:right;margin-top:4px;">0%</div>
+    </div>
+    <button class="btn btn-primary" id="translateStartBtn" style="width:100%;justify-content:center;padding:13px;" onclick="startTranslation()">⚡ Lancer la traduction</button>
+  </div>
+</div>
+
+
 <!-- MODAL AUTH -->
 <div class="overlay" id="authModal" onclick="oClose(event,'authModal')">
   <div class="modal" style="max-width:420px;">
@@ -2530,15 +2539,18 @@ init();
     </div>
     <!-- LOGIN -->
     <div class="auth-panel active" id="auth-login">
-      <div class="fg"><label class="fl">Pseudo</label><input class="fi" id="login_username" type="text" placeholder="TonPseudo" maxlength="20" autocomplete="username"></div>
-      <div class="fg"><label class="fl">Mot de passe</label><input class="fi" id="login_pwd" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="current-password"></div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" id="login_email" type="email" placeholder="ton@email.com"></div>
+      <div class="fg"><label class="fl">Mot de passe</label><input class="fi" id="login_pwd" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
       <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;margin-top:8px;" onclick="doLogin()">🔑 Se connecter</button>
+      <div style="text-align:center;margin-top:12px;"><a href="#" onclick="showForgotPwd();return false;" style="font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted);">Mot de passe oublié ?</a></div>
     </div>
     <!-- REGISTER -->
     <div class="auth-panel" id="auth-register">
-      <div class="fg"><label class="fl">Pseudo *</label><input class="fi" id="reg_username" type="text" placeholder="TonPseudo" maxlength="20" autocomplete="username"></div>
-      <div class="fg"><label class="fl">Mot de passe *</label><input class="fi" id="reg_pwd" type="password" placeholder="Min. 6 caractères" onkeydown="if(event.key==='Enter')doRegister()" autocomplete="new-password"></div>
+      <div class="fg"><label class="fl">Pseudo *</label><input class="fi" id="reg_username" type="text" placeholder="TonPseudo" maxlength="20"></div>
+      <div class="fg"><label class="fl">Email *</label><input class="fi" id="reg_email" type="email" placeholder="ton@email.com"></div>
+      <div class="fg"><label class="fl">Mot de passe *</label><input class="fi" id="reg_pwd" type="password" placeholder="Min. 6 caractères" onkeydown="if(event.key==='Enter')doRegister()"></div>
       <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;margin-top:8px;" onclick="doRegister()">✨ Créer mon compte</button>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);text-align:center;margin-top:12px;">Un email de confirmation sera envoyé</p>
     </div>
   </div>
 </div>
@@ -2576,8 +2588,6 @@ init();
     </div>
   </div>
 </div>
-
-
 
 </body>
 </html>
