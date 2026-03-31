@@ -1328,7 +1328,7 @@ async function init(){
   try{localStorage.removeItem('vx_view');}catch(e){}
   setViewMode('grid');
   updateFavBadge();
-  await initAuth();
+  initAuth();
   // Charger Supabase en arrière-plan
   try{
     const data=await apiGet();
@@ -1641,8 +1641,8 @@ async function submitPost(type){
   const title=document.getElementById(tId).value.trim();
   const content=document.getElementById(dId).value.trim();
   if(!title||!content){notify(t('err_fields'),true);return;}
-  const author=document.getElementById(aId).value.trim()||(currentProfile?.username)||'Anonyme';
-  const post={id:'p'+Date.now(),type,title,content,author,userId:currentUser?.id||null,link:lId?document.getElementById(lId).value.trim():'',date:Date.now(),likes:0,dislikes:0};
+  const author=document.getElementById(aId).value.trim()||(currentUser?.username)||'Anonyme';
+  const post={id:'p'+Date.now(),type,title,content,author,userId:currentUser?.id||null,link:lId?document.getElementById(lId).value.trim():'',notifEmail:notifEmail||null,date:Date.now(),likes:0,dislikes:0};
   community.unshift(post);
   notify('⏳ Publication...');
   try{
@@ -2205,257 +2205,36 @@ function rndInit(){
 
 
 // ═══════════════ AUTH SUPABASE ═══════════════
-let currentUser=null, currentProfile=null;
-const AUTH_URL=`${SB_URL}/auth/v1`;
-const AUTH_H={'apikey':SB_KEY,'Content-Type':'application/json'};
 
 // Helpers auth
-function getSession(){try{const s=localStorage.getItem('vx_session');return s?JSON.parse(s):null;}catch(e){return null;}}
-function saveSession(s){try{if(s)localStorage.setItem('vx_session',JSON.stringify(s));else localStorage.removeItem('vx_session');}catch(e){}}
 function getAuthHeaders(){
   const s=getSession();
   return s?{...SB_HEADERS,'Authorization':'Bearer '+s.access_token}:SB_HEADERS;
 }
 
-async function sbAuthPost(path, body){
-  const r=await fetch(`${AUTH_URL}${path}`,{method:'POST',headers:AUTH_H,body:JSON.stringify(body)});
-  const d=await r.json();
-  if(!r.ok)throw new Error(d.msg||d.error_description||d.message||'Erreur');
-  return d;
-}
 
 // Inscription
-async function doRegister(){
-  const username=document.getElementById('reg_username').value.trim();
-  const pwd=document.getElementById('reg_pwd').value;
-  if(!username||!pwd){notify('❌ Remplis tous les champs',true);return;}
-  if(username.length<3){notify('❌ Pseudo trop court (min 3 caractères)',true);return;}
-  if(pwd.length<6){notify('❌ Mot de passe trop court (min 6 caractères)',true);return;}
-  // Email factice basé sur le pseudo
-  const _h=username.split('').reduce((a,b)=>((a<<5)-a)+b.charCodeAt(0),0);const fakeEmail='vx'+Math.abs(_h)+'@example.com';
-  const btn=document.querySelector('#auth-register .btn-primary');
-  if(btn){btn.disabled=true;btn.textContent='⏳ Création...';}
-  try{
-    const data=await sbAuthPost('/signup',{email:fakeEmail,password:pwd,data:{username}});
-    if(data.user){
-      await createProfile(data.user.id, username, data.session?.access_token);
-      if(data.session){
-        saveSession(data.session);
-        currentUser=data.user;
-        await loadProfile();
-        closeM('authModal');
-        notify('✅ Bienvenue '+username+' !');
-        updateAuthNav();
-        render();
-      } else {
-        // Compte créé mais email confirmation requise
-        closeM('authModal');
-        notify('✅ Compte créé ! Connecte-toi maintenant avec ton pseudo et mot de passe.');
-      }
-    }
-  }catch(e){
-    const msg=e.message||'';
-    if(msg.includes('already registered')||msg.includes('User already registered')){
-      notify('❌ Ce pseudo est déjà pris, choisis-en un autre',true);
-    } else if(msg.includes('Email address') || msg.includes('invalid')){
-      notify('❌ Erreur technique — contacte un admin',true);
-    } else if(msg.includes('confirmation')||msg.includes('email')){
-      notify('⚠️ Vérifie ton email pour confirmer le compte',false);
-    } else if(msg.includes('Network')||msg.includes('fetch')||msg.includes('Failed')){
-      notify('❌ Connexion impossible — vérifie ta connexion internet',true);
-    } else {
-      notify('❌ Erreur: '+msg,true);
-      console.error('Register error:',e);
-    }
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent='✨ Créer mon compte';}
-  }
-}
 
-async function createProfile(uid, username, token){
-  const h={...SB_HEADERS};
-  if(token)h['Authorization']='Bearer '+token;
-  await fetch(`${SB_URL}/rest/v1/profiles`,{
-    method:'POST',headers:{...h,'Prefer':'resolution=merge-duplicates'},
-    body:JSON.stringify({id:uid,username})
-  });
-}
 
 // Connexion
-async function doLogin(){
-  const username=document.getElementById('login_username').value.trim();
-  const pwd=document.getElementById('login_pwd').value;
-  if(!username||!pwd){notify('❌ Remplis tous les champs',true);return;}
-  const _h=username.split('').reduce((a,b)=>((a<<5)-a)+b.charCodeAt(0),0);const fakeEmail='vx'+Math.abs(_h)+'@example.com';
-  const btn=document.querySelector('#auth-login .btn-primary');
-  if(btn){btn.disabled=true;btn.textContent='⏳ Connexion...';}
-  try{
-    const data=await sbAuthPost('/token?grant_type=password',{email:fakeEmail,password:pwd});
-    saveSession(data);
-    currentUser=data.user;
-    await loadProfile();
-    closeM('authModal');
-    notify('✅ Connecté en tant que '+(currentProfile?.username||username));
-    updateAuthNav();
-    render();
-  }catch(e){
-    const msg=e.message||'';
-    if(msg.includes('Email not confirmed')||msg.includes('not confirmed')){
-      notify('⚠️ Email non confirmé — vérifie ta boîte mail ou contacte un admin',true);
-    } else if(msg.includes('Invalid login')||msg.includes('invalid_grant')||msg.includes('Invalid credentials')){
-      notify('❌ Pseudo ou mot de passe incorrect',true);
-    } else if(msg.includes('Network')||msg.includes('fetch')||msg.includes('Failed')){
-      notify('❌ Connexion impossible — vérifie ta connexion internet',true);
-    } else {
-      notify('❌ Erreur: '+msg,true);
-      console.error('Login error:',e);
-    }
-  }finally{
-    if(btn){btn.disabled=false;btn.textContent='🔑 Se connecter';}
-  }
-}
 
 // Déconnexion
-async function doLogout(){
-  const s=getSession();
-  if(s){
-    try{await fetch(`${AUTH_URL}/logout`,{method:'POST',headers:{...AUTH_H,'Authorization':'Bearer '+s.access_token}});}catch(e){}
-  }
-  saveSession(null);
-  currentUser=null;currentProfile=null;
-  updateAuthNav();
-  closeM('profileModal');
-  notify('👋 Déconnecté');
-}
 
 // Charger profil
-async function loadProfile(){
-  if(!currentUser)return;
-  try{
-    const r=await fetch(`${SB_URL}/rest/v1/profiles?id=eq.${currentUser.id}&select=*`,{headers:getAuthHeaders()});
-    const rows=await r.json();
-    if(rows&&rows.length>0)currentProfile=rows[0];
-    updateAuthNav();
-  }catch(e){console.warn('loadProfile',e);}
-}
 
 // Refresh session si expirée
-async function refreshSession(){
-  const s=getSession();
-  if(!s?.refresh_token)return false;
-  try{
-    const data=await sbAuthPost('/token?grant_type=refresh_token',{refresh_token:s.refresh_token});
-    saveSession(data);
-    currentUser=data.user;
-    return true;
-  }catch(e){saveSession(null);currentUser=null;return false;}
-}
 
 // Mettre à jour le bouton nav
-function updateAuthNav(){
-  const btn=document.getElementById('authNavBtn');
-  const ph=document.getElementById('navAvatarPh');
-  const un=document.getElementById('navUsername');
-  if(!btn)return;
-  if(currentProfile){
-    un.textContent=currentProfile.username;
-    const mob=document.getElementById('mobileUsername');if(mob)mob.textContent=currentProfile.username;
-    if(currentProfile.avatar_url){
-      ph.outerHTML=`<img class="auth-avatar" id="navAvatarPh" src="${currentProfile.avatar_url}" onerror="this.outerHTML='<span class=\'auth-avatar-ph\' id=\'navAvatarPh\'>👤</span>'">`;
-    } else {
-      ph.textContent=currentProfile.username.charAt(0).toUpperCase();
-    }
-  } else {
-    un.textContent='Connexion';
-    ph.textContent='👤';
-  }
-}
 
 // Ouvrir auth ou profil
-function handleAuthNav(e){
-  e.preventDefault();
-  if(currentUser){openProfileModal();}
-  else{openM('authModal');}
-}
 
 // Modal profil
-function openProfileModal(){
-  if(!currentProfile)return;
-  // Avatar
-  const ab=document.getElementById('profileAvatarBig');
-  if(currentProfile.avatar_url){
-    ab.outerHTML=`<img class="profile-avatar-big" id="profileAvatarBig" src="${currentProfile.avatar_url}" onerror="this.outerHTML='<div class=\'profile-avatar-big-ph\' id=\'profileAvatarBig\'>👤</div>'">`;
-  } else {
-    ab.textContent=currentProfile.username.charAt(0).toUpperCase();
-  }
-  document.getElementById('profileUsername').textContent=currentProfile.username;
-  document.getElementById('profileBio').textContent=currentProfile.bio||'Pas encore de bio.';
-  const since=new Date(currentProfile.created_at);
-  document.getElementById('profileSince').textContent=since.toLocaleDateString();
-  // Stats
-  const myPosts=community.filter(p=>p.userId===currentUser.id).length;
-  document.getElementById('profilePostCount').textContent=myPosts;
-  document.getElementById('profileFavCount').textContent=getFavs().length;
-  document.getElementById('profileEditForm').style.display='none';
-  document.getElementById('profileActions').style.display='flex';
-  openM('profileModal');
-}
-
-function startEditProfile(){
-  document.getElementById('edit_username').value=currentProfile.username||'';
-  document.getElementById('edit_bio').value=currentProfile.bio||'';
-  document.getElementById('edit_avatar').value=currentProfile.avatar_url||'';
-  document.getElementById('profileEditForm').style.display='block';
-  document.getElementById('profileActions').style.display='none';
-}
-function cancelEditProfile(){
-  document.getElementById('profileEditForm').style.display='none';
-  document.getElementById('profileActions').style.display='flex';
-}
-
-async function saveProfile(){
-  const username=document.getElementById('edit_username').value.trim();
-  const bio=document.getElementById('edit_bio').value.trim();
-  const avatar_url=document.getElementById('edit_avatar').value.trim();
-  if(!username){notify('❌ Pseudo requis',true);return;}
-  try{
-    notify('⏳ Sauvegarde...');
-    const r=await fetch(`${SB_URL}/rest/v1/profiles?id=eq.${currentUser.id}`,{
-      method:'PATCH',
-      headers:{...getAuthHeaders(),'Prefer':'return=representation'},
-      body:JSON.stringify({username,bio,avatar_url})
-    });
-    if(!r.ok)throw new Error('Erreur sauvegarde');
-    const rows=await r.json();
-    if(rows&&rows[0])currentProfile=rows[0];
-    updateAuthNav();
-    openProfileModal();
-    notify('✅ Profil mis à jour !');
-  }catch(e){notify('❌ '+e.message,true);}
-}
 
 
-function switchAuthTab(tab, btn){
-  document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.auth-panel').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('auth-'+tab).classList.add('active');
-}
+
+
 
 // Init auth au démarrage
-async function initAuth(){
-  const s=getSession();
-  if(!s)return;
-  // Vérif expiration
-  const exp=s.expires_at||s.expires_in;
-  const now=Math.floor(Date.now()/1000);
-  if(exp&&exp<now){
-    const ok=await refreshSession();
-    if(!ok)return;
-  }
-  currentUser=s.user||null;
-  if(currentUser)await loadProfile();
-}
 
 
 // ═══════════════ MENU MOBILE ═══════════════
@@ -2588,6 +2367,200 @@ function addComment(swId){
 
 
 
+
+
+// ═══════════════ AUTH MAISON (sans email) ═══════════════
+let currentUser = null; // {id, username, bio, avatar}
+
+async function hashPwd(s){
+  const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+
+function getLocalSession(){
+  try{return JSON.parse(localStorage.getItem('vx_user')||'null');}catch(e){return null;}
+}
+function saveLocalSession(u){
+  try{
+    if(u)localStorage.setItem('vx_user',JSON.stringify(u));
+    else localStorage.removeItem('vx_user');
+  }catch(e){}
+}
+
+// Charger la liste des users depuis Supabase
+async function loadUsers(){
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/vaultex_data?key=eq.users&select=value`,{headers:SB_HEADERS});
+    const rows=await r.json();
+    return rows[0]?.value||[];
+  }catch(e){return [];}
+}
+async function saveUsers(users){
+  await fetch(`${SB_URL}/rest/v1/vaultex_data`,{
+    method:'POST',
+    headers:{...SB_HEADERS,'Prefer':'resolution=merge-duplicates'},
+    body:JSON.stringify({key:'users',value:users})
+  });
+}
+
+// Inscription
+async function doRegister(){
+  const username=document.getElementById('reg_username').value.trim();
+  const pwd=document.getElementById('reg_pwd').value;
+  if(!username||!pwd){notify('❌ Remplis tous les champs',true);return;}
+  if(username.length<3){notify('❌ Pseudo trop court (min 3 caractères)',true);return;}
+  if(pwd.length<6){notify('❌ Mot de passe trop court (min 6)',true);return;}
+  const btn=document.querySelector('#auth-register .btn-primary');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Création...';}
+  try{
+    const users=await loadUsers();
+    const exists=users.find(u=>u.username.toLowerCase()===username.toLowerCase());
+    if(exists){notify('❌ Ce pseudo est déjà pris',true);return;}
+    const hash=await hashPwd(pwd);
+    const newUser={id:'u'+Date.now(),username,hash,bio:'',avatar:'',created:Date.now()};
+    users.push(newUser);
+    await saveUsers(users);
+    // Connecter directement
+    const session={id:newUser.id,username:newUser.username,bio:'',avatar:''};
+    currentUser=session;
+    saveLocalSession(session);
+    closeM('authModal');
+    notify('✅ Bienvenue '+username+' !');
+    updateAuthNav();
+    render();
+  }catch(e){
+    notify('❌ Erreur: '+e.message,true);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='✨ Créer mon compte';}
+  }
+}
+
+// Connexion
+async function doLogin(){
+  const username=document.getElementById('login_username').value.trim();
+  const pwd=document.getElementById('login_pwd').value;
+  if(!username||!pwd){notify('❌ Remplis tous les champs',true);return;}
+  const btn=document.querySelector('#auth-login .btn-primary');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Connexion...';}
+  try{
+    const users=await loadUsers();
+    const hash=await hashPwd(pwd);
+    const user=users.find(u=>u.username.toLowerCase()===username.toLowerCase()&&u.hash===hash);
+    if(!user){notify('❌ Pseudo ou mot de passe incorrect',true);return;}
+    const session={id:user.id,username:user.username,bio:user.bio||'',avatar:user.avatar||''};
+    currentUser=session;
+    saveLocalSession(session);
+    closeM('authModal');
+    notify('✅ Connecté en tant que '+user.username);
+    updateAuthNav();
+    render();
+  }catch(e){
+    notify('❌ Erreur: '+e.message,true);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='🔑 Se connecter';}
+  }
+}
+
+// Déconnexion
+function doLogout(){
+  currentUser=null;
+  saveLocalSession(null);
+  updateAuthNav();
+  closeM('profileModal');
+  notify('👋 Déconnecté');
+}
+
+// Mettre à jour le bouton nav
+function updateAuthNav(){
+  const btn=document.getElementById('authNavBtn');
+  const ph=document.getElementById('navAvatarPh');
+  const un=document.getElementById('navUsername');
+  const mob=document.getElementById('mobileUsername');
+  if(!btn)return;
+  if(currentUser){
+    if(un)un.textContent=currentUser.username;
+    if(ph)ph.textContent=currentUser.username.charAt(0).toUpperCase();
+    if(mob)mob.textContent=currentUser.username;
+  }else{
+    if(un)un.textContent='Connexion';
+    if(ph)ph.textContent='👤';
+    if(mob)mob.textContent='Connexion';
+  }
+}
+
+// Ouvrir auth ou profil
+function handleAuthNav(e){
+  e.preventDefault();
+  if(currentUser){openProfileModal();}
+  else{openM('authModal');}
+}
+
+// Profil modal
+function openProfileModal(){
+  if(!currentUser)return;
+  document.getElementById('profileUsername').textContent=currentUser.username;
+  document.getElementById('profileBio').textContent=currentUser.bio||'Pas encore de bio.';
+  const since=new Date(parseInt(currentUser.id.replace('u',''))||Date.now());
+  document.getElementById('profileSince').textContent=since.toLocaleDateString('fr-FR');
+  const myPosts=community.filter(p=>p.userId===currentUser.id).length;
+  document.getElementById('profilePostCount').textContent=myPosts;
+  document.getElementById('profileFavCount').textContent=getFavs().length;
+  document.getElementById('profileEditForm').style.display='none';
+  document.getElementById('profileActions').style.display='flex';
+  openM('profileModal');
+}
+
+function startEditProfile(){
+  document.getElementById('edit_username').value=currentUser.username||'';
+  document.getElementById('edit_bio').value=currentUser.bio||'';
+  document.getElementById('edit_avatar').value=currentUser.avatar||'';
+  document.getElementById('profileEditForm').style.display='block';
+  document.getElementById('profileActions').style.display='none';
+}
+function cancelEditProfile(){
+  document.getElementById('profileEditForm').style.display='none';
+  document.getElementById('profileActions').style.display='flex';
+}
+
+async function saveProfile(){
+  const username=document.getElementById('edit_username').value.trim();
+  const bio=document.getElementById('edit_bio').value.trim();
+  const avatar=document.getElementById('edit_avatar').value.trim();
+  if(!username){notify('❌ Pseudo requis',true);return;}
+  try{
+    const users=await loadUsers();
+    const idx=users.findIndex(u=>u.id===currentUser.id);
+    if(idx>=0){
+      // Vérifier si nouveau pseudo déjà pris
+      if(username.toLowerCase()!==currentUser.username.toLowerCase()){
+        const taken=users.find(u=>u.username.toLowerCase()===username.toLowerCase());
+        if(taken){notify('❌ Ce pseudo est déjà pris',true);return;}
+      }
+      users[idx].username=username;
+      users[idx].bio=bio;
+      users[idx].avatar=avatar;
+      await saveUsers(users);
+    }
+    currentUser={...currentUser,username,bio,avatar};
+    saveLocalSession(currentUser);
+    updateAuthNav();
+    openProfileModal();
+    notify('✅ Profil mis à jour !');
+  }catch(e){notify('❌ '+e.message,true);}
+}
+
+function switchAuthTab(tab,btn){
+  document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.auth-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('auth-'+tab).classList.add('active');
+}
+
+// Init auth depuis session locale
+function initAuth(){
+  const s=getLocalSession();
+  if(s){currentUser=s;updateAuthNav();}
+}
 
 // ═══════════════ SITE CONFIG ═══════════════
 function applySiteConfig(){
