@@ -2485,6 +2485,9 @@ async function doLogin(){
     const hash=await hashPwd(pwd);
     const user=users.find(u=>u.username.toLowerCase()===username.toLowerCase()&&u.hash===hash);
     if(!user){notify('❌ Pseudo ou mot de passe incorrect',true);return;}
+    // Mettre à jour lastLogin
+    const userIdx=users.findIndex(u=>u.id===user.id);
+    if(userIdx>=0){users[userIdx].lastLogin=Date.now();saveUsers(users).catch(()=>{});}
     const session={id:user.id,username:user.username,bio:user.bio||'',avatar:user.avatar||''};
     currentUser=session;
     saveLocalSession(session);
