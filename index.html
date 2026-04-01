@@ -1358,6 +1358,7 @@ async function init(){
     }
     render();
     renderCommunity();
+    rndBuild();rndShow(false);
   }catch(e){
     console.warn('Supabase indisponible — mode hors-ligne');
   }
@@ -1413,7 +1414,7 @@ function render(){
   }).join('');
   grid.querySelectorAll('.sw-card').forEach(c=>c.addEventListener('click',function(e){
     if(e.target.closest('.fav-btn,.sw-dl'))return;
-    openSWModal(this.dataset.id);
+    if(!e.target.closest('.fav-btn,.sw-dl'))openSWModal(this.dataset.id);
   }));
 }
 
@@ -2330,7 +2331,7 @@ function commentsHtml(swId){
         <div class="comment-text">${esc(c.text)}</div>
       </div>
     </div>`).join(''):'<div style="color:rgba(255,255,255,.2);font-family:Share Tech Mono,monospace;font-size:.65rem;padding:8px 0">Aucun commentaire — sois le premier !</div>';
-  const user=currentProfile?.username||'';
+  const user=currentUser?.username||'';
   return `<div class="comments-section">
     <div class="comments-title">💬 COMMENTAIRES (${all.length})</div>
     <div class="comment-form">
@@ -2344,10 +2345,10 @@ function commentsHtml(swId){
 function addComment(swId){
   const input=document.getElementById('cmt_input_'+swId);
   if(!input||!input.value.trim())return;
-  if(!currentProfile){notify('❌ Connecte-toi pour commenter',true);return;}
+  if(!currentUser){notify('❌ Connecte-toi pour commenter',true);return;}
   const all=getComments();
   if(!all[swId])all[swId]=[];
-  all[swId].unshift({author:currentProfile.username,text:input.value.trim(),date:Date.now()});
+  all[swId].unshift({author:currentUser.username,text:input.value.trim(),date:Date.now()});
   saveComments(all);
   input.value='';
   // Re-render comments
@@ -2479,8 +2480,15 @@ function updateAuthNav(){
   if(!btn)return;
   if(currentUser){
     if(un)un.textContent=currentUser.username;
-    if(ph)ph.textContent=currentUser.username.charAt(0).toUpperCase();
     if(mob)mob.textContent=currentUser.username;
+    if(ph){
+      if(currentUser.avatar){
+        ph.outerHTML=`<img class="auth-avatar" id="navAvatarPh" src="${currentUser.avatar}" onerror="this.outerHTML='<span class=\'auth-avatar-ph\' id=\'navAvatarPh\'>${currentUser.username.charAt(0).toUpperCase()}</span>'">`;
+      } else {
+        if(ph.tagName==='IMG'){ph.outerHTML=`<span class="auth-avatar-ph" id="navAvatarPh">${currentUser.username.charAt(0).toUpperCase()}</span>`;}
+        else{ph.textContent=currentUser.username.charAt(0).toUpperCase();}
+      }
+    }
   }else{
     if(un)un.textContent='Connexion';
     if(ph)ph.textContent='👤';
@@ -2505,6 +2513,16 @@ function openProfileModal(){
   const myPosts=community.filter(p=>p.userId===currentUser.id).length;
   document.getElementById('profilePostCount').textContent=myPosts;
   document.getElementById('profileFavCount').textContent=getFavs().length;
+  // Avatar
+  const avatarEl=document.getElementById('profileAvatarBig');
+  if(avatarEl){
+    if(currentUser.avatar){
+      avatarEl.outerHTML=`<img class="profile-avatar-big" id="profileAvatarBig" src="${currentUser.avatar}" onerror="this.outerHTML='<div class=\'profile-avatar-big-ph\' id=\'profileAvatarBig\'>${currentUser.username.charAt(0).toUpperCase()}</div>'">`;
+    } else {
+      if(avatarEl.tagName==='IMG'){avatarEl.outerHTML=`<div class="profile-avatar-big-ph" id="profileAvatarBig">${currentUser.username.charAt(0).toUpperCase()}</div>`;}
+      else{avatarEl.textContent=currentUser.username.charAt(0).toUpperCase();}
+    }
+  }
   document.getElementById('profileEditForm').style.display='none';
   document.getElementById('profileActions').style.display='flex';
   openM('profileModal');
