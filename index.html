@@ -1063,7 +1063,7 @@ body.light-mode .notif{background:#fff;color:#0077cc;}
 <script>
 // ═══════════════ CONFIG SÉCURISÉE ═══════════════
 const SB_URL='https://skrurhqjslbwhgpyrxmo.supabase.co';
-const SB_KEY='sb_publishable_Yfp53b_iA-Y2Zlu3CHPM7w_ZJuxecMh';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrcnVyaHFqc2xid2hncHlyeG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NTM0MDYsImV4cCI6MjA4OTAyOTQwNn0.d_Y0pWg4swIVEvwmdL5lXHN_BsPYnxoyzN85-PD8KuM';
 const SB_HEADERS={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
 
 // ═══════════════ DONNÉES PAR DÉFAUT ═══════════════
@@ -1321,10 +1321,10 @@ const POST_LABELS={bug:'🐛 Bug',jeu:'🎮 Jeu gratuit',logiciel:'💾 Logiciel
 
 // ═══════════════ NAV ═══════════════
 function prefillCommunityForms(){
-  if(!currentProfile)return;
+  if(!currentUser)return;
   ['bug_author','jeu_author','log_author','sug_author'].forEach(id=>{
     const el=document.getElementById(id);
-    if(el&&!el.value)el.value=currentProfile.username;
+    if(el&&!el.value)el.value=currentUser.username;
   });
 }
 function showPage(name){
@@ -1551,7 +1551,7 @@ function rateSW(id, stars, e){
         db[idx].ratingCount=(db[idx].ratingCount||0)+1;
       }
     }
-    apiPut(db,community).catch(()=>{});
+    apiUpsert('softwares', db).catch(()=>{});
   }
   render();
 }
@@ -1587,7 +1587,7 @@ function trackView(id){
   const idx=db.findIndex(s=>s.id===id);
   if(idx<0)return;
   db[idx].views=(db[idx].views||0)+1;
-  apiPut(db,community).catch(()=>{});
+  apiUpsert('softwares', db).catch(()=>{});
 }
 
 // ═══════════════ BADGE VÉRIFIÉ (admin) ═══════════════
@@ -1636,7 +1636,7 @@ async function vote(pid, type){
     community[i]={...community[i],likes:type==='like'?(community[i].likes||0)+1:community[i].likes||0,dislikes:type==='dislike'?(community[i].dislikes||0)+1:community[i].dislikes||0};
   }
   saveVoted(votes);
-  try{await apiPut(db,community);}catch(e){}
+  try{await apiUpsert('community', community);}catch(e){}
   renderCommunity();
 }
 function renderCommunity(){
@@ -1715,8 +1715,9 @@ async function submitPost(type){
   community.unshift(post);
   notify('⏳ Publication...');
   try{
-    await apiPut(db,community);
-    notify('✅ Post publié !');
+    await apiUpsert('community', community);
+    const notifMsgs={bug:'🐛 Merci d\'avoir reporté ce bug ! On va y jeter un œil.',jeu:'🎮 Merci pour ta proposition de jeu !',logiciel:'💾 Merci pour ta proposition de logiciel !',suggestion:'💡 Merci pour ta suggestion !'};
+    notify(notifMsgs[type]||'✅ Post publié !');
     [aId,tId,dId].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
     if(lId){const el=document.getElementById(lId);if(el)el.value='';}
     if(emailMap[type]){const el=document.getElementById(emailMap[type]);if(el)el.value='';}
@@ -1728,7 +1729,7 @@ async function submitPost(type){
 async function delPost(id,e){
   e.stopPropagation();  if(!confirm('Supprimer ce post ?'))return;
   community=community.filter(p=>p.id!==id);
-  try{await apiPut(db,community);notify(t('notif_post_deleted'));}catch(err){notify('❌ '+err.message,true);}
+  try{await apiUpsert('community', community);notify(t('notif_post_deleted'));}catch(err){notify('❌ '+err.message,true);}
   renderCommunity();renderSide();
 }
 
@@ -2955,5 +2956,6 @@ init();
   </div>
 </div>
 
+<div id="notif" class="notif"></div>
 </body>
 </html>
