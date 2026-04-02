@@ -682,6 +682,30 @@ body.light-mode .notif{background:#fff;color:#0077cc;}
 /* ── Signaler post ── */
 .report-btn{background:none;border:none;font-size:.6rem;color:rgba(255,255,255,.2);cursor:pointer;font-family:'Share Tech Mono',monospace;padding:2px 6px;transition:color .2s;}
 .report-btn:hover{color:var(--red);}
+
+/* ── Page Nouveautés + Top mois ── */
+.page-new-section{padding:40px 80px 60px;}
+.new-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:16px;}
+.top-month-list{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+.top-month-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--card);border:1px solid var(--border);cursor:pointer;transition:all .2s;}
+.top-month-item:hover{border-color:rgba(0,255,231,.3);}
+.top-month-rank{font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:700;width:32px;text-align:center;flex-shrink:0;}
+.top-month-rank.g{color:#ffd700;}
+.top-month-rank.s{color:#c0c0c0;}
+.top-month-rank.b{color:#cd7f32;}
+.top-month-rank.n{color:var(--muted);}
+.top-month-img{width:48px;height:48px;object-fit:cover;flex-shrink:0;}
+.top-month-img-ph{width:48px;height:48px;background:rgba(0,255,231,.06);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.top-month-info{flex:1;min-width:0;}
+.top-month-name{font-family:'Orbitron',monospace;font-size:.72rem;color:var(--fg);}
+.top-month-meta{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:2px;}
+.top-month-val{font-family:'Orbitron',monospace;font-size:.7rem;color:var(--neon);flex-shrink:0;}
+/* ── Tags ── */
+.tag{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:.58rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.tag:hover,.tag.active{background:rgba(0,255,231,.1);border-color:rgba(0,255,231,.3);color:var(--neon);}
+.tags-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px;}
+.sw-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
+@media(max-width:768px){.page-new-section{padding:30px 16px;}}
 </style>
 </head>
 <body>
@@ -699,6 +723,7 @@ body.light-mode .notif{background:#fff;color:#0077cc;}
     <li><a onclick="showPage('home');gotoSection('#categories')" id="nl-cat" data-i18n="nav_cat">Catégories</a></li>
     <li><a onclick="showPage('community')" id="nl-comm" data-i18n="nav_comm">Communauté</a></li>
     <li><a onclick="showPage('stats')" id="nl-stats">📊 Stats</a></li>
+    <li><a onclick="showPage('new')" id="nl-new">🆕 Nouveautés</a></li>
   </ul>
   <div class="nav-actions">
     <a id="discordBtn" href="#" target="_blank" rel="noopener" class="social-btn social-discord" style="display:none">
@@ -729,6 +754,7 @@ body.light-mode .notif{background:#fff;color:#0077cc;}
   <a onclick="showPage('home');gotoSection('#categories');closeMobileMenu()" data-i18n="nav_cat">Catégories</a>
   <a onclick="showPage('community');closeMobileMenu()" data-i18n="nav_comm">Communauté</a>
   <div class="menu-divider"></div>
+  <a onclick="showPage('new');closeMobileMenu()">🆕 Nouveautés</a>
   <a onclick="handleAuthNav(event);closeMobileMenu()">👤 <span id="mobileUsername">Connexion</span></a>
 </div>
 
@@ -1314,8 +1340,10 @@ function showPage(name){
   window.scrollTo({top:0,behavior:'smooth'});
   if(name==='community'){renderCommunity();renderSide();setTimeout(prefillCommunityForms,100);}
   if(name==='stats'){renderStats();}
+  if(name==='new'){renderNewPage();}
   if(name==='home'){render();}
   if(name==='stats'){renderStats();}
+  if(name==='new'){renderNewPage();}
 }
 function gotoSection(sel){setTimeout(()=>{const el=document.querySelector(sel);if(el)el.scrollIntoView({behavior:'smooth'});},120);}
 
@@ -1391,6 +1419,7 @@ async function init(){
     renderCommunity();
     rndBuild();rndShow(false);
     loadMembersCount();
+    if(document.getElementById('page-new')?.classList.contains('active'))renderNewPage();
   }catch(e){
     console.warn('Supabase indisponible — mode hors-ligne');
   }
@@ -1668,28 +1697,31 @@ function switchCommTab(btn,name){
 // ═══════════════ SUBMIT POST ═══════════════
 async function submitPost(type){
   // Pré-remplir auteur si connecté
-  if(currentProfile){
-    ['bug','jeu','log','sug'].forEach(t=>{
-      const el=document.getElementById(t+'_author');
-      if(el&&!el.value)el.value=currentProfile.username;
+  if(currentUser){
+    ['bug','jeu','log','sug'].forEach(k=>{
+      const el=document.getElementById(k+'_author');
+      if(el&&!el.value)el.value=currentUser.username;
     });
   }
+  const emailMap={bug:'bug_email',jeu:'jeu_email',logiciel:'log_email',suggestion:'sug_email'};
+  const notifEmail=(emailMap[type]&&document.getElementById(emailMap[type]))?document.getElementById(emailMap[type]).value.trim():'';
   const m={bug:['bug_author','bug_title','bug_desc',null],jeu:['jeu_author','jeu_title','jeu_desc','jeu_link'],logiciel:['log_author','log_title','log_desc','log_link'],suggestion:['sug_author','sug_title','sug_desc',null]};
   const[aId,tId,dId,lId]=m[type];
-  const title=document.getElementById(tId).value.trim();
-  const content=document.getElementById(dId).value.trim();
-  if(!title||!content){notify(t('err_fields'),true);return;}
-  const author=document.getElementById(aId).value.trim()||(currentUser?.username)||'Anonyme';
-  const post={id:'p'+Date.now(),type,title,content,author,userId:currentUser?.id||null,link:lId?document.getElementById(lId).value.trim():'',notifEmail:notifEmail||null,date:Date.now(),likes:0,dislikes:0};
+  const title=document.getElementById(tId)?.value.trim()||'';
+  const content=document.getElementById(dId)?.value.trim()||'';
+  if(!title||!content){notify('❌ Remplis les champs obligatoires',true);return;}
+  const author=document.getElementById(aId)?.value.trim()||(currentUser?.username)||'Anonyme';
+  const post={id:'p'+Date.now(),type,title,content,author,userId:currentUser?.id||null,link:lId?document.getElementById(lId)?.value.trim()||'':'',notifEmail:notifEmail||null,date:Date.now(),likes:0,dislikes:0};
   community.unshift(post);
   notify('⏳ Publication...');
   try{
     await apiPut(db,community);
     notify('✅ Post publié !');
-    [aId,tId,dId].forEach(id=>{document.getElementById(id).value='';});
-    if(lId)document.getElementById(lId).value='';
+    [aId,tId,dId].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    if(lId){const el=document.getElementById(lId);if(el)el.value='';}
+    if(emailMap[type]){const el=document.getElementById(emailMap[type]);if(el)el.value='';}
     renderCommunity();renderSide();
-    document.getElementById('heroComm').innerHTML=community.length+'<span></span>';
+    const hc=document.getElementById('heroComm');if(hc)hc.innerHTML=community.length+'<span></span>';
   }catch(e){community.shift();notify('❌ Erreur : '+e.message,true);}
 }
 
@@ -2685,8 +2717,124 @@ function reportPost(postId, e){
     if(reports.includes(postId)){notify('⚠️ Déjà signalé',true);return;}
     reports.push(postId);
     localStorage.setItem('vx_reports',JSON.stringify(reports));
-    notify('✅ Post signalé !');
+    notify('✅ Post signalé à l admin !');
   }catch(e){}
+}
+
+
+// ═══════════════ PAGE NOUVEAUTÉS + TOP MOIS + TAGS ═══════════════
+const PREDEFINED_TAGS=['Gratuit','Open Source','Portable','No-install','Multijoueur','Solo','2D','3D','FPS','RPG','Horreur','Simulation','Stratégie','Éducatif','Productivité','Vidéo','Audio','Image','Code','Sécurité','Linux','Windows','Mac','Android'];
+
+function getTagList(s){
+  return (s.tags||[]);
+}
+
+function renderNewPage(){
+  // ── Nouveautés du mois ──
+  const oneMonth=Date.now()-30*24*3600*1000;
+  const newSw=db.filter(s=>{
+    const ms=(s.added&&s.added>1000000000000)?s.added:(s.added&&s.added>1000000000)?s.added*1000:0;
+    return ms>oneMonth;
+  }).sort((a,b)=>{
+    const ta=(b.added>1000000000000)?b.added:b.added*1000;
+    const tb=(a.added>1000000000000)?a.added:a.added*1000;
+    return ta-tb;
+  });
+
+  const newGrid=document.getElementById('newThisMonthGrid');
+  if(newGrid){
+    if(!newSw.length){
+      newGrid.innerHTML='<div style="color:var(--muted);font-family:Share Tech Mono,monospace;font-size:.75rem;padding:20px;grid-column:1/-1;">Aucun logiciel ajouté ce mois-ci.</div>';
+    } else {
+      const favs=getFavs();
+      const ratings=getRatings();
+      newGrid.innerHTML=newSw.map(s=>{
+        const sc=(s.cat||'').toLowerCase().replace(/[éèê]/g,'e').replace(/[àâ]/g,'a');
+        const avg=getAvgRating(s);
+        const userRating=ratings[s.id]||0;
+        const favActive=favs.includes(s.id)?'active':'';
+        const imgHtml=s.img?`<img class="sw-img" style="opacity:0;" onload="this.style.opacity=1" src="${esc(s.img)}" alt="${esc(s.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'';
+        const ph=`<div class="sw-img-ph" style="${s.img?'display:none':''}">${ICONS[s.cat]||'📦'}</div>`;
+        const addedMs=(s.added>1000000000000)?s.added:s.added*1000;
+        const daysAgo=Math.floor((Date.now()-addedMs)/86400000);
+        return `<div class="sw-card" data-id="${s.id}" onclick="openSWModal('${s.id}')" style="cursor:pointer">
+          ${imgHtml}${ph}
+          <button class="fav-btn ${favActive}" onclick="toggleFav('${s.id}',event)">❤️</button>
+          <div class="sw-body">
+            <div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}</div>
+            <div class="sw-name">${esc(s.name)} <span class="badge-new">NEW</span></div>
+            <div class="sw-desc">${esc(getDesc(s))}</div>
+            ${starHtml(s.id,avg,userRating)}
+            <div class="sw-foot">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--muted)">il y a ${daysAgo}j</span>
+              <a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${t('btn_dl')}</a>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // ── Top du mois (par vues) ──
+  const topList=document.getElementById('topMonthList');
+  if(topList){
+    const sorted=[...db].sort((a,b)=>(b.views||0)-(a.views||0)).slice(0,10);
+    const rankClass=i=>i===0?'g':i===1?'s':i===2?'b':'n';
+    topList.innerHTML=sorted.map((s,i)=>`
+      <div class="top-month-item" onclick="openSWModal('${s.id}')">
+        <span class="top-month-rank ${rankClass(i)}">#${i+1}</span>
+        ${s.img?`<img class="top-month-img" src="${esc(s.img)}" onerror="this.style.display='none'">`:`<div class="top-month-img-ph">${ICONS[s.cat]||'📦'}</div>`}
+        <div class="top-month-info">
+          <div class="top-month-name">${esc(s.name)}</div>
+          <div class="top-month-meta">${esc(s.cat)}${s.platform?' · '+esc(s.platform):''}</div>
+        </div>
+        <span class="top-month-val">👁 ${s.views||0}</span>
+      </div>`).join('');
+  }
+
+  // ── Tags ──
+  const tagsRow=document.getElementById('allTagsRow');
+  if(tagsRow){
+    // Collecter tous les tags utilisés
+    const tagCounts={};
+    db.forEach(s=>(s.tags||[]).forEach(tag=>{tagCounts[tag]=(tagCounts[tag]||0)+1;}));
+    PREDEFINED_TAGS.forEach(tag=>{if(!tagCounts[tag])tagCounts[tag]=0;});
+    const sorted=Object.entries(tagCounts).sort((a,b)=>b[1]-a[1]).slice(0,20);
+    tagsRow.innerHTML=sorted.map(([tag,count])=>`
+      <span class="tag" onclick="filterByTag('${esc(tag)}')">#${esc(tag)}${count>0?` <span style="opacity:.5">(${count})</span>`:''}</span>`).join('');
+  }
+}
+
+let activeTag='';
+function filterByTag(tag){
+  activeTag=activeTag===tag?'':tag;
+  document.querySelectorAll('.tag').forEach(el=>{
+    el.classList.toggle('active',el.textContent.includes(tag)&&activeTag);
+  });
+  const results=activeTag?db.filter(s=>(s.tags||[]).includes(activeTag)):[];
+  const grid=document.getElementById('tagResultsGrid');
+  if(!grid)return;
+  if(!activeTag){grid.innerHTML='';return;}
+  if(!results.length){grid.innerHTML=`<div style="color:var(--muted);font-family:Share Tech Mono,monospace;font-size:.75rem;padding:20px;grid-column:1/-1;">Aucun logiciel avec le tag #${activeTag}</div>`;return;}
+  const favs=getFavs();
+  const ratings=getRatings();
+  grid.innerHTML=results.map(s=>{
+    const sc=(s.cat||'').toLowerCase().replace(/[éèê]/g,'e').replace(/[àâ]/g,'a');
+    const avg=getAvgRating(s);
+    const userRating=ratings[s.id]||0;
+    const favActive=favs.includes(s.id)?'active':'';
+    return `<div class="sw-card" data-id="${s.id}" onclick="openSWModal('${s.id}')" style="cursor:pointer">
+      ${s.img?`<img class="sw-img" style="opacity:0;" onload="this.style.opacity=1" src="${esc(s.img)}" loading="lazy" onerror="this.style.display='none'">`:''}<div class="sw-img-ph" style="${s.img?'display:none':''}">${ICONS[s.cat]||'📦'}</div>
+      <button class="fav-btn ${favActive}" onclick="toggleFav('${s.id}',event)">❤️</button>
+      <div class="sw-body">
+        <div class="sw-top"><span class="ctag t-${sc}">${ICONS[s.cat]||''} ${esc(s.cat)}</span>${s.version?`<span class="sw-ver">${esc(s.version)}</span>`:''}</div>
+        <div class="sw-name">${esc(s.name)}</div>
+        <div class="sw-desc">${esc(getDesc(s))}</div>
+        ${starHtml(s.id,avg,userRating)}
+        <div class="sw-foot"><a class="sw-dl" href="${esc(s.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${t('btn_dl')}</a></div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ═══════════════ SITE CONFIG ═══════════════
@@ -2783,6 +2931,29 @@ init();
 </div>
 
 
+
+
+<!-- PAGE NOUVEAUTÉS -->
+<div class="page" id="page-new">
+  <div class="page-new-section">
+    <div class="section-title">// NOUVEAUTÉS</div>
+    <h2 class="section-heading" style="margin-bottom:8px;">Ce mois-ci</h2>
+    <p style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--muted);margin-bottom:30px;">Logiciels ajoutés au cours des 30 derniers jours</p>
+    <div id="newThisMonthGrid" class="new-grid"></div>
+    <div style="margin-top:48px;">
+      <div class="section-title">// TOP DU MOIS</div>
+      <h2 class="section-heading" style="margin-bottom:8px;">Les plus populaires</h2>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--muted);margin-bottom:20px;">Classement par nombre de vues ce mois-ci</p>
+      <div id="topMonthList" class="top-month-list"></div>
+    </div>
+    <div style="margin-top:48px;">
+      <div class="section-title">// EXPLORER PAR TAG</div>
+      <h2 class="section-heading" style="margin-bottom:16px;">Tags populaires</h2>
+      <div id="allTagsRow" class="tags-row"></div>
+      <div id="tagResultsGrid" class="new-grid" style="margin-top:20px;"></div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
