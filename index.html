@@ -706,6 +706,11 @@ body.light-mode .notif{background:#fff;color:#0077cc;}
 .tags-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px;}
 .sw-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
 @media(max-width:768px){.page-new-section{padding:30px 16px;}}
+
+/* ── Bouton Vidéo ── */
+.sw-modal-video-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:rgba(255,32,64,.1);border:1px solid rgba(255,32,64,.3);color:#ff4d6d;font-family:'Orbitron',monospace;font-size:.65rem;letter-spacing:1px;cursor:pointer;border-radius:2px;transition:all .2s;text-decoration:none;margin-top:10px;}
+.sw-modal-video-btn:hover{background:rgba(255,32,64,.25);box-shadow:0 0 20px rgba(255,32,64,.2);}
+.sw-modal-video-embed{width:100%;aspect-ratio:16/9;border:none;border-radius:2px;margin-top:12px;background:#000;}
 </style>
 </head>
 <body>
@@ -1796,6 +1801,24 @@ function openSWModal(id){
       </div>
       <a class="sw-modal-dl" href="${esc(s.link)}" target="_blank" rel="noopener">${t('btn_dl')}</a>
     </div>`;
+  // Bouton vidéo si disponible
+  const videoUrl=s.videoUrl||'';
+  if(videoUrl){
+    let embedUrl=videoUrl;
+    const ytMatch=videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+    if(ytMatch)embedUrl=`https://www.youtube.com/embed/${ytMatch[1]}`;
+    const videoSection=document.createElement('div');
+    videoSection.style.cssText='padding:0 28px 16px;';
+    videoSection.innerHTML=`<a href="${videoUrl}" target="_blank" rel="noopener" class="sw-modal-video-btn">▶ Voir la vidéo</a><iframe id="videoEmbed" class="sw-modal-video-embed" src="${embedUrl}" style="display:none" allowfullscreen loading="lazy"></iframe>`;
+    document.getElementById('swModalContent').appendChild(videoSection);
+    // Bouton toggle embed
+    videoSection.querySelector('.sw-modal-video-btn').onclick=function(e){
+      const iframe=document.getElementById('videoEmbed');
+      if(iframe.style.display==='none'){iframe.style.display='block';this.textContent='✕ Fermer la vidéo';}
+      else{iframe.style.display='none';iframe.src=iframe.src;this.innerHTML='▶ Voir la vidéo';}
+      e.preventDefault();
+    };
+  }
   document.getElementById('swModalContent').innerHTML+=commentsHtml(id);
   document.getElementById('swModal').classList.add('open');
   document.body.style.overflow='hidden';
